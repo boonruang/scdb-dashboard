@@ -1,9 +1,9 @@
-# MKHerbal Dashboard
+# SCDB Dashboard
 
 ## Clone
 ```bash
-git clone https://github.com/boonruang/herbhukisan-api.git
-cd herbhukisan-api
+git clone https://github.com/boonruang/scdb-dashboard.git
+cd scdb-dashboard
 yarn install
 ```
 
