@@ -1,4 +1,4 @@
-# SCDB Dashboard
+# SCDB DASHBOARD
 
 ## Clone
 ```bash
