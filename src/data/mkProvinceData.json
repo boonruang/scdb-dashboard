@@ -1,0 +1,130 @@
+[
+  {
+    "id": 32,
+    "name_th": "มหาสารคาม",
+    "name_en": "Maha Sarakham",
+    "geography_id": 3,
+    "created_at": "2019-08-09T03:33:09.000+07:00",
+    "updated_at": "2022-05-16T06:31:03.000+07:00",
+    "deleted_at": null,
+    "amphure": [
+      {
+        "id": 4401,
+        "name_th": "เมืองมหาสารคาม",
+        "name_en": "Mueang Maha Sarakham",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4402,
+        "name_th": "แกดำ",
+        "name_en": "Kae Dam",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4403,
+        "name_th": "โกสุมพิสัย",
+        "name_en": "Kosum Phisai",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4404,
+        "name_th": "กันทรวิชัย",
+        "name_en": "Kantharawichai",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4405,
+        "name_th": "เชียงยืน",
+        "name_en": "Kantharawichai",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4406,
+        "name_th": "บรบือ",
+        "name_en": "Borabue",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4407,
+        "name_th": "นาเชือก",
+        "name_en": "Na Chueak",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4408,
+        "name_th": "พยัคฆภูมิพิสัย",
+        "name_en": "Phayakkhaphum Phisai",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4409,
+        "name_th": "วาปีปทุม",
+        "name_en": "Wapi Pathum",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4410,
+        "name_th": "นาดูน",
+        "name_en": "Na Dun",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4411,
+        "name_th": "ยางสีสุราช",
+        "name_en": "Yang Sisurat",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4412,
+        "name_th": "กุดรัง",
+        "name_en": "Kut Rang",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      },
+      {
+        "id": 4413,
+        "name_th": "ชื่นชม",
+        "name_en": "Chuen Chom",
+        "province_id": 32,
+        "created_at": "2019-08-09T03:33:09.000+07:00",
+        "updated_at": "2022-05-16T06:31:26.000+07:00",
+        "deleted_at": null
+      }
+    ]
+  }
+]

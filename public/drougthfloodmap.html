@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="utf-8" />
+    <title>Display a map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Athiti:wght@200;300;400;500;600;700&family=Noto+Sans+Thai:wght@500&display=swap" rel="stylesheet">
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+      /* #map { position: relative; top: 0; bottom: 0; width: 100%; height: 100vh;  } */
+      .thai {
+        font-family: "Athiti", serif;
+        font-weight: 600;
+        font-style: normal;
+      }
+      .collapsed {
+          height: 50px; /* ความสูงเมื่อย่อ */
+      }
+      #popup {
+          display: none;
+          position: absolute;
+          border: 1px solid #ccc;
+          background-color: white;
+          padding: 10px;
+          box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      }
+      
+      #map .popover2 {
+        -webkit-animation: fade-in .4s linear 1;
+        -moz-animation: fade-in .4s linear 1;
+        -ms-animation: fade-in .4s linear 1;
+      }
+      .info2 {
+        position: absolute;
+        width: 100%;
+        max-width: 105px;
+        height:auto;
+        right:0;
+        top:15px;
+        
+        z-index: 9999;
+        opacity: 0.9;
+        border-radius: 10px;
+      }
+
+      .info3 {
+        position: absolute;
+        width: 100%;
+        max-width: 320px;
+        height:auto;
+        right:10px;
+        top:50px;
+        background-color: white;
+        z-index: 9999;
+        opacity: 0.9;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .info3 .active {
+        background-color: #046C41 !important;
+      }
+
+      @-webkit-keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @-moz-keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @-ms-keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @-webkit-keyframes move-up {
+        from {
+          bottom: 30px;
+        }
+        to {
+          bottom: 42px;
+        }
+      }
+      @-moz-keyframes move-up {
+        from {
+          bottom: 30px;
+        }
+        to {
+          bottom: 42px;
+        }
+      }
+      @-ms-keyframes move-up {
+        from {
+          bottom: 30px;
+        }
+        to {
+          bottom: 42px;
+        }
+      }
+      .circle {
+        width:20px;
+        height:20px;
+        border-radius:50%;
+        border: 2px solid white;
+        
+      }
+      .--yellow {
+        color: #9f3a00dc;
+      }
+      .--blue {
+        color: #0c5898;
+      }
+      .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      .control-group {
+        display: inline-block;
+        vertical-align: top;
+        background: #fff;
+        text-align: left;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        padding: 5px;
+        margin: 10px;
+      }
+      .control {
+        display: block;
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .control input {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+      }
+      .control__indicator {
+        position: absolute;
+        top: 2px;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background: #e6e6e6;
+      }
+      .control--radio .control__indicator {
+        border-radius: 50%;
+      }
+      .control:hover input ~ .control__indicator,
+      .control input:focus ~ .control__indicator {
+        background: #ccc;
+      }
+      .control input:checked ~ .control__indicator {
+        background: #2aa1c0;
+      }
+      .control:hover input:not([disabled]):checked ~ .control__indicator,
+      .control input:checked:focus ~ .control__indicator {
+        background: #0e647d;
+      }
+      .control input:disabled ~ .control__indicator {
+        background: #e6e6e6;
+        opacity: 0.6;
+        pointer-events: none;
+      }
+      .control__indicator:after {
+        content: '';
+        position: absolute;
+        display: none;
+      }
+      .control input:checked ~ .control__indicator:after {
+        display: block;
+      }
+      .control--checkbox .control__indicator:after {
+        left: 8px;
+        top: 4px;
+        width: 3px;
+        height: 8px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .control--checkbox input:disabled ~ .control__indicator:after {
+        border-color: #7b7b7b;
+      }
+      .control--radio .control__indicator:after {
+        left: 7px;
+        top: 7px;
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .control--radio input:disabled ~ .control__indicator:after {
+        background: #7b7b7b;
+      }
+      .select {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px;
+        width: 100%;
+      }
+      .select select {
+        display: inline-block;
+        width: 100%;
+        cursor: pointer;
+        padding: 10px 15px;
+        outline: 0;
+        border: 0;
+        border-radius: 0;
+        background: #e6e6e6;
+        color: #7b7b7b;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+      .select select::-ms-expand {
+        display: none;
+      }
+      .select select:hover,
+      .select select:focus {
+        color: #000;
+        background: #ccc;
+      }
+      .select select:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .select__arrow {
+        position: absolute;
+        top: 16px;
+        right: 15px;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+        border-style: solid;
+        border-width: 8px 5px 0 5px;
+        border-color: #7b7b7b transparent transparent transparent;
+      }
+      .select select:hover ~ .select__arrow,
+      .select select:focus ~ .select__arrow {
+        border-top-color: #000;
+      }
+      .select select:disabled ~ .select__arrow {
+        border-top-color: #ccc;
+      }
+    </style>
+    </head>
+    <body>
+    <div id="map">
+      <div class="info2 p-4 thai">
+        <button class="thai" id="toggleButton">เปิด/ปิด</button>
+      </div>
+      <div class="info3 popover2 p-4 thai" id="draggable">
+        <div class="container">
+          <div class="control-group">
+            <div id="forShow" style="padding:7px; margin-bottom: 10px;">
+              <div class="thai mb-4" style="font-size: 18px; font-weight: 500;">
+                <div style="text-align: center;">
+                  <h3 style="margin:5px;">ผลการวิเคราะห์</h3>
+                  <span id="prov_nam_t"></span>
+                  <span id="amphoe_t"></span>
+                  <span id="tam_nam_t"></span>
+                </div>
+                <div style="background-color: #dddddd; margin-top:5px; padding:20px;">
+                  <span id="show_data">เลือกพื้นที่</span>
+                </div>
+              </div>
+            </div>
+            <label class="control control--checkbox"><font class="--yellow">พื้นที่แล้งซ้ำซาก</font> จังหวัดขอนแก่น
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="d_kk"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--blue">พื้นที่น้ำท่วม</font> จังหวัดขอนแก่น
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="f_kk"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--yellow">พื้นที่แล้งซ้ำซาก</font> จังหวัดมหาสารคาม
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="d_mhk"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--blue">พื้นที่น้ำท่วม</font> จังหวัดมหาสารคาม
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="f_mhk"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--yellow">พื้นที่แล้งซ้ำซาก</font> จังหวัดร้อยเอ็ด
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="d_re"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--blue">พื้นที่น้ำท่วม</font> จังหวัดร้อยเอ็ด
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="f_re"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--yellow">พื้นที่แล้งซ้ำซาก</font> จังหวัดกาฬสินธุ์
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="d_ksn"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox"><font class="--blue">พื้นที่น้ำท่วม</font> จังหวัดกาฬสินธุ์
+              <input type="checkbox" class="checkbox-input checkboxes" name="checkboxes" id="f_ksn"/>
+              <div class="control__indicator"></div>
+            </label>
+            <!-- <label class="control control--checkbox">Disabled
+              <input type="checkbox" disabled="disabled"/>
+              <div class="control__indicator"></div>
+            </label>
+            <label class="control control--checkbox">Disabled & checked
+              <input type="checkbox" disabled="disabled" checked="checked"/>
+              <div class="control__indicator"></div>
+            </label> -->
+          </div>
+        </div>
+      </div>
+      <!-- <div class="info2 popover2 p-4 thai" >
+        
+      </div> -->
+    </div>
+    
+    <script>
+      const draggable = document.getElementById('draggable');
+
+      let offsetX, offsetY;
+
+      draggable.addEventListener('mousedown', (e) => {
+          offsetX = e.clientX - draggable.getBoundingClientRect().left;
+          offsetY = e.clientY - draggable.getBoundingClientRect().top;
+
+          // เปลี่ยน cursor เป็น grabbing
+          draggable.style.cursor = 'grabbing';
+
+          document.addEventListener('mousemove', drag);
+          document.addEventListener('mouseup', drop);
+      });
+
+      function drag(e) {
+          draggable.style.left = `${e.clientX - offsetX}px`;
+          draggable.style.top = `${e.clientY - offsetY}px`;
+      }
+
+      function drop() {
+          // คืนค่า cursor เป็น grab
+          draggable.style.cursor = 'grab';
+          document.removeEventListener('mousemove', drag);
+          document.removeEventListener('mouseup', drop);
+      }
+
+      const toggleButton = document.getElementById('toggleButton');
+
+      // ฟังก์ชันสำหรับเปิด/ปิดกล่อง
+      toggleButton.addEventListener('click', () => {
+          if (draggable.style.display === 'none') {
+            draggable.style.display = 'block';
+          } else {
+            draggable.style.display = 'none';
+          }
+      });
+
+      function closeAll() {
+        map.setLayoutProperty('Drougth_kkn', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_ksn', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_ret', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_mkm01', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_mkm02', 'visibility', 'none');
+        map.setLayoutProperty('Flood_kkn01', 'visibility', 'none');
+        map.setLayoutProperty('Flood_kkn02', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ksn', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ret01', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ret02', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ret03', 'visibility', 'none');
+        map.setLayoutProperty('Flood_mkm01', 'visibility', 'none');
+        map.setLayoutProperty('Flood_mkm02', 'visibility', 'none');
+      }
+
+      var map = new maplibregl.Map({
+        container: "map", // container id
+        style: "https://edu.vallarismaps.com/core/api/styles/1.0-beta/styles/67763a0ea75e1b29c37011ca?api_key=XR3aZraWW35hjReLNzd2EGCht6yBNlCml5WsDttefWEQPlYWXCSbWUkHcDphA8fM", // style URL
+        center: [103.145331, 16.2], // starting position [lng, lat]
+        zoom: 8, // starting zoom
+        cursor: 'pointer'
+      });
+      map.addControl(new mapboxgl.FullscreenControl());
+
+      map.on('click', (e) => {
+        const features = map.queryRenderedFeatures(e.point);
+        // var popup = document.getElementById('popup');
+        // popup.style.display = 'block';
+        // popup.style.left = event.offsetX + 'px'; // ใช้ offsetX เพื่อให้ตำแหน่งถูกต้องภายใน div
+        // popup.style.top = event.offsetY + 'px'; // ใช้ offsetY เพื่อให้ตำแหน่งถูกต้องภายใน div
+        // console.log(features);
+
+        var forShow = document.getElementById('forShow');
+        var span_prov = document.getElementById('prov_nam_t');
+        var span_amphoe = document.getElementById('amphoe_t');
+        var span_tam = document.getElementById('tam_nam_t');
+        var show_data = document.getElementById('show_data');
+        forShow.style.display = 'block';
+        
+        if (features.length > 0 && features[0].properties) {
+          const prov_nam_t = features[0].properties.prov_nam_t || "";
+          const amphoe_t = features[0].properties.amphoe_t || "";
+          const tam_nam_t = features[0].properties.tam_nam_t || "";
+          const f_class = features[0].properties.f_class || "";
+          const layer = features[0].layer.id;
+
+          let showData = ""; // กำหนดค่าเริ่มต้นให้กับ showData
+
+          if (features[0].properties.dr_desth) {
+              showData = "พื้นที่แล้งซ้ำซาก: " + features[0].properties.dr_desth;
+          } else if (features[0].properties.fl_desth) {
+              showData = features[0].properties.fl_desth;
+          } else {
+              showData = "ไม่มีข้อมูลที่เกี่ยวข้อง";
+          }
+
+          // แสดงข้อมูลใน HTML
+          span_prov.innerHTML = prov_nam_t;
+          span_amphoe.innerHTML = amphoe_t;
+          span_tam.innerHTML = tam_nam_t;
+          show_data.innerHTML = showData;
+
+        } else {
+            // กรณีไม่พบข้อมูล
+            show_data.innerHTML = "ไม่พบข้อมูล กรุณาลองใหม่อีกครั้ง";
+        }
+        
+      });
+
+      map.on('load', () => {
+        map.setLayoutProperty('Drougth_kkn', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_ksn', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_ret', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_mkm01', 'visibility', 'none');
+        map.setLayoutProperty('Drougth_mkm02', 'visibility', 'none');
+        map.setLayoutProperty('Flood_kkn01', 'visibility', 'none');
+        map.setLayoutProperty('Flood_kkn02', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ksn', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ret01', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ret02', 'visibility', 'none');
+        map.setLayoutProperty('Flood_ret03', 'visibility', 'none');
+        map.setLayoutProperty('Flood_mkm01', 'visibility', 'none');
+        map.setLayoutProperty('Flood_mkm02', 'visibility', 'none');
+      });
+
+      map.on('idle', () => {
+
+      });
+
+      var checkboxes = document.querySelectorAll('input.checkboxes');
+      for (i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].onchange = function () {
+          closeAll();
+          filter_checkboxes();
+        }
+      }
+
+      var filter_checkboxes = function () {
+        var checked = [];
+        for (i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].checked) {
+            if(checkboxes[i].id==='d_kk'){
+              map.setLayoutProperty('Drougth_kkn', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='f_kk'){
+              map.setLayoutProperty('Flood_kkn01', 'visibility', 'visible');
+              map.setLayoutProperty('Flood_kkn02', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='d_mhk'){
+              map.setLayoutProperty('Drougth_mkm01', 'visibility', 'visible');
+              map.setLayoutProperty('Drougth_mkm02', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='f_mhk'){
+              map.setLayoutProperty('Flood_mkm01', 'visibility', 'visible');
+              map.setLayoutProperty('Flood_mkm02', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='d_re'){
+              map.setLayoutProperty('Drougth_ret', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='f_re'){
+              map.setLayoutProperty('Flood_ret01', 'visibility', 'visible');
+              map.setLayoutProperty('Flood_ret02', 'visibility', 'visible');
+              map.setLayoutProperty('Flood_ret03', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='d_ksn'){
+              map.setLayoutProperty('Drougth_ksn', 'visibility', 'visible');
+            }else if(checkboxes[i].id==='f_ksn'){
+              map.setLayoutProperty('Flood_ksn', 'visibility', 'visible');
+            }
+          }
+        }
+      }
+
+    </script>
+    
+    </body>
+    </html>
