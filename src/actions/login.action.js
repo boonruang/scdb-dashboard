@@ -142,6 +142,7 @@ export const logout = ({ navigate }, roles) => {
     // history.push('/')
     dispatch(setLoginStateToLogout())
     console.log('roles in login.action',roles)
-    roles.find((role) => [ROLES.Admin].includes(role)) ? navigate('/backoffice') : navigate('/')   
+    // roles.find((role) => [ROLES.Admin].includes(role)) ? navigate('/backoffice') : navigate('/')   
+    navigate('/')
   }
 }

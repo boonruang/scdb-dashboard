@@ -1,10 +1,7 @@
-import KeplerGlSchema from '@kepler.gl/schemas';
-
 import {
   SHOW_SIDEBAR,
   SET_MAP_CONFIG,
   QUERY_SUCCESS,
-  // SHOW_FARMER_DETIALBOX,
 } from '../constants'
 
 const initialState = {
@@ -21,11 +18,6 @@ const appReducer= (state = initialState, { type, payload }) => {
         ...state,
         isSidebar: payload
         }         
-    case SET_MAP_CONFIG:
-      return {
-        ...state,
-        mapConfig: KeplerGlSchema.getConfigToSave(payload)
-        }
     case QUERY_SUCCESS:
       return {
         ...state,

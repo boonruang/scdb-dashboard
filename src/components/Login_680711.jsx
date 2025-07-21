@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { 
-  Box,CssBaseline, TextField, Button, Checkbox, FormControlLabel, Typography 
+  Box,CssBaseline, TextField, Button, Grid, Grid2, Checkbox, FormControlLabel, Typography 
 } from '@mui/material';
-
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 import  * as loginActions  from '../actions/login.action'
@@ -18,14 +17,14 @@ const Login = () => {
   })
 
   const [isConsentChecked, setIsConsentChecked] = useState(false);
-    
+
   const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     console.log('account ',account)
-    dispatch(loginActions.login({ ...account, navigate }))
+    dispatch(loginActions.letin({ ...account, navigate }))
 
   };
 
@@ -49,7 +48,7 @@ const Login = () => {
     <CssBaseline />
       <Box 
             sx={{
-              backgroundImage: "url('images/backoffice_bg.jpg')",
+              backgroundImage: "url('images/sign-img-left.jpg')",
               backgroundSize: "cover",
               height: "100vh",
               width: '100%',
@@ -65,6 +64,19 @@ const Login = () => {
               alignItems: 'center',
             }}  
       >
+        {/* <Box sx={{ justifyContent:'center', alignItems: 'center' }}>
+            <Box
+                component="img"
+                sx={{
+                  height: 135,
+                  maxHeight: { xs: 120, md: 160 },
+                  alignItems: 'center',
+                  marginTop: '20px',
+                }}
+                alt="logo"
+                src="images/msulogo.png"        
+            />
+        </Box> */}
         <Box
             sx={{
               marginTop: '10px',
@@ -77,7 +89,7 @@ const Login = () => {
           >
 
             <Typography component="h1" variant="h5">
-              ระบบผู้ดูแลฐานข้อมูล
+              เข้าใช้งานระบบ
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField
@@ -119,7 +131,7 @@ const Login = () => {
                       </Typography>
                     }
                   />
-              </Box>  
+              </Box>               
               <Box>
               {loginReducer.isError ? showError() : null}
               </Box>              
@@ -135,6 +147,25 @@ const Login = () => {
               >
                 เข้าระบบ
               </Button>
+              <Box>
+                  <Grid2 item xs>
+                  <Link to="/forgetpassword" variant="body2">
+                    ลืมรหัสผ่าน
+                  </Link>
+                </Grid2>
+              </Box>
+              {/* <Grid container>
+                <Grid item xs>
+                  <Link to="/forgetpassword" variant="body2">
+                    ลืมรหัสผ่าน
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link to="/registration" variant="body2">
+                    ลงทะเบียน
+                  </Link>
+                </Grid>
+              </Grid> */}
             </Box>
         </Box>            
       </Box>
