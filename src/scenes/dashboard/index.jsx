@@ -16,7 +16,7 @@ import TrafficIcon from "@mui/icons-material/Traffic"
 import LineChart from "../../components/LineChart"
 // import BarChart from "../../components/BarChart"
 import BarChartAllFarmer from "../../components/BarChartAllFarmer"
-import BarChartFarmer from "../../components/BarChartFarmer"
+import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartFarmergroup from "../../components/BarChartFarmergroup"
 import GeographyChart from "../../components/GeographyChart"
 import PieChart from "../../components/PieChart"
@@ -158,7 +158,9 @@ const Dashbaord = () => {
                     />
                 </Box>
 
+                {/* END ROW 1 */}
 
+                {/* START ROW 2 */}
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -181,7 +183,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.farmersummary && <BarChartFarmer isDashboard={true} data={dashboardReducer?.result?.farmersummary} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -207,7 +209,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.farmersummary && <BarChartFarmergroup isDashboard={true} data={dashboardReducer?.result?.farmersummary} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartFarmergroup isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -233,14 +235,97 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.farmersummary && <BarChartCollaborativefarm isDashboard={true} data={dashboardReducer?.result?.farmersummary} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartCollaborativefarm isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
 
-                {/* TRANSACTION */}
+                {/* END ROW 2 */}
 
-                {/* TRANSACTION2 โดย สสจ */}
+                {/* START ROW 3 */}
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนนิสิต
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนบุคลากร
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.academicWork && <BarChartFarmergroup isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนอาจารย์
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.academicWork && <BarChartCollaborativefarm isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+
+                {/* END ROW 3 */}
+
+
+                {/* TRANSACTION2 */}
                     
                 <Box
                 gridColumn="span 4"

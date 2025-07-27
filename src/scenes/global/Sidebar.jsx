@@ -218,7 +218,7 @@ const Sidebar = () => {
                          }
  
 
-                        <SubMenu title="1.จัดการข้อมูลด้านวิจัย" icon={<GrassIcon />}>
+                        <SubMenu title="1.ฝ่ายวิจัย" icon={<GrassIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
@@ -244,7 +244,7 @@ const Sidebar = () => {
                          </SubMenu>      
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="2.ข้อมูลนิสิต" icon={<PeopleOutlinedIcon />}>
+                           ? <SubMenu title="2.ฝ่ายกิจการนิสิต" icon={<PeopleOutlinedIcon />}>
                             <Item
                                 title="ข้อมูลนิสิต"
                                 to="/student"
@@ -252,11 +252,43 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-
                          </SubMenu>   : undefined  } 
 
+                        <SubMenu title="3.ฝ่ายวิชาการ" icon={<GrassIcon />}>
+                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
+                           ? <Item
+                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> : undefined  } 
+                            
+                         </SubMenu>      
+
+                        <SubMenu title="4.ฝ่ายบุคคล" icon={<GrassIcon />}>
+                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
+                           ? <Item
+                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> : undefined  } 
+                            
+                         </SubMenu>                            
+
+                        <SubMenu title="5.แผนและงบประมาณ" icon={<GrassIcon />}>
+                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
+                           ? <Item
+                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> : undefined  } 
+                            
+                         </SubMenu>  
+
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="3.สำหรับผู้ดูแลระบบ" icon={<PeopleOutlinedIcon />}>
+                           ? <SubMenu title="6.สำหรับผู้ดูแลระบบ" icon={<PeopleOutlinedIcon />}>
                             <Item
                                 title="ข้อมูลผู้ใช้"
                                 to="/users/list"
