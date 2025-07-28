@@ -24,8 +24,11 @@ import { ROLES } from './constants/index'
 import { useEffect } from "react";
 import * as loginActions from 'actions/login.action'
 import StudentList from "scenes/student";
+import StudentAdd from "scenes/student/StudentAdd"; 
+import StudentDetail from "scenes/student/StudentDetail"; 
+import StudentEdit from "scenes/student/StudentEdit"; 
 import UsersList from "scenes/users/list";
-import UsersAdd from "scenes/users/add";
+import UsersAdd from "scenes/users/add"; 
 import Log from "scenes/log";
 import UsersEdit from "scenes/users/edit";
 import UsersDetail from "scenes/users/detail";
@@ -65,6 +68,9 @@ function App() {
           <Route path="users/detail" element={<UsersDetail />} />
           <Route path="users/edit" element={<UsersEdit />} />
           <Route path="users/list" element={<UsersList />} />
+          <Route path="student/add" element={<StudentAdd />} />
+          <Route path="student/detail" element={<StudentDetail />} />
+          <Route path="student/edit" element={<StudentEdit />} />
           <Route path="student" element={<StudentList />} />
           <Route path="calendar" element={<Calendar />} />
           <Route path="bar" element={<Bar />} />

@@ -27,7 +27,7 @@ import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { addPost } from '../../actions/post.action'
+import { addStudent } from '../../actions/student.action'
 import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -119,13 +119,9 @@ const StudentAdd = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('title', values.title)
-              formData.append('excerpt', values.excerpt)
-              formData.append('category', values.category)
-              formData.append('date', values.date)
-              formData.append('image', values.file)
+              formData.append('name', values.title)
               console.log('values',values)
-              dispatch(addPost(navigate, formData))
+              dispatch(addStudent(navigate, formData))
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -147,65 +143,16 @@ const StudentAdd = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อเรื่อง"
+                        label="ชื่อ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.title}
-                        name="title"
-                        multiline={true}
-                        minRows="2"                          
-                        error={!!touched.title && !!errors.title}
-                        helperText={touched.title && errors.title}
+                        value={values?.name}
+                        name="name"
+                        error={!!touched.name && !!errors.name}
+                        helperText={touched.name && errors.name}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="เนื้อหา"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.excerpt}
-                        name="excerpt"
-                        multiline={true}
-                        minRows="2"                         
-                        error={!!touched.excerpt && !!errors.excerpt}
-                        helperText={touched.excerpt && errors.excerpt}
-                        sx={{ gridColumn: "span 1" }}
-                    />
-                    <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="หมวด"
-                         onBlur={handleBlur}
-                         onChange={handleChange}
-                         value={values.category}
-                         name="category"
-                         multiline={true}
-                         minRows="2"                           
-                         error={!!touched.category && !!errors.category}
-                         helperText={touched.category && errors.category}
-                         sx={{ gridColumn: "span 1" }}
-                     />       
-                        <KeyboardDatePicker
-                          id="date-picker-dialog"
-                          label="เลือกวันที่"
-                          inputVariant="outlined"
-                          format="d MMMM yyyy" // ใช้ format ปกติ (แค่บังคับรูปแบบ)
-                          value={values.date ? new Date(values.date) : new Date()}
-                          onChange={(value) => setFieldValue("date", value)}
-                          onBlur={handleBlur}
-                          name="date"
-                          fullWidth
-                          KeyboardButtonProps={{ "aria-label": "change date" }}
-                          margin="normal"
-                          sx={{ gridColumn: "span 1" }}
-                          InputLabelProps={{ shrink: true }}
-                          // ใช้ labelFunc เพื่อแสดงผลเป็น พ.ศ.
-                          labelFunc={(date) => formatThaiDateBuddhistEra(date)}
-                        />
-
+       
                      </Box>
                 </Box>
                 
@@ -223,48 +170,8 @@ const StudentAdd = () => {
                             gridColumn: "span 4"
                         }}                    
                       >
-                          <Box mr="20px">     
-                           { values.file_obj ? 
-                                <img src={values.file_obj} style={{ width: '300px' }} />
-                                // <Item image={values.file_obj}/>
-                            : <Item image={values.file_obj}/> }           
-                          </Box>                        
 
                           <Box>
-                            <Button
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudQueueIcon />}
-                                sx={{
-                                  backgroundColor: colors.blueAccent[700],
-                                  color: colors.grey[100],
-                                  width: '135px',
-                                  fontSize: "14px",
-                                  fontWeight: "bold",
-                                  padding: "10px 20px",
-                                  mr: "20px",
-                                  mb: "10px",
-                                  '&:hover': {backgroundColor: colors.blueAccent[800]}
-                              }}                                
-                              >
-                                เลือกรูป
-                                <VisuallyHiddenInput
-                                  type="file"
-                                  // onChange={(event) => console.log(event.target.files)}
-                                  multiple
-                                  onChange={(e) => {
-                                    e.preventDefault();
-                                    setFieldValue('file', e.target.files[0]); // for upload image
-                                    setFieldValue(
-                                      'file_obj',
-                                      URL.createObjectURL(e.target.files[0])
-                                    ); // for preview image
-                                  }}
-                                />
-                              </Button>
-
                           </Box>
                      </Box>             
                   </Box>   

@@ -29,7 +29,7 @@ import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { updatePost } from '../../actions/post.action'
+import { updateStudent } from '../../actions/student.action'
 import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -59,10 +59,9 @@ const initialValues = {
 }
 
 const userSchema = yup.object().shape({
-    title: yup.string().required("ต้องใส่"),
-    excerpt: yup.string().required("ต้องใส่"),
-    category: yup.string().required("ต้องใส่"),
-    // date: yup.string().required("ต้องใส่"),
+    // title: yup.string().required("ต้องใส่"),
+    // excerpt: yup.string().required("ต้องใส่"),
+    // category: yup.string().required("ต้องใส่"),
 }) 
 
 
@@ -119,14 +118,10 @@ const StudentEdit = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('id', values.id)
+              formData.append('student_id', values.id)
               formData.append('title', values.title)
-              formData.append('excerpt', values.excerpt)
-              formData.append('category', values.category)
-              formData.append('date', values.date)
-              formData.append('image', values.file)           
               console.log('values',values)
-              dispatch(updatePost(navigate, formData))
+              dispatch(updateStudent(navigate, formData))
               setSubmitting(false)
             }}
             initialValues={location?.state?.row}
@@ -151,10 +146,10 @@ const StudentEdit = () => {
                         label="รหัส"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.id}
-                        name="id"
-                        error={!!touched.id && !!errors.id}
-                        helperText={touched.id && errors.id}
+                        value={values?.student_id}
+                        name="student_id"
+                        error={!!touched.student_id && !!errors.student_id}
+                        helperText={touched.student_id && errors.student_id}
                         InputLabelProps={{ shrink: true }}
                         sx={{ gridColumn: "span 1" }}
                     />                        
@@ -162,62 +157,16 @@ const StudentEdit = () => {
                          fullWidth
                          variant="outlined"
                          type="text"
-                         label="ชื่อเรื่อง"
+                         label="ชื่อ"
                          onBlur={handleBlur}
                          onChange={handleChange}
-                         value={values?.title}
-                         name="title"
-                         error={!!touched.title && !!errors.title}
-                         helperText={touched.title && errors.title}
+                         value={values?.name}
+                         name="name"
+                         error={!!touched.name && !!errors.name}
+                         helperText={touched.name && errors.name}
                          sx={{ gridColumn: "span 1" }}
                          InputLabelProps={{ shrink: true }}
                      />
-                     <TextField
-                         fullWidth
-                         variant="outlined"
-                         type="text"
-                         label="เนื้อหา"
-                         onBlur={handleBlur}
-                         onChange={handleChange}
-                         value={values?.excerpt}
-                         name="excerpt"
-                         error={!!touched.excerpt && !!errors.excerpt}
-                         helperText={touched.excerpt && errors.excerpt}
-                         sx={{ gridColumn: "span 1" }}
-                         InputLabelProps={{ shrink: true }}
-                     />
-                     <TextField
-                          fullWidth
-                          variant="outlined"
-                          type="text"
-                          label="หมวด"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.category}
-                          name="category"
-                          error={!!touched.category && !!errors.category}
-                          helperText={touched.category && errors.category}
-                          sx={{ gridColumn: "span 1" }}
-                          InputLabelProps={{ shrink: true }}
-                      />      
-
-                        <KeyboardDatePicker
-                          id="date-picker-dialog"
-                          label="เลือกวันที่"
-                          inputVariant="outlined"
-                          format="d MMMM yyyy" // ใช้ format ปกติ (แค่บังคับรูปแบบ)
-                          value={values.unformatdate ? new Date(values.unformatdate) : new Date()}
-                          onChange={(value) => setFieldValue("date", value)}
-                          onBlur={handleBlur}
-                          name="date"
-                          fullWidth
-                          KeyboardButtonProps={{ "aria-label": "change date" }}
-                          margin="normal"
-                          sx={{ gridColumn: "span 1" }}
-                          InputLabelProps={{ shrink: true }}
-                          // ใช้ labelFunc เพื่อแสดงผลเป็น พ.ศ.
-                          labelFunc={(date) => formatThaiDateBuddhistEra(date)}
-                        />
                      </Box>
                 </Box>
 
@@ -227,46 +176,6 @@ const StudentEdit = () => {
                             gridColumn: "span 4"
                         }}                    
                       >
-
-                          <Box mr="20px">     
-                           { values.file_obj ? 
-                                <img src={values.file_obj} style={{ width: '300px' }} />
-                            : <Item image={values?.image}/> }           
-                          </Box>                            
-                          <Box>
-                                <Button  
-                                    variant="contained"
-                                    component="label"
-                                sx={{
-                                    backgroundColor: colors.blueAccent[700],
-                                    color: colors.grey[100],
-                                    width: '135px',
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                    padding: "10px 20px",
-                                    mr: "10px",
-                                    mb: "10px",
-                                    '&:hover': {backgroundColor: colors.blueAccent[800]}
-                                }}
-                            > 
-                                เลือกรูป
-                                <input                           
-                                onChange={(e) => {
-                                    e.preventDefault();
-                                    setFieldValue('file', e.target.files[0]); // for upload image
-                                    setFieldValue(
-                                    'file_obj',
-                                    URL.createObjectURL(e.target.files[0])
-                                    ); // for preview image
-                                }}
-                                type='file'
-                                name='image'
-                                multiple
-                                accept='image/*'                           
-                                hidden
-                                />                              
-                            </Button>    
-                          </Box>
                       </Box>  
                     </Box>
                     

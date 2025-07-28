@@ -80,7 +80,7 @@ const StudentDetail = () => {
                         variant="filled"
                         type="text"
                         label="รหัส"
-                        value={location.state.row.id}
+                        value={location.state.row.student_id}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -89,81 +89,14 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อเรื่อง"
-                        value={location.state.row.title}
-                        name="title"
-                        multiline={true}
-                        minRows="2"                         
+                        label="ชื่อ"
+                        value={location.state.row.name}
+                        name="name"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="เนื้อหา"
-                        value={location.state.row.excerpt}
-                        name="excerpt"
-                        multiline={true}
-                        minRows="2"                         
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />
-                   <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="หมวดหมู่"
-                         value={location.state.row.category}
-                         name="category"
-                         sx={{ gridColumn: "span 1" }}
-                         InputLabelProps={{ shrink: true }}
-                     />       
-                   <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="วันที่"
-                         value={location.state.row.date}
-                         name="date"
-                         sx={{ gridColumn: "span 1" }}
-                         InputLabelProps={{ shrink: true }}
-                     />       
-                    <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="การเข้าชม"
-                         value={location.state.row.views}
-                         name="views"
-                         sx={{ gridColumn: "span 1" }}
-                         InputLabelProps={{ shrink: true }}
-                     />       
                     </Box>
                 </Box>
-
-                <Box 
-                        display="grid"
-                        gap="30px"
-                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        sx={{
-                            "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
-                        }}                    
-                    >
-                      <Box display="flex" justifyContent="start"
-                          sx={{
-                            mt: "20px", 
-                            gridColumn: "span 4"
-                        }}                    
-                      >
-                          <Box mr="20px">                
-                            <Item image={location.state.row.image}/>
-                          </Box>                        
-                          <Box>
-        
-                          </Box>
-                      </Box> 
-                  </Box>
 
                     <Box 
                         display="grid"
