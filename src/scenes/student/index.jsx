@@ -148,7 +148,7 @@ const Students = () => {
 
     return (
         <Box m="20px">
-            <Header title="ข้อมูลการโพสต์หน้าเว็บ" subtitle="รายการข้อมูลการโพสต์หน้าเว็บ" />
+            <Header title="ข้อมูลนิสิต" subtitle="รายการข้อมูลนิสิต" />
             <Box m="40px 0 0 0" height="75vh" sx={{
                 "& .MuiDataGrid-root": {
                     border: 1,

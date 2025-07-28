@@ -17,7 +17,11 @@ import LineChart from "../../components/LineChart"
 // import BarChart from "../../components/BarChart"
 import BarChartAllFarmer from "../../components/BarChartAllFarmer"
 import BarChartAcademic from "../../components/BarChartAcademic"
-import BarChartFarmergroup from "../../components/BarChartFarmergroup"
+import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
+import BarChartPublishedInter from "../../components/BarChartPublishedInter"
+import BarChartStudent from "../../components/BarChartStudent"
+import BarChartStaff from "../../components/BarChartStaff"
+import BarChartTeacher from "../../components/BarChartTeacher"
 import GeographyChart from "../../components/GeographyChart"
 import PieChart from "../../components/PieChart"
 import StatBox from "../../components/StatBox"
@@ -28,7 +32,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // import { getHerbalPriceyear } from 'actions/herbalpriceyear.action';
 import { getDashboard } from 'actions/dashboard.action'
 import ProgressCircleCal from 'components/ProgressCircleCal'
-import BarChartCollaborativefarm from 'components/BarChartCollaborativefarm'
+// import BarChartCollaborativefarm from 'components/BarChartCollaborativefarm'
 
 let newDate = new Date()
 let date = newDate.getDate();
@@ -209,7 +213,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartFarmergroup isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -235,7 +239,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartCollaborativefarm isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -265,7 +269,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -291,7 +295,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartFarmergroup isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -317,7 +321,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartCollaborativefarm isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
