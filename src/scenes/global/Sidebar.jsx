@@ -222,7 +222,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
-                                to="/researchinnovations"
+                                to="/student"
                                 icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -231,6 +231,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับชาติ"
+                                to="/student"
                                 icon={<HandshakeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -238,6 +239,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="นวัตกรรม/อนุสิทธิบัตร"
+                                to="/student"
                                 icon={<Diversity3Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -260,6 +262,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                to="/student"
                                 icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -271,6 +274,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                to="/student"
                                 icon={<SchoolIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -282,6 +286,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                to="/student"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
