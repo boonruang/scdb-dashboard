@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
 
-const BarChartFarmer = ({ isDashboard = false, data }) => {
+const BarChartStaff = ({ isDashboard = false, data }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -45,14 +45,14 @@ const BarChartFarmer = ({ isDashboard = false, data }) => {
                 }
             }}
             keys={[
-                'farmer',
+                'staff',
             ]}
             indexBy="province"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={{ scheme: 'accent' }}
             defs={[
                 {
                     id: 'dots',
@@ -143,4 +143,4 @@ const BarChartFarmer = ({ isDashboard = false, data }) => {
     )
 }
 
-export default BarChartFarmer
+export default BarChartStaff

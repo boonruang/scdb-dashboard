@@ -218,14 +218,16 @@ const Sidebar = () => {
                          }
  
 
-                        <SubMenu title="1.ฝ่ายวิจัย" icon={<GrassIcon />}>
+                        <SubMenu title="1.ฝ่ายวิจัย" icon={<WbIncandescentIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
-                                icon={<StickyNote2Icon />}
+                                to="/researchinnovations"
+                                icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> : undefined  } 
+                            /> : undefined  }  
+
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับชาติ"
@@ -244,39 +246,39 @@ const Sidebar = () => {
                          </SubMenu>      
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="2.ฝ่ายกิจการนิสิต" icon={<PeopleOutlinedIcon />}>
+                           ? <SubMenu title="2.ฝ่ายกิจการนิสิต" icon={<MedicalInformationIcon />}>
                             <Item
                                 title="ข้อมูลนิสิต"
                                 to="/student"
-                                icon={<PersonIcon />}
+                                icon={<LocalFloristIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                          </SubMenu>   : undefined  } 
 
-                        <SubMenu title="3.ฝ่ายวิชาการ" icon={<GrassIcon />}>
+                        <SubMenu title="3.ฝ่ายวิชาการ" icon={<FmdBadIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
-                                icon={<StickyNote2Icon />}
+                                icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> : undefined  } 
                             
                          </SubMenu>      
 
-                        <SubMenu title="4.ฝ่ายบุคคล" icon={<GrassIcon />}>
+                        <SubMenu title="4.ฝ่ายบุคคล" icon={<WbIncandescentIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
-                                icon={<StickyNote2Icon />}
+                                icon={<SchoolIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> : undefined  } 
                             
                          </SubMenu>                            
 
-                        <SubMenu title="5.แผนและงบประมาณ" icon={<GrassIcon />}>
+                        <SubMenu title="5.แผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
@@ -299,7 +301,7 @@ const Sidebar = () => {
                             <Item
                                 title="ประวัติการใช้ API"
                                 to="/system/log"
-                                icon={<PersonIcon />}
+                                icon={<PendingIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />

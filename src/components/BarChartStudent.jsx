@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
 
-const BarChartFarmergroup = ({ isDashboard = false, data }) => {
+const BarChartStudent = ({ isDashboard = false, data }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -45,14 +45,14 @@ const BarChartFarmergroup = ({ isDashboard = false, data }) => {
                 }
             }}
             keys={[
-                'farmergroup',
+                'student',
             ]}
             indexBy="province"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'accent' }}
+            colors={{ scheme: 'nivo' }}
             defs={[
                 {
                     id: 'dots',
@@ -96,7 +96,7 @@ const BarChartFarmergroup = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'farmer',
+                legend: isDashboard ? undefined : 'Academic Work',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
@@ -143,4 +143,4 @@ const BarChartFarmergroup = ({ isDashboard = false, data }) => {
     )
 }
 
-export default BarChartFarmergroup
+export default BarChartStudent

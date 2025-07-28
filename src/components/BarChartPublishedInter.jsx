@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
 
-const BarChartCollaborativefarm = ({ isDashboard = false, data }) => {
+const BarChartPublishedInter = ({ isDashboard = false, data }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -45,7 +45,7 @@ const BarChartCollaborativefarm = ({ isDashboard = false, data }) => {
                 }
             }}
             keys={[
-                'collaborativefarm',
+                'international',
             ]}
             indexBy="province"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
@@ -143,4 +143,4 @@ const BarChartCollaborativefarm = ({ isDashboard = false, data }) => {
     )
 }
 
-export default BarChartCollaborativefarm
+export default BarChartPublishedInter
