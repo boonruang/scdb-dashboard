@@ -256,6 +256,14 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
+                            <Item
+                                title="กิจกรรมนิสิต"
+                                to="/student"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                                                        
                          </SubMenu>   : undefined  } 
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
