@@ -47,12 +47,12 @@ const BarChartStaff = ({ isDashboard = false, data }) => {
             keys={[
                 'staff',
             ]}
-            indexBy="province"
+            indexBy="staff"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'accent' }}
+            colors={{ scheme: 'nivo' }}
             defs={[
                 {
                     id: 'dots',
@@ -101,6 +101,7 @@ const BarChartStaff = ({ isDashboard = false, data }) => {
                 legendOffset: -40
             }}
             enableLabel={false}
+            layout="horizontal"
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor={{

@@ -47,12 +47,12 @@ const BarChartStudent = ({ isDashboard = false, data }) => {
             keys={[
                 'student',
             ]}
-            indexBy="province"
+            indexBy="student"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={{ scheme: 'paired' }}
             defs={[
                 {
                     id: 'dots',
@@ -88,7 +88,7 @@ const BarChartStudent = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'province',
+                legend: isDashboard ? undefined : 'student',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -101,6 +101,7 @@ const BarChartStudent = ({ isDashboard = false, data }) => {
                 legendOffset: -40
             }}
             enableLabel={false}
+            layout="horizontal"
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor={{

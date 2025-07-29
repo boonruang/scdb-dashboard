@@ -328,9 +328,89 @@ const Dashbaord = () => {
 
                 {/* END ROW 3 */}
 
-                {/* START ROW 4 */}
-                {/* END ROW 4 */}
 
+                {/* TRANSACTION2 */}
+                    
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                <Typography variant="h5" fontWeight="600">
+                นิสิต
+                </Typography>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    mt="25px"
+                >
+                    <ProgressCircleCal size="125" progress={dashboardReducer.result && dashboardReducer.result.studentPercent}/>
+                    <Typography
+                    variant="h5"
+                    color={colors.greenAccent[500]}
+                    sx={{ mt: "15px" }}
+                    >
+                    {dashboardReducer.result && dashboardReducer.result.student}
+                    </Typography>
+                    <Typography>{dashboardReducer.result && (dashboardReducer.result.studentPercent*100).toFixed(0) + '%'}</Typography>
+                </Box>
+                </Box>
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                <Typography variant="h5" fontWeight="600">
+                บุคลากร
+                </Typography>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    mt="25px"
+                >
+                    <ProgressCircleCal size="125" progress={dashboardReducer.result && dashboardReducer.result.staffPercent}/>
+                    <Typography
+                    variant="h5"
+                    color={colors.greenAccent[500]}
+                    sx={{ mt: "15px" }}
+                    >
+                    {dashboardReducer.result && dashboardReducer.result.staff}
+                    </Typography>
+                    <Typography>{dashboardReducer.result && (dashboardReducer.result.staffPercent*100).toFixed(0) + '%'}</Typography>
+                </Box>
+                </Box>
+
+                {/* ROW 3 */}
+                <Box
+                    gridColumn="span 4"
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
+                    p="30px"
+                >
+                    <Typography variant='h5' fontWeight="600">
+                        ผู้ใช้งานระบบ
+                    </Typography>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        mt="25px"
+                    >
+                        <ProgressCircleCal size="125" progress={dashboardReducer.result && dashboardReducer.result.userPercent}/>
+                        <Typography
+                            variant="h5"
+                            color={colors.greenAccent[500]}
+                            sx={{ mt: "15px" }}
+                        >
+                            {dashboardReducer.result && dashboardReducer.result.user}
+                        </Typography>
+                        <Typography>{dashboardReducer.result && (dashboardReducer.result.userPercent*100).toFixed(0) + '%'}</Typography>
+                    </Box>
+                </Box>
 
             </Box>
         </Box >

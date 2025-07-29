@@ -47,12 +47,12 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
             keys={[
                 'teacher',
             ]}
-            indexBy="province"
+            indexBy="teacher"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'paired' }}
+            colors={{ scheme: 'accent' }}
             defs={[
                 {
                     id: 'dots',
@@ -101,6 +101,7 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
                 legendOffset: -40
             }}
             enableLabel={false}
+            layout="horizontal"
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor={{
