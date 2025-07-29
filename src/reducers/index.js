@@ -8,6 +8,7 @@ import userSelectedReducer from "./userSelected.reducer";
 import roleReducer from "./role.reducer";
 import logReducer from "./log.reducer";   
 import studentReducer from "./student.reducer";   
+import academicProgramReducer from "./academicProgram.reducer";   
 
 export default combineReducers({
   appReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   registerReducer,
   logReducer,
   studentReducer,
+  academicProgramReducer,
 })

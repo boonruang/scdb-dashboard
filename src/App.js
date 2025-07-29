@@ -27,6 +27,10 @@ import StudentList from "scenes/student";
 import StudentAdd from "scenes/student/StudentAdd"; 
 import StudentDetail from "scenes/student/StudentDetail"; 
 import StudentEdit from "scenes/student/StudentEdit"; 
+import AcademicProgramList from "scenes/academicprogram";
+import AcademicProgramAdd from "scenes/academicprogram/AcademicProgramAdd"; 
+import AcademicProgramDetail from "scenes/academicprogram/AcademicProgramDetail"; 
+import AcademicProgramEdit from "scenes/academicprogram/AcademicProgramEdit"; 
 import UsersList from "scenes/users/list";
 import UsersAdd from "scenes/users/add"; 
 import Log from "scenes/log";
@@ -72,6 +76,10 @@ function App() {
           <Route path="student/detail" element={<StudentDetail />} />
           <Route path="student/edit" element={<StudentEdit />} />
           <Route path="student" element={<StudentList />} />
+          <Route path="academicprogram/add" element={<AcademicProgramAdd />} />
+          <Route path="academicprogram/detail" element={<AcademicProgramDetail />} />
+          <Route path="academicprogram/edit" element={<AcademicProgramEdit />} />
+          <Route path="academicprogram" element={<AcademicProgramList />} />          
           <Route path="calendar" element={<Calendar />} />
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />
