@@ -221,14 +221,14 @@ const Sidebar = () => {
                         <SubMenu title="1.ฝ่ายวิจัย" icon={<WbIncandescentIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
-                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                title="ผลงานวิจัยตีพิมพ์"
                                 to="/student"
                                 icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> : undefined  }  
 
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
+                        {/* { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์ระดับชาติ"
                                 to="/student"
@@ -243,7 +243,7 @@ const Sidebar = () => {
                                 icon={<Diversity3Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> : undefined  }     
+                            /> : undefined  }      */}
                             
                          </SubMenu>      
 
@@ -252,28 +252,35 @@ const Sidebar = () => {
                             <Item
                                 title="ข้อมูลนิสิต"
                                 to="/student"
-                                icon={<LocalFloristIcon />}
+                                icon={<PersonIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                          </SubMenu>   : undefined  } 
 
-                        <SubMenu title="3.ฝ่ายวิชาการ" icon={<FmdBadIcon />}>
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
-                           ? <Item
-                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="3.ฝ่ายวิชาการ" icon={<FmdBadIcon />}>
+                            <Item
+                                title="ข้อมูลนิสิต"
                                 to="/student"
+                                icon={<PersonIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ข้อมูลฝ่ายวิชาการ"
+                                to="/academicprogram"
                                 icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> : undefined  } 
-                            
-                         </SubMenu>      
+                            />                            
+                         </SubMenu>   : undefined  }                          
+
 
                         <SubMenu title="4.ฝ่ายบุคคล" icon={<WbIncandescentIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
-                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                title="ข้อมูลคลากร"
                                 to="/student"
                                 icon={<SchoolIcon />}
                                 selected={selected}
@@ -285,7 +292,7 @@ const Sidebar = () => {
                         <SubMenu title="5.แผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
-                                title="ผลงานวิจัยตีพิมพ์ระดับนานาชาติ"
+                                title="ข้อมูลโครงการ"
                                 to="/student"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
