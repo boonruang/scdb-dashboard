@@ -47,7 +47,7 @@ const Item = ({image}) => {
     )
 }
 
-const StudentDetail = () => {
+const StaffeducationDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -80,7 +80,7 @@ const StudentDetail = () => {
                         variant="filled"
                         type="text"
                         label="รหัส"
-                        value={location.state.row.student_id}
+                        value={location.state.row.staffeducation_id}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -99,8 +99,8 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="สาขา"
-                        value={location.state.row.AcademicProgram?.program_name}
+                        label="ตำแหน่ง"
+                        value={location.state.row.position}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -109,9 +109,29 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ที่ปรึกษา"
-                        value={location.state.row.advisor?.name}
-                        name="advisor"
+                        label="ประเภท"
+                        value={location.state.row.staffeducation_type}
+                        name="staffeducation_type"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="อีเมล์"
+                        value={location.state.row.email}
+                        name="email"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ออฟฟิศ"
+                        value={location.state.row.office_location}
+                        name="office_location"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />                    
@@ -159,4 +179,4 @@ const StudentDetail = () => {
     </Box >
 }
 
-export default StudentDetail
+export default StaffeducationDetail

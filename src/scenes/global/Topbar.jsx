@@ -4,7 +4,6 @@ import { ColorModeContext, tokens } from "../../theme"
 import PersonOutlined from "@mui/icons-material/PersonOutlined"
 import { useDispatch, useSelector } from "react-redux"
 import * as loginActions from '../../actions/login.action'
-import * as farmerActions from '../../actions/farmer.action'
 import { useNavigate } from "react-router-dom"
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -18,8 +17,6 @@ const Topbar = () => {
     const { isSidebar } = useSelector((state) => state.app.appReducer)
 
     const { result } = useSelector((state) => state.app.loginReducer)
-
-    const farmerReducer = useSelector((state) => state.app.farmerReducer)
 
 const [anchorEl, setAnchorEl] = useState(null)
 const open = Boolean(anchorEl)
@@ -112,14 +109,6 @@ const handleChangePassword = () => {
         setError("รหัสผ่านใหม่ไม่ตรงกัน")
         return
     }
-
-    // dispatch action ไปที่ backend
-    dispatch(farmerActions.changePassword({
-        username,
-        currentPassword,
-        newPassword,
-        navigate
-    }))
 
     setSnackBarOpen(true)
 
@@ -216,7 +205,6 @@ const handleCancel = () => {
                     </Box>
                 </Modal>     
         </Box>
-        <MuiSnackbar message={farmerReducer?.isChangeSuccess ? "เปลี่ยนรหัสผ่านสำเร็จ" : "เปลี่ยนรหัสผ่านไม่สำเร็จ"} duration={6000} />      
     </Box>)
     )
 }

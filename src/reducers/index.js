@@ -8,7 +8,13 @@ import userSelectedReducer from "./userSelected.reducer";
 import roleReducer from "./role.reducer";
 import logReducer from "./log.reducer";   
 import studentReducer from "./student.reducer";   
+import staffReducer from "./staff.reducer";   
+import studentgrantReducer from "./studentgrant.reducer";   
+import publicationReducer from "./publication.reducer";   
 import academicProgramReducer from "./academicProgram.reducer";   
+import projectReducer from "./project.reducer";   
+import staffeducationReducer from "./staffeducation.reducer";   
+import leaverecordReducer from "./leaverecord.reducer";   
 
 export default combineReducers({
   appReducer,
@@ -21,4 +27,10 @@ export default combineReducers({
   logReducer,
   studentReducer,
   academicProgramReducer,
+  staffReducer,
+  studentgrantReducer,
+  publicationReducer,
+  projectReducer,
+  staffeducationReducer,
+  leaverecordReducer,
 })

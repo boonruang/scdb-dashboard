@@ -3,7 +3,7 @@ import { Box, useTheme,Button } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
 import AddIcon from '@mui/icons-material/Add';
-import { getStudent, deleteStudent } from '../../actions/student.action'
+import { getStaffeducation, deleteStaffeducation } from '../../actions/staffeducation.action'
 
 import Header from "../../components/Header"
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +17,7 @@ import Avatar from '@mui/material/Avatar';
 
 const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
-const Students = () => {
+const Staffeducations = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -31,25 +31,25 @@ const Students = () => {
     const message = 'กรุณายืนยันการลบข้อมูล'    
 
     useEffect(() => {
-        dispatch(getStudent())
+        dispatch(getStaffeducation())
     },[dispatch])
 
-    const { result, isFetching } = useSelector((state) => state.app.studentReducer)
+    const { result, isFetching } = useSelector((state) => state.app.staffeducationReducer)
 
     const loginReducer = useSelector((state) => state.app.loginReducer)
 
     const DeleteFunction = () => {
-        dispatch(deleteStudent(rowId))
+        dispatch(deleteStaffeducation(rowId))
         setOpen(false)
     }
 
     const handleDeleteClick = ({state}) => {
-        setRowId(state.row.student_id)
+        setRowId(state.row.staffeducation_id)
         setOpen(true)
     }
 
     const handleAddButton = () => {
-        navigate('/student/add')
+        navigate('/staffeducation/add')
       };
 
     const ExportExcelButton = () => {
@@ -58,7 +58,7 @@ const Students = () => {
     ws = XLSX.utils.json_to_sheet(result)
 
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "student.xlsx")
+    XLSX.writeFile(wb, "staffeducation.xlsx")
 
     };
       
@@ -66,7 +66,6 @@ const Students = () => {
     const handleButtonDetail = (p) => {
         // console.log('params',params)
         console.log('params',p)
-        // navigate('/farmers/detail')
     };
 
     const handleRowClick = (params,event,details) => {
@@ -78,78 +77,70 @@ const Students = () => {
 
     const columns = [
     {
-      field: 'id', // ใช้ 'id' ที่เราสร้าง alias ไว้
+      field: 'id', 
       headerName: 'ID',
-      flex: 0.5,
+      flex: 0.3,
       cellClassName: "name-column--cell"
     },
     {
       field: 'name',
-      headerName: 'ชื่อ-สกุล',
+      headerName: 'ชื่อบุคคากร',
       flex: 1,
+      renderCell: (params) => {
+        return params.row.Staff?.name || 'N/A';
+      }
+    },
+    {
+      field: 'degree',
+      headerName: 'การศึกษา',
+      flex: 1.5,
       cellClassName: "name-column--cell"
     },
     {
-      field: 'program_name',
-      headerName: 'หลักสูตร',
+      field: 'university',
+      headerName: 'สถานศึกษา',
       flex: 1.5,
-      // --- เปลี่ยนมาใช้ renderCell ซึ่งเสถียรกว่า ---
-      renderCell: (params) => {
-        // params.row จะมีข้อมูลของแถวนั้นๆ อยู่เสมอเมื่อ renderCell ทำงาน
-        // ใช้ Optional Chaining (?.) เพื่อความปลอดภัย
-        return params.row.AcademicProgram?.program_name || 'N/A';
-      }
+      cellClassName: "name-column--cell"
     },
-    {
-      field: 'advisor_name',
-      headerName: 'อาจารย์ที่ปรึกษา',
-      flex: 1,
-      // --- เปลี่ยนมาใช้ renderCell เช่นกัน ---
-      renderCell: (params) => {
-        return params.row.advisor?.name || 'N/A';
-      }
-    }
-        ,
-        { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
-            return (
-              <Box>
-                <Button
-                  onClick={() => (navigate('/student/detail',  { state: { row: params.row }} ))}
-                  variant="outlined"
-                  color="success"
-                >
-                  รายละเอียด
-                </Button>
+    { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
+        return (
+          <Box>
+            <Button
+              onClick={() => (navigate('/staffeducation/detail',  { state: { row: params.row }} ))}
+              variant="outlined"
+              color="success"
+            >
+              รายละเอียด
+            </Button>
+            
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+            ? <Button
+            onClick={() => (navigate('/staffeducation/edit',  { state: { row: params.row }} ))}
+              variant="outlined"
+              color="info"
+              sx={{ ml: 1 }}            
+            >
+              แก้ไข
+            </Button> : undefined  }                  
+
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+            ? <Button
+            onClick={() => handleDeleteClick({ state: { row: params.row }})}
+              variant="outlined"
+              color="error"
+              sx={{ ml: 1 }} 
+            >
+              ลบ
+            </Button> : undefined  } 
                 
-            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-                ? <Button
-                onClick={() => (navigate('/student/edit',  { state: { row: params.row }} ))}
-                  variant="outlined"
-                  color="info"
-                  sx={{ ml: 1 }}            
-                >
-                  แก้ไข
-                </Button> : undefined  }                  
-
-            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-                ? <Button
-                onClick={() => handleDeleteClick({ state: { row: params.row }})}
-                  variant="outlined"
-                  color="error"
-                  sx={{ ml: 1 }} 
-                >
-                  ลบ
-                </Button> : undefined  } 
-                    
-              </Box>
-            );
-          } }         
-
+          </Box>
+        );
+      } }         
     ]
 
     return (
         <Box m="20px">
-            <Header title="ข้อมูลนิสิต" subtitle="รายการข้อมูลนิสิต" />
+            <Header title="ข้อมูลการศึกษาของบุคลากร" subtitle="รายการข้อมูลการศึกษาของบุคลากร" />
             <Box m="40px 0 0 0" height="75vh" sx={{
                 "& .MuiDataGrid-root": {
                     border: 1,
@@ -232,14 +223,14 @@ const Students = () => {
                                 hideFooter: true,
                                 hideToolbar: true, // ซ่อน headers column, filters, exports ตอนพิมพ์
                                 fields: [
-                                    'student_id',
-                                    'title',
-                                    'excerpt',
-                                    'category',
-                                    'views',                                    
-                                    'image',
+                                    'staffeducation_id',
+                                    'name',
+                                    'position',
+                                    'staffeducation_type',
+                                    'email',                                    
+                                    'office_location',
                                 ],
-                                fileName: 'students', // not work!
+                                fileName: 'staffeducations', 
                                 },
                             },
                           }}  
@@ -256,4 +247,4 @@ const Students = () => {
     )
 }
 
-export default Students
+export default Staffeducations

@@ -60,22 +60,26 @@ const AcademicProgram = () => {
         { field: 'id', 
             headerName: 'ลำดับ',  
             headerAlign: 'center', 
-            flex: 0.3,
+            flex: 0.5,
             align: 'center'},
         {
             field: 'program_name',
-            headerName: 'เรื่อง',
-            flex: 0.8,
+            headerName: 'ชื่อหลักสูตร',
+            flex: 1,
             cellClassName: "name-column--cell"
         },
         { field: 'degree_level', 
-            headerName: 'ชื่อปริญญา', 
-            flex: 0.3, 
+            headerName: 'ปริญญา', 
+            flex: 1, 
             cellClassName: "name-column--cell" },
-        { field: 'department_id', 
-            headerName: 'ฝ่าย', 
-            flex: 0.4, 
-            cellClassName: "name-column--cell" },
+        {
+            field: 'dept_name',
+            headerName: 'ภาควิชา',
+            flex: 1,
+            renderCell: (params) => {
+                return params.row.Department?.dept_name || 'N/A';
+            }
+        },
         // { field: 'edition', 
         //     headerName: 'พิมพ์ครั้งที่', 
         //     flex: 0.4, 
@@ -145,7 +149,7 @@ const AcademicProgram = () => {
 
     return (
         <Box m="20px">
-            <Header title="ข้อมูลฝ่ายวิชาการ"/>
+            <Header title="ข้อมูลหลักสูตร"/>
             <Box m="40px 0 0 0" height="75vh" sx={{
                 "& .MuiDataGrid-root": {
                     // border: "none"

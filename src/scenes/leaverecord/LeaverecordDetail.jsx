@@ -9,16 +9,45 @@ import {
     FormControlLabel,
     FormControl,
     useMediaQuery,
+    CardActionArea,
+    Grid,
+    styled,
+    Card,
+    CardMedia    
   } from '@mui/material'
-
+import { format } from 'date-fns'
+import { th } from 'date-fns/locale'
 import Header from "../../components/Header"
 import { Formik, Field } from 'formik'
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate,useParams,useLocation } from 'react-router-dom'
+import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
 
+const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
-const AcademicProgramDetail = () => {
+const Item = ({image}) => {
+  const theme = useTheme()
+  const colors = tokens(theme.palette.mode)
+  return (
+    <Grid item xs={12} sm={4} ms={4} >
+        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
+          <CardActionArea >
+            <CardMedia
+              component="img"
+              height="220"
+              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
+              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
+              alt="herbal"
+              style={{borderRadius: '5px'}}
+            />            
+          </CardActionArea>
+        </Card>
+      </Grid>
+    )
+}
+
+const LeaverecordDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -29,34 +58,14 @@ const AcademicProgramDetail = () => {
 
   const location = useLocation()
 
-  console.log('Outsource add row', location.state.row)
+  console.log('Post add row', location.state.row)
 
-    const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
-    const INITIAL_ZOOM = 12
-    const [center, setCenter] = useState(INITIAL_CENTER);
-
-    const isNonMobile = useMediaQuery("(min-width:600px)")  
-
-
-    useEffect(() => {
-        if (location.state.row.latitude && location.state.row.latitude) {
-            setCenter({ lat: location.state.row.latitude, lng: location.state.row.longitude})
-        }
-    },[location.state.row])
-  // const [snackBarOpen, setSnackBarOpen] = useState(false)
-
-  // const [roleSelected, setRoleSelected] = useState('1')
-
-  // const { result } = useSelector((state) => state.app.roleReducer)
+  const isNonMobile = useMediaQuery("(min-width:600px)")  
 
 
       return <Box m="20px">
-        <Header title="รายละเอียดข้อมูล" subtitle="รายละเอียดข้อมูลองค์ความรู้การแพทย์แผนไทย"  />
+        <Header title="รายละเอียดข้อมูล" subtitle="รายละเอียดข้อมูลการโพสต์ข้อความ" />
                 <Box>
-                    {/* tab1 */}
-                        <Typography>
-                            ข้อมูลเบื้องต้น
-                        </Typography>
                     <Box mt='40px'>                
                     <Box 
                         display="grid"
@@ -71,50 +80,52 @@ const AcademicProgramDetail = () => {
                         variant="filled"
                         type="text"
                         label="รหัส"
-                        value={location.state.row.id}
-                        name="id"
-                        multiline={true}
-                        minRows="2"                        
-                        sx={{ gridColumn: "span 2" }}
+                        value={location.state.row.leave_id}
+                        name="leave_id"
+                        sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อหลักสูตร"
-                        value={location.state.row.program_name}
-                        name="program_name"
-                        multiline={true}
-                        minRows="2"                        
-                        sx={{ gridColumn: "span 2" }}
+                        label="ชื่อ"
+                        value={location.state.row.Staff.name}
+                        name="name"
+                        sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
-                   <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="ปริญญา"
-                         value={location.state.row.degree_level}
-                         name="degree_level"
-                         multiline={true}
-                         minRows="2"                         
-                         sx={{ gridColumn: "span 2" }}
-                         InputLabelProps={{ shrink: true }}
-                     />       
                     <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="ภาควิชา"
-                         value={location.state.row.Department?.dept_name}
-                         name="dept_name"
-                         multiline={true}
-                         minRows="2"                         
-                         sx={{ gridColumn: "span 2" }}
-                         InputLabelProps={{ shrink: true }}
-                     />       
-
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ประเภทการลา"
+                        value={location.state.row.leave_type}
+                        name="id"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันเริ่มต้น"
+                        value={location.state.row.start_date}
+                        name="start_date"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันสิ้นสุด"
+                        value={location.state.row.end_date}
+                        name="end_date"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                  
                     </Box>
                 </Box>
 
@@ -159,4 +170,4 @@ const AcademicProgramDetail = () => {
     </Box >
 }
 
-export default AcademicProgramDetail
+export default LeaverecordDetail

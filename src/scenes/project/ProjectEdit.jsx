@@ -20,18 +20,22 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from '@material-ui/pickers';
+
 import DateFnsUtils from '@date-io/date-fns';
+import { format } from 'date-fns'
 import { th } from 'date-fns/locale';
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { addStudent } from '../../actions/student.action'
-import { useNavigate } from 'react-router-dom'
+import { updateProject } from '../../actions/project.action'
+import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
+
+const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -51,22 +55,21 @@ const VisuallyHiddenInput = styled('input')({
   });
 
 const initialValues = {
-    title: "",
+    name: "",
 }
 
 const userSchema = yup.object().shape({
-    title: yup.string().required("ต้องใส่"),
-    excerpt: yup.string().required("ต้องใส่"),
-    category: yup.string().required("ต้องใส่"),
-    date: yup.string().required("ต้องใส่"),
+    // name: yup.string().required("ต้องใส่"),
+    // position: yup.string().required("ต้องใส่"),
+    // project_type: yup.string().required("ต้องใส่"),
+    // email: yup.string().required("ต้องใส่"),
+    // office_location: yup.string().required("ต้องใส่"),
 }) 
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
 const Item = ({image}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  console.log('image in Item => ',image)
   return (
     <Grid item xs={12} sm={4} ms={4} >
         <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
@@ -74,7 +77,8 @@ const Item = ({image}) => {
             <CardMedia
               component="img"
               height="220"
-              image={imagesUrl+'no-image-icon-23485.png'}
+              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
+              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
               alt="herbal"
               style={{borderRadius: '5px'}}
             />            
@@ -84,7 +88,7 @@ const Item = ({image}) => {
     )
 }
 
-const StudentAdd = () => {
+const ProjectEdit = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -92,6 +96,8 @@ const StudentAdd = () => {
   const dispatch = useDispatch()    
 
   const navigate = useNavigate()
+
+  const location = useLocation()
 
   const [open, setOpen] = useState(false)
 
@@ -107,99 +113,156 @@ const StudentAdd = () => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
-    const handleFormSubmit = (values) => {
-        console.log(values)
-        // dispatch(addUser(navigate,values))
-    }
-
     return <Box m="20px">
-        <Header title="เพิ่มโพสต์" subtitle="เพิ่มการโพสต์ข้อความ" />
+        <Header title="ปรับปรุงข้อมูล" subtitle="ปรับปรุงข้อมูลการโพสต์ข้อความ" />
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={th}>
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('name', values.title)
+              formData.append('project_id', values.id)
+              formData.append('title', values.title)
               console.log('values',values)
-              dispatch(addStudent(navigate, formData))
+              dispatch(updateProject(navigate, formData))
               setSubmitting(false)
             }}
-            initialValues={initialValues}
+            initialValues={location?.state?.row}
             validationSchema={userSchema}
         >
             {({ values, errors, touched, isSubmitting, dirty, isValid, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
                     <Box>
-                    <Box mt='40px'>                
+                    <Box mt='20px'>                
                     <Box 
                         display="grid"
                         gap="30px"
-                        gridTemplateColumns="repeat(3, minmax(0, 1fr))"
+                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                         sx={{
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
                     <TextField
                         fullWidth
-                        variant="filled"
+                        variant="outlined"
                         type="text"
-                        label="ชื่อ"
+                        label="รหัส"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.name}
-                        name="name"
-                        error={!!touched.name && !!errors.name}
-                        helperText={touched.name && errors.name}
+                        value={values?.project_id}
+                        name="project_id"
+                        error={!!touched.project_id && !!errors.project_id}
+                        helperText={touched.project_id && errors.project_id}
                         sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                        
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อโครงการ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.project_name}
+                        title="project_name"
+                        error={!!touched.project_name && !!errors.project_name}
+                        helperText={touched.project_name && errors.project_name}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
                     />
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="สาขา"
+                        label="ประเภทโครงการ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.program_name}
-                        name="program_name"
-                        error={!!touched.program_name && !!errors.program_name}
-                        helperText={touched.program_name && errors.position}
+                        value={values?.project_type}
+                        name="project_type"
+                        error={!!touched.project_type && !!errors.project_type}
+                        helperText={touched.project_type && errors.project_type}
                         sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
                     />       
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ที่ปรึกษา"
+                        label="วันเริ่มต้น"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.staff_type}
-                        name="advisor"
-                        error={!!touched.advisor && !!errors.advisor}
-                        helperText={touched.advisor && errors.advisor}
+                        value={values?.start_date}
+                        name="start_date"
+                        error={!!touched.start_date && !!errors.start_date}
+                        helperText={touched.start_date && errors.start_date}
                         sx={{ gridColumn: "span 1" }}
-                    />       
+                        InputLabelProps={{ shrink: true }}
+                    />                       
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันเริ่มต้น"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.end_date}
+                        name="end_date"
+                        error={!!touched.end_date && !!errors.end_date}
+                        helperText={touched.end_date && errors.end_date}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                       
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="แหล่งงบประมาณ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.budget_source}
+                        name="budget_source"
+                        error={!!touched.budget_source && !!errors.budget_source}
+                        helperText={touched.budget_source && errors.budget_source}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                       
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="งบประมาณ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.budget_amount}
+                        name="budget_amount"
+                        error={!!touched.budget_amount && !!errors.budget_amount}
+                        helperText={touched.budget_amount && errors.budget_amount}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                       
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="สถานะ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.status}
+                        name="status"
+                        error={!!touched.status && !!errors.status}
+                        helperText={touched.status && errors.status}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                
                      </Box>
                 </Box>
-                
-                <Box 
-                        display="grid"
-                        gap="30px"
-                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        sx={{
-                            "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
-                        }}                    
-                    >
+
                       <Box display="flex" justifyContent="start"
                           sx={{
                             mt: "20px", 
                             gridColumn: "span 4"
                         }}                    
                       >
-
-                          <Box>
-                          </Box>
-                     </Box>             
-                  </Box>   
+                      </Box>  
                     </Box>
                     
                     <Box 
@@ -251,7 +314,7 @@ const StudentAdd = () => {
                         >
                             ยกเลิก
                         </Button>    
-                        </Box>
+                        </Box>                
                   </Box>   
                 </form>
             )}
@@ -267,4 +330,4 @@ const StudentAdd = () => {
     
 }
 
-export default StudentAdd
+export default ProjectEdit

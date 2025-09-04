@@ -167,6 +167,34 @@ const StudentEdit = () => {
                          sx={{ gridColumn: "span 1" }}
                          InputLabelProps={{ shrink: true }}
                      />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="สาขา"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.program_name}
+                        name="program_name"
+                        error={!!touched.program_name && !!errors.program_name}
+                        helperText={touched.program_name && errors.position}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />       
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ที่ปรึกษา"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.staff_type}
+                        name="advisor"
+                        error={!!touched.advisor && !!errors.advisor}
+                        helperText={touched.advisor && errors.advisor}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                      
                      </Box>
                 </Box>
 
