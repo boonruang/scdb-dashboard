@@ -47,7 +47,7 @@ const Item = ({image}) => {
     )
 }
 
-const StudentDetail = () => {
+const PublicationDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -80,7 +80,7 @@ const StudentDetail = () => {
                         variant="filled"
                         type="text"
                         label="รหัส"
-                        value={location.state.row.student_id}
+                        value={location.state.row.pub_id}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -89,8 +89,8 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อ"
-                        value={location.state.row.name}
+                        label="ชื่อเรื่อง"
+                        value={location.state.row.title}
                         name="name"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -99,8 +99,8 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="สาขา"
-                        value={location.state.row.AcademicProgram?.program_name}
+                        label="วารสาร"
+                        value={location.state.row.journal_name}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -109,9 +109,29 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ที่ปรึกษา"
-                        value={location.state.row.advisor?.name}
-                        name="advisor"
+                        label="ปีที่ตีพิมพ์"
+                        value={location.state.row.publication_year}
+                        name="publication_type"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="คลอไทล์"
+                        value={location.state.row.quartile}
+                        name="quartile"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ฐานข้อมูล"
+                        value={location.state.row.database_source}
+                        name="database_source"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />                    
@@ -159,4 +179,4 @@ const StudentDetail = () => {
     </Box >
 }
 
-export default StudentDetail
+export default PublicationDetail

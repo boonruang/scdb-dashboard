@@ -195,11 +195,11 @@ const Sidebar = () => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Science Facalty Database
+                                    Science Data Center: SDC
                                 </Typography>
                                 <Typography
                                     variant='h7' color={colors.greenAccent[300]}
-                                >ระบบฐานข้อมูลคณะวิทยาศาสตร์</Typography>
+                                >ระบบฐานข้อมูลศูนย์กลางคณะวิทยาศาสตร์</Typography>
                             </Box>
                         </Box>
                     )}
@@ -218,11 +218,68 @@ const Sidebar = () => {
                          }
  
 
-                        <SubMenu title="1.ฝ่ายวิจัย" icon={<WbIncandescentIcon />}>
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="1.ด้านบุคลากร" icon={<WbIncandescentIcon />}>
+                            <Item
+                                title="ข้อมูลคลากร"
+                                to="/staff"
+                                icon={<SchoolIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ข้อมูลการศึกษาบุคลากร"
+                                to="/staffeducation"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                            <Item
+                                title="ข้อมูลการลาบุคลากร"
+                                to="/leaverecord"
+                                icon={<SchoolIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                            
+                                                        
+                         </SubMenu>   : undefined  }                          
+
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="2.ด้านกิจการนิสิต" icon={<MedicalInformationIcon />}>
+                            <Item
+                                title="ข้อมูลนิสิต"
+                                to="/student"
+                                icon={<PersonIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ทุนการศึกษา"
+                                to="/studentgrant"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                                                        
+                         </SubMenu>   : undefined  } 
+
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="3.ด้านหลักสูตร" icon={<FmdBadIcon />}>
+                            <Item
+                                title="ข้อมูลหลักสูตร"
+                                to="/academicprogram"
+                                icon={<DehazeIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                            
+                         </SubMenu>   : undefined  }                          
+
+
+                        <SubMenu title="4.ด้านการวิจัย" icon={<WbIncandescentIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ผลงานวิจัยตีพิมพ์"
-                                to="/student"
+                                to="/publication"
                                 icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -245,63 +302,13 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             /> : undefined  }      */}
                             
-                         </SubMenu>      
+                         </SubMenu>                                               
 
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="2.ฝ่ายกิจการนิสิต" icon={<MedicalInformationIcon />}>
-                            <Item
-                                title="ข้อมูลนิสิต"
-                                to="/student"
-                                icon={<PersonIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="กิจกรรมนิสิต"
-                                to="/student"
-                                icon={<StickyNote2Icon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> 
-                                                        
-                         </SubMenu>   : undefined  } 
-
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="3.ฝ่ายวิชาการ" icon={<FmdBadIcon />}>
-                            <Item
-                                title="ข้อมูลนิสิต"
-                                to="/student"
-                                icon={<PersonIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="ข้อมูลฝ่ายวิชาการ"
-                                to="/academicprogram"
-                                icon={<DehazeIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />                            
-                         </SubMenu>   : undefined  }                          
-
-
-                        <SubMenu title="4.ฝ่ายบุคคล" icon={<WbIncandescentIcon />}>
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
-                           ? <Item
-                                title="ข้อมูลคลากร"
-                                to="/student"
-                                icon={<SchoolIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> : undefined  } 
-                            
-                         </SubMenu>                            
-
-                        <SubMenu title="5.แผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
+                        <SubMenu title="5.ด้านแผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
                         { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="ข้อมูลโครงการ"
-                                to="/student"
+                                to="/project"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}

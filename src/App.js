@@ -10,7 +10,6 @@ import Calendar from "./scenes/calendar";
 import Bar from "./scenes/bar";
 import Pie from "./scenes/pie";
 import Line from "./scenes/line";
-import Geography from "./scenes/geography";
 import ThankyouReg from 'components/Thankyoupage'
 import Terms from 'components/Terms'
 // import Registration from 'components/Registration'
@@ -27,10 +26,34 @@ import StudentList from "scenes/student";
 import StudentAdd from "scenes/student/StudentAdd"; 
 import StudentDetail from "scenes/student/StudentDetail"; 
 import StudentEdit from "scenes/student/StudentEdit"; 
+import StudentgrantList from "scenes/studentgrant";
+import StudentgrantAdd from "scenes/studentgrant/StudentgrantAdd"; 
+import StudentgrantDetail from "scenes/studentgrant/StudentgrantDetail"; 
+import StudentgrantEdit from "scenes/studentgrant/StudentgrantEdit"; 
+import StaffList from "scenes/staff";
+import StaffAdd from "scenes/staff/StaffAdd"; 
+import StaffDetail from "scenes/staff/StaffDetail"; 
+import StaffEdit from "scenes/staff/StaffEdit"; 
+import StaffeducationList from "scenes/staffeducation";
+import StaffeducationAdd from "scenes/staffeducation/StaffeducationAdd"; 
+import StaffeducationDetail from "scenes/staffeducation/StaffeducationDetail"; 
+import StaffeducationEdit from "scenes/staffeducation/StaffeducationEdit"; 
 import AcademicProgramList from "scenes/academicprogram";
 import AcademicProgramAdd from "scenes/academicprogram/AcademicProgramAdd"; 
 import AcademicProgramDetail from "scenes/academicprogram/AcademicProgramDetail"; 
 import AcademicProgramEdit from "scenes/academicprogram/AcademicProgramEdit"; 
+import PublicationList from "scenes/publication";
+import PublicationAdd from "scenes/publication/PublicationAdd"; 
+import PublicationDetail from "scenes/publication/PublicationDetail"; 
+import PublicationEdit from "scenes/publication/PublicationEdit"; 
+import ProjectList from "scenes/project";
+import ProjectAdd from "scenes/project/ProjectAdd"; 
+import ProjectDetail from "scenes/project/ProjectDetail"; 
+import ProjectEdit from "scenes/project/ProjectEdit"; 
+import LeaverecordList from "scenes/leaverecord";
+import LeaverecordAdd from "scenes/leaverecord/LeaverecordAdd"; 
+import LeaverecordDetail from "scenes/leaverecord/LeaverecordDetail"; 
+import LeaverecordEdit from "scenes/leaverecord/LeaverecordEdit"; 
 import UsersList from "scenes/users/list";
 import UsersAdd from "scenes/users/add"; 
 import Log from "scenes/log";
@@ -76,15 +99,38 @@ function App() {
           <Route path="student/detail" element={<StudentDetail />} />
           <Route path="student/edit" element={<StudentEdit />} />
           <Route path="student" element={<StudentList />} />
+          <Route path="studentgrant/add" element={<StudentgrantAdd />} />
+          <Route path="studentgrant/detail" element={<StudentgrantDetail />} />
+          <Route path="studentgrant/edit" element={<StudentgrantEdit />} />
+          <Route path="studentgrant" element={<StudentgrantList />} />
+          <Route path="staff/add" element={<StaffAdd />} />
+          <Route path="staff/detail" element={<StaffDetail />} />
+          <Route path="staff/edit" element={<StaffEdit />} />
+          <Route path="staff" element={<StaffList />} />
+          <Route path="staffeducation/add" element={<StaffeducationAdd />} />
+          <Route path="staffeducation/detail" element={<StaffeducationDetail />} />
+          <Route path="staffeducation/edit" element={<StaffeducationEdit />} />
+          <Route path="staffeducation" element={<StaffeducationList />} />
           <Route path="academicprogram/add" element={<AcademicProgramAdd />} />
           <Route path="academicprogram/detail" element={<AcademicProgramDetail />} />
           <Route path="academicprogram/edit" element={<AcademicProgramEdit />} />
           <Route path="academicprogram" element={<AcademicProgramList />} />          
+          <Route path="publication/add" element={<PublicationAdd />} />
+          <Route path="publication/detail" element={<PublicationDetail />} />
+          <Route path="publication/edit" element={<PublicationEdit />} />
+          <Route path="publication" element={<PublicationList />} />     
+          <Route path="project/add" element={<ProjectAdd />} />
+          <Route path="project/detail" element={<ProjectDetail />} />
+          <Route path="project/edit" element={<ProjectEdit />} />
+          <Route path="project" element={<ProjectList />} />                  
+          <Route path="leaverecord/add" element={<LeaverecordAdd />} />
+          <Route path="leaverecord/detail" element={<LeaverecordDetail />} />
+          <Route path="leaverecord/edit" element={<LeaverecordEdit />} />
+          <Route path="leaverecord" element={<LeaverecordList />} />                  
           <Route path="calendar" element={<Calendar />} />
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />
           <Route path="line" element={<Line />} />
-          <Route path="geography" element={<Geography />} />
 
           <Route path="form" element={<Form />} />
         </Route>

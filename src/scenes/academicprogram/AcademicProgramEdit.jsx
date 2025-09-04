@@ -139,146 +139,51 @@ const AcademicEdit = () => {
                          disabled
                      />
 
+                <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อหลักสูตร"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.program_name}
+                        name="name"
+                        multiline={true}
+                        minRows="2"                        
+                        error={!!touched.program_name && !!errors.program_name}
+                        helperText={touched.program_name && errors.program_name}
+                        sx={{ gridColumn: "span 2" }}
+                    />
                     <TextField
                          fullWidth
                          variant="filled"
                          type="text"
-                         label="เรื่อง"
+                         label="ปริญญา"
                          onBlur={handleBlur}
                          onChange={handleChange}
-                         value={values?.name}
-                         name="name"
+                         value={values.degree_level}
+                         name="degree_level"
                          multiline={true}
-                         minRows="2"                        
-                         error={!!touched.name && !!errors.name}
-                         helperText={touched.name && errors.name}
+                         minRows="2"                         
+                         error={!!touched.degree_level && !!errors.degree_level}
+                         helperText={touched.degree_level && errors.degree_level}
                          sx={{ gridColumn: "span 2" }}
-                     />
-                     <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="ชื่อผู้แต่ง"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.author}
-                          name="author"
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.author && !!errors.author}
-                          helperText={touched.author && errors.author}
-                          sx={{ gridColumn: "span 2" }}
-                      />       
-                     <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="ปีที่ตีพิมพ์"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.publishyear}
-                          name="publishyear"
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.publishyear && !!errors.publishyear}
-                          helperText={touched.publishyear && errors.publishyear}
-                          sx={{ gridColumn: "span 2" }}
-                      />       
-                      
-                      <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="พิมพ์ครั้งที่"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.edition}
-                          name="edition"
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.edition && !!errors.edition}
-                          helperText={touched.edition && errors.edition}
-                          sx={{ gridColumn: "span 2" }}
-                      />     
-                      <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="สำนักพิมพ์"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.journal}
-                          name="journal"
-                          multiline={true}
-                          minRows="2"                       
-                          error={!!touched.journal && !!errors.journal}
-                          helperText={touched.journal && errors.journal}
-                          sx={{ gridColumn: "span 2" }}
-                      />     
-                      
-                      <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="สถานที่พิมพ์"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.press}
-                          name="press"
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.press && !!errors.press}
-                          helperText={touched.press && errors.press}
-                          sx={{ gridColumn: "span 2" }}
-                      />     
-  
-                      <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="ประเภท"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.type}
-                          name="type"
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.type && !!errors.type}
-                          helperText={touched.type && errors.type}
-                          sx={{ gridColumn: "span 2" }}
-                      />                                         
-  
-                      <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="อ้างอิง"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.reference}
-                          name="reference"     
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.reference && !!errors.reference}
-                          helperText={touched.reference && errors.reference}
-                          sx={{ gridColumn: "span 2" }}
-                      /> 
- 
-                       <TextField
-                          fullWidth
-                          variant="filled"
-                          type="text"
-                          label="เอกสารแนบ"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.attachment}
-                          name="attachment"     
-                          multiline={true}
-                          minRows="2"                         
-                          error={!!touched.attachment && !!errors.attachment}
-                          helperText={touched.attachment && errors.attachment}
-                          sx={{ gridColumn: "span 2" }}
-                      /> 
+                     />       
+                    <TextField
+                         fullWidth
+                         variant="filled"
+                         type="text"
+                         label="ภาควิชา"
+                         onBlur={handleBlur}
+                         onChange={handleChange}
+                         value={values.dept_name}
+                         name="dept_name"
+                         multiline={true}
+                         minRows="2"                         
+                         error={!!touched.dept_name && !!errors.dept_name}
+                         helperText={touched.dept_name && errors.dept_name}
+                         sx={{ gridColumn: "span 2" }}
+                     />       
                      </Box>
                 </Box>
                      

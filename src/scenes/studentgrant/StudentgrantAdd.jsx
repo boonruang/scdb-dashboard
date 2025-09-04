@@ -27,7 +27,7 @@ import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { addStudent } from '../../actions/student.action'
+import { addStudentgrant } from '../../actions/studentgrant.action'
 import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -84,7 +84,7 @@ const Item = ({image}) => {
     )
 }
 
-const StudentAdd = () => {
+const StudentgrantgrantAdd = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -121,7 +121,7 @@ const StudentAdd = () => {
               let formData = new FormData()
               formData.append('name', values.title)
               console.log('values',values)
-              dispatch(addStudent(navigate, formData))
+              dispatch(addStudentgrant(navigate, formData))
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -267,4 +267,4 @@ const StudentAdd = () => {
     
 }
 
-export default StudentAdd
+export default StudentgrantgrantAdd

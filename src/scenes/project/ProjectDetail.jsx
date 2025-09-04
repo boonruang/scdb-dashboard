@@ -47,7 +47,7 @@ const Item = ({image}) => {
     )
 }
 
-const StudentDetail = () => {
+const ProjectDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -80,7 +80,7 @@ const StudentDetail = () => {
                         variant="filled"
                         type="text"
                         label="รหัส"
-                        value={location.state.row.student_id}
+                        value={location.state.row.project_id}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -89,9 +89,9 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อ"
-                        value={location.state.row.name}
-                        name="name"
+                        label="ชื่อโครงการ"
+                        value={location.state.row.project_name}
+                        name="project_name"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
@@ -99,9 +99,9 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="สาขา"
-                        value={location.state.row.AcademicProgram?.program_name}
-                        name="id"
+                        label="ประเภทโครงการ"
+                        value={location.state.row.project_type}
+                        name="project_type"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
@@ -109,9 +109,59 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ที่ปรึกษา"
-                        value={location.state.row.advisor?.name}
-                        name="advisor"
+                        label="วันเริ่มต้น"
+                        value={location.state.row.start_date}
+                        name="start_date"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันสิ้นสุด"
+                        value={location.state.row.end_date}
+                        name="end_date"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="แหล่งงบประมาณ"
+                        value={location.state.row.budget_source}
+                        name="budget_source"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="งบประมาณ"
+                        value={location.state.row.budget_amount}
+                        name="budget_amount"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="สถานะ"
+                        value={location.state.row.status}
+                        name="status"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ภาควิชา"
+                        value={location.state.row.Department.dept_name}
+                        name="status"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />                    
@@ -159,4 +209,4 @@ const StudentDetail = () => {
     </Box >
 }
 
-export default StudentDetail
+export default ProjectDetail
