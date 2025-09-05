@@ -313,17 +313,24 @@ const Sidebar = () => {
                             
                          </SubMenu>                                               
 
-                        <SubMenu title="5.ด้านแผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
-                           ? <Item
+
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="5.ด้านแผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
+                            <Item
                                 title="ข้อมูลโครงการ"
                                 to="/project"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> : undefined  } 
-                            
-                         </SubMenu>  
+                            />
+                            <Item
+                                title="การติดตามเอกสาร"
+                                to="/document"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                         </SubMenu>   : undefined  }                           
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="6.สำหรับผู้ดูแลระบบ" icon={<PeopleOutlinedIcon />}>
