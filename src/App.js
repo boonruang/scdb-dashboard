@@ -53,10 +53,17 @@ import PublicationList from "scenes/publication";
 import PublicationAdd from "scenes/publication/PublicationAdd"; 
 import PublicationDetail from "scenes/publication/PublicationDetail"; 
 import PublicationEdit from "scenes/publication/PublicationEdit"; 
+
 import ProjectList from "scenes/project";
 import ProjectAdd from "scenes/project/ProjectAdd"; 
 import ProjectDetail from "scenes/project/ProjectDetail"; 
 import ProjectEdit from "scenes/project/ProjectEdit"; 
+
+import DocumentList from "scenes/document";
+import DocumentAdd from "scenes/document/DocumentAdd"; 
+import DocumentDetail from "scenes/document/DocumentDetail"; 
+import DocumentEdit from "scenes/document/DocumentEdit"; 
+
 import LeaverecordList from "scenes/leaverecord";
 import LeaverecordAdd from "scenes/leaverecord/LeaverecordAdd"; 
 import LeaverecordDetail from "scenes/leaverecord/LeaverecordDetail"; 
@@ -133,10 +140,17 @@ function App() {
           <Route path="publication/detail" element={<PublicationDetail />} />
           <Route path="publication/edit" element={<PublicationEdit />} />
           <Route path="publication" element={<PublicationList />} />     
+
           <Route path="project/add" element={<ProjectAdd />} />
           <Route path="project/detail" element={<ProjectDetail />} />
           <Route path="project/edit" element={<ProjectEdit />} />
-          <Route path="project" element={<ProjectList />} />                  
+          <Route path="project" element={<ProjectList />} />     
+
+          <Route path="document/add" element={<DocumentAdd />} />
+          <Route path="document/detail" element={<DocumentDetail />} />
+          <Route path="document/edit" element={<DocumentEdit />} />
+          <Route path="document" element={<DocumentList />} />   
+
           <Route path="leaverecord/add" element={<LeaverecordAdd />} />
           <Route path="leaverecord/detail" element={<LeaverecordDetail />} />
           <Route path="leaverecord/edit" element={<LeaverecordEdit />} />
