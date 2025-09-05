@@ -170,7 +170,7 @@ const Projects = () => {
 
     return (
         <Box m="20px">
-            <Header title="ข้อมูลบุคลากร" subtitle="รายการข้อมูลบุคลากร" />
+            <Header title="ข้อมูลแผนและงบประมาณ" subtitle="รายการข้อมูลแผนและงบประมาณ" />
             <Box m="40px 0 0 0" height="75vh" sx={{
                 "& .MuiDataGrid-root": {
                     border: 1,

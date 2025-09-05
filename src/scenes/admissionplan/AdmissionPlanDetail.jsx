@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate,useParams,useLocation } from 'react-router-dom'
 
 
-const AcademicProgramDetail = () => {
+const AdmissionPlanDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -51,7 +51,7 @@ const AcademicProgramDetail = () => {
 
 
       return <Box m="20px">
-        <Header title="รายละเอียดข้อมูล" subtitle="รายละเอียดข้อมูลหลักสูตร"  />
+        <Header title="รายละเอียดข้อมูล" subtitle="รายละเอียดข้อมูลแผนการรับนิสิต"  />
                 <Box>
                     {/* tab1 */}
                         <Typography>
@@ -159,4 +159,4 @@ const AcademicProgramDetail = () => {
     </Box >
 }
 
-export default AcademicProgramDetail
+export default AdmissionPlanDetail

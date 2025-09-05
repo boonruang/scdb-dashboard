@@ -71,7 +71,7 @@ const AcademicProgramAdd = () => {
     }
 
     return <Box m="20px">
-        <Header title="เพิ่มข้อมูล" subtitle="เพิ่มข้อมูลองค์ความรู้การแพทย์แผนไทย" />
+        <Header title="เพิ่มข้อมูล" subtitle="เพิ่มข้อมูลหลักสูตร" />
 
         <Formik
             // onSubmit={handleFormSubmit}

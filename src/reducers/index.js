@@ -15,6 +15,7 @@ import academicProgramReducer from "./academicProgram.reducer";
 import projectReducer from "./project.reducer";   
 import staffeducationReducer from "./staffeducation.reducer";   
 import leaverecordReducer from "./leaverecord.reducer";   
+import admissionPlanReducer from "./admissionPlan.reducer";   
 
 export default combineReducers({
   appReducer,
@@ -33,4 +34,5 @@ export default combineReducers({
   projectReducer,
   staffeducationReducer,
   leaverecordReducer,
+  admissionPlanReducer,
 })

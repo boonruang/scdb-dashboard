@@ -150,7 +150,7 @@ const Publications = () => {
 
     return (
         <Box m="20px">
-            <Header title="ข้อมูลบุคลากร" subtitle="รายการข้อมูลบุคลากร" />
+            <Header title="ข้อมูลงานวิจัย" subtitle="รายการข้อมูลงานวิจัย" />
             <Box m="40px 0 0 0" height="75vh" sx={{
                 "& .MuiDataGrid-root": {
                     border: 1,
