@@ -263,6 +263,7 @@ const Sidebar = () => {
                                                         
                          </SubMenu>   : undefined  } 
 
+
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="3.ด้านหลักสูตร" icon={<FmdBadIcon />}>
                             <Item
@@ -271,8 +272,16 @@ const Sidebar = () => {
                                 icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                            
-                         </SubMenu>   : undefined  }                          
+                            />
+                            <Item
+                                title="แผนการรับนิสิต"
+                                to="/admissionplan"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                                                        
+                         </SubMenu>   : undefined  }                                               
 
 
                         <SubMenu title="4.ด้านการวิจัย" icon={<WbIncandescentIcon />}>

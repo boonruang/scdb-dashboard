@@ -38,10 +38,17 @@ import StaffeducationList from "scenes/staffeducation";
 import StaffeducationAdd from "scenes/staffeducation/StaffeducationAdd"; 
 import StaffeducationDetail from "scenes/staffeducation/StaffeducationDetail"; 
 import StaffeducationEdit from "scenes/staffeducation/StaffeducationEdit"; 
+
 import AcademicProgramList from "scenes/academicprogram";
 import AcademicProgramAdd from "scenes/academicprogram/AcademicProgramAdd"; 
 import AcademicProgramDetail from "scenes/academicprogram/AcademicProgramDetail"; 
 import AcademicProgramEdit from "scenes/academicprogram/AcademicProgramEdit"; 
+
+import AdmissionPlanList from "scenes/admissionplan";
+import AdmissionPlanAdd from "scenes/admissionplan/AdmissionPlanAdd"; 
+import AdmissionPlanDetail from "scenes/admissionplan/AdmissionPlanDetail"; 
+import AdmissionPlanEdit from "scenes/admissionplan/AdmissionPlanEdit"; 
+
 import PublicationList from "scenes/publication";
 import PublicationAdd from "scenes/publication/PublicationAdd"; 
 import PublicationDetail from "scenes/publication/PublicationDetail"; 
@@ -111,10 +118,17 @@ function App() {
           <Route path="staffeducation/detail" element={<StaffeducationDetail />} />
           <Route path="staffeducation/edit" element={<StaffeducationEdit />} />
           <Route path="staffeducation" element={<StaffeducationList />} />
+
           <Route path="academicprogram/add" element={<AcademicProgramAdd />} />
           <Route path="academicprogram/detail" element={<AcademicProgramDetail />} />
           <Route path="academicprogram/edit" element={<AcademicProgramEdit />} />
-          <Route path="academicprogram" element={<AcademicProgramList />} />          
+          <Route path="academicprogram" element={<AcademicProgramList />} />    
+
+          <Route path="admissionplan/add" element={<AdmissionPlanAdd />} />
+          <Route path="admissionplan/detail" element={<AdmissionPlanDetail />} />
+          <Route path="admissionplan/edit" element={<AdmissionPlanEdit />} />
+          <Route path="admissionplan" element={<AdmissionPlanList />} />   
+
           <Route path="publication/add" element={<PublicationAdd />} />
           <Route path="publication/detail" element={<PublicationDetail />} />
           <Route path="publication/edit" element={<PublicationEdit />} />

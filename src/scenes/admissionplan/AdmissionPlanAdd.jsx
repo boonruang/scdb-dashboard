@@ -16,8 +16,8 @@ import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { updateAcademicProgram } from '../../actions/academicProgram.action'
-import { useNavigate,useLocation } from 'react-router-dom'
+import { addAdmissionPlan } from '../../actions/admissionPlan.action'
+import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
 const initialValues = {
@@ -34,7 +34,7 @@ const userSchema = yup.object().shape({
     edition: yup.string().required("ต้องใส่").matches(/^[0-9]{1}$/,"ต้องประกอบด้วยตัวเลข"),
 }) // end yup
 
-const AcademicEdit = () => {
+const AdmissionPlanAdd = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -43,26 +43,11 @@ const AcademicEdit = () => {
 
   const navigate = useNavigate()
 
-  const location = useLocation()
-
   const [open, setOpen] = useState(false)
 
   const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
   const INITIAL_ZOOM = 12
-  const [initMap, setInitMap] =useState(INITIAL_CENTER)
-  const [center, setCenter] = useState(INITIAL_CENTER);    
-
-    useEffect(() => {
-    if (location.state.row.latitude && location.state.row.latitude) {
-        setInitMap({ lat: location.state.row.latitude, lng: location.state.row.longitude})
-    }
-    },[location.state.row])
-
-    useEffect(() => {
-        if (location.state.row.latitude && location.state.row.latitude) {
-            setCenter(initMap)
-        }
-    },[initMap])
+  const [center, setCenter] = useState(INITIAL_CENTER);
 
   //  if (result) {
   //   console.log('role result',result)
@@ -86,13 +71,12 @@ const AcademicEdit = () => {
     }
 
     return <Box m="20px">
-        <Header title="ปรับปรุงข้อมูล" subtitle="ปรับปรุงข้อมูลหลักสูตร" />
+        <Header title="เพิ่มข้อมูล" subtitle="เพิ่มข้อมูลแผนการรับนิสิต" />
 
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('id', values.id)
               formData.append('name', values.name)
               formData.append('author', values.author)
               formData.append('journal', values.journal)
@@ -104,10 +88,10 @@ const AcademicEdit = () => {
               formData.append('reference', values.reference)
               formData.append('status', 'true')
               console.log('values',values)
-              dispatch(updateAcademicProgram(navigate, formData))
+              dispatch(addAdmissionPlan(navigate, formData))
               setSubmitting(false)
             }}
-            initialValues={location.state.row}
+            initialValues={initialValues}
             validationSchema={userSchema}
         >
             {({ values, errors, touched, isSubmitting, dirty, isValid, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
@@ -117,7 +101,7 @@ const AcademicEdit = () => {
                         <Typography>
                             ข้อมูลเบื้องต้น
                         </Typography>
-                    <Box mt='20px'>                
+                    <Box mt='40px'>                
                     <Box 
                         display="grid"
                         gap="30px"
@@ -127,19 +111,6 @@ const AcademicEdit = () => {
                         }}
                     >
                     <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="รหัส"
-                         value={values?.id}
-                         name="id"
-                         multiline={true}
-                         minRows="2"                        
-                         sx={{ gridColumn: "span 2" }}
-                         disabled
-                     />
-
-                <TextField
                         fullWidth
                         variant="filled"
                         type="text"
@@ -184,9 +155,9 @@ const AcademicEdit = () => {
                          helperText={touched.dept_name && errors.dept_name}
                          sx={{ gridColumn: "span 2" }}
                      />       
+                     
                      </Box>
                 </Box>
-                     
 
                     </Box>
                     
@@ -254,4 +225,4 @@ const AcademicEdit = () => {
     
 }
 
-export default AcademicEdit
+export default AdmissionPlanAdd

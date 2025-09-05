@@ -109,7 +109,7 @@ export const addAcademicProgram = (navigate, formData) => {
       let result = await httpClient.post(server.ACADEMIC_URL, formData)
       console.log('addAcademicProgram formData successfully: ', result)
       setTimeout(() => {
-        navigate('/knowledgebase')
+        navigate('/academicprogram')
       },5000)      
     } catch (error) {
       // failed
@@ -127,7 +127,7 @@ export const updateAcademicProgram = (navigate, formData) => {
       let result = await httpClient.put(server.ACADEMIC_URL, formData)
       console.log('updated AcademicProgram formData successfully: ', result)
       setTimeout(() => {
-        navigate('/knowledgebase')
+        navigate('/academicprogram')
       },5000)
     } catch (error) {
       // failed

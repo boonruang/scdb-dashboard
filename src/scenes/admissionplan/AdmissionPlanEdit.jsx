@@ -16,7 +16,7 @@ import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { updateAcademicProgram } from '../../actions/academicProgram.action'
+import { updateAdmissionPlan } from '../../actions/admissionPlan.action'
 import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
@@ -86,7 +86,7 @@ const AcademicEdit = () => {
     }
 
     return <Box m="20px">
-        <Header title="ปรับปรุงข้อมูล" subtitle="ปรับปรุงข้อมูลหลักสูตร" />
+        <Header title="ปรับปรุงข้อมูล" subtitle="ปรับปรุงข้อมูลแผนการรับนิสิต" />
 
         <Formik
             // onSubmit={handleFormSubmit}
@@ -104,7 +104,7 @@ const AcademicEdit = () => {
               formData.append('reference', values.reference)
               formData.append('status', 'true')
               console.log('values',values)
-              dispatch(updateAcademicProgram(navigate, formData))
+              dispatch(updateAdmissionPlan(navigate, formData))
               setSubmitting(false)
             }}
             initialValues={location.state.row}
