@@ -47,7 +47,7 @@ const BarChartPublicationScopus = ({ isDashboard = false, data }) => {
             keys={[
                 'scopus',
             ]}
-            indexBy="province"
+            indexBy="publication"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
@@ -88,7 +88,7 @@ const BarChartPublicationScopus = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'province',
+                legend: isDashboard ? undefined : 'publication',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -138,7 +138,7 @@ const BarChartPublicationScopus = ({ isDashboard = false, data }) => {
             ]}
             role="application"
             ariaLabel="Nivo bar chart demo"
-            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in province: " + e.indexValue }}
+            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in publication: " + e.indexValue }}
         />
     )
 }

@@ -235,7 +235,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ต่างประเทศ
+                            จำนวนผลงานตีพิมพ์ตามสาขา
                         </Typography>
                         <Box
                             height="245px"

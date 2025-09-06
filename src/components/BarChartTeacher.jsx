@@ -47,7 +47,7 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
             keys={[
                 'teacher',
             ]}
-            indexBy="teacher"
+            indexBy="catalog"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
@@ -88,7 +88,7 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'province',
+                legend: isDashboard ? undefined : 'catalog',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -139,7 +139,7 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
             ]}
             role="application"
             ariaLabel="Nivo bar chart demo"
-            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in province: " + e.indexValue }}
+            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in catalog: " + e.indexValue }}
         />
     )
 }
