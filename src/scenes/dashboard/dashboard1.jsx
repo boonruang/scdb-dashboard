@@ -17,6 +17,8 @@ import LineChart from "../../components/LineChart"
 // import BarChart from "../../components/BarChart"
 import BarChartAllFarmer from "../../components/BarChartAllFarmer"
 import BarChartAcademic from "../../components/BarChartAcademic"
+import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
+import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
 import BarChartStudent from "../../components/BarChartStudent"
@@ -70,7 +72,7 @@ const Dashbaord = () => {
                 gap="20px"
             >
                 {/* ROW 1 */}
-                <Box
+                {/* <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
                     display="flex"
@@ -160,7 +162,7 @@ const Dashbaord = () => {
                             />
                         }
                     />
-                </Box>
+                </Box> */}
 
                 {/* END ROW 1 */}
 
@@ -181,13 +183,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานวิชาการ
+                            จำนวนผลงานติพิมพ์ฐาน Scopus
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.publicationScopus && <BarChartPublicationScopus isDashboard={true} data={dashboardReducer?.result?.publicationScopus} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -207,13 +209,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ภายในประเทศ
+                            จำนวนผลงานติพิมพ์ฐาน ISI(SCIE)
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
                         </Box>
                     </Box>                     
                 </Box>
