@@ -14,7 +14,7 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
                 <Box>
                     {icon}
                     <Typography
-                        variant="h4"
+                        variant="h3"
                         fontWeight="bold"
                         sx={{ color: colors.grey[100] }}
                     >
@@ -32,7 +32,7 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
                 mt="2px"
             >
                 <Typography
-                    variant="h5"
+                    variant="h4"
                     sx={{ color: colors.greenAccent[500] }}
                 >
                     {subtitle}

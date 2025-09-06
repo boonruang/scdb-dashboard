@@ -2,7 +2,7 @@ import { ColorModeContext, useMode } from "./theme"
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { useDispatch,useSelector } from "react-redux";
 import { Routes,Route, useNavigate } from 'react-router-dom';
-// import Dashbaord from "./scenes/dashboard";
+import Dashbaord from "./scenes/dashboard";
 import Dashbaord1 from "./scenes/dashboard/dashboard1";
 import Dashbaord2 from "./scenes/dashboard/dashboard2";
 import Dashbaord3 from "./scenes/dashboard/dashboard3";
@@ -102,8 +102,8 @@ function App() {
       <Route path="/" element={<Layout />}>
 
         <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>
-          <Route path="/" element={<Dashbaord1 />} />
-          <Route path="dashboard" element={<Dashbaord1 />} />
+          <Route path="/" element={<Dashbaord />} />
+          <Route path="dashboard" element={<Dashbaord />} />
           <Route path="dashboard/dashboard1" element={<Dashbaord1 />} />
           <Route path="dashboard/dashboard2" element={<Dashbaord2 />} />
           <Route path="dashboard/dashboard3" element={<Dashbaord3 />} />
