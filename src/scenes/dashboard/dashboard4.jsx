@@ -15,8 +15,9 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import TrafficIcon from "@mui/icons-material/Traffic"
 import LineChart from "../../components/LineChart"
 // import BarChart from "../../components/BarChart"
-import BarChartAllFarmer from "../../components/BarChartAllFarmer"
 import BarChartAcademic from "../../components/BarChartAcademic"
+import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
+import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
 import BarChartStudent from "../../components/BarChartStudent"
@@ -58,7 +59,7 @@ const Dashbaord = () => {
                 display="flex" justifyContent="space-between"
                 alignItems="center"
             >
-                <Header title="แดชบอร์ด" subtitle="แดชบอร์ดแสดงช้อมูล" />
+                <Header title="แดชบอร์ดข้อมูลด้านวิจัย" subtitle=""/>
 
             </Box>
 
@@ -70,7 +71,7 @@ const Dashbaord = () => {
                 gap="20px"
             >
                 {/* ROW 1 */}
-                <Box
+                {/* <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
                     display="flex"
@@ -160,11 +161,93 @@ const Dashbaord = () => {
                             />
                         }
                     />
-                </Box>
+                </Box> */}
 
                 {/* END ROW 1 */}
 
-               {/* START ROW 2 */}
+                {/* START ROW 2 */}
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนผลงานติพิมพ์ฐาน Scopus
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.publicationScopus && <BarChartPublicationScopus isDashboard={true} data={dashboardReducer?.result?.publicationScopus} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนผลงานติพิมพ์ฐาน ISI(SCIE)
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนผลงานตีพิมพ์ตามสาขา
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+
+                {/* END ROW 2 */}
+
+                {/* START ROW 3 */}
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -240,88 +323,6 @@ const Dashbaord = () => {
                             mt="-25px"
                         >
                             {dashboardReducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-
-                {/* END ROW 2 */}                
-
-                {/* START ROW 3 */}
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานวิชาการ
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานตีพิมพ์ภายในประเทศ
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานตีพิมพ์ต่างประเทศ
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>

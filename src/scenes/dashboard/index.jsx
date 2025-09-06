@@ -16,6 +16,8 @@ import TrafficIcon from "@mui/icons-material/Traffic"
 import LineChart from "../../components/LineChart"
 // import BarChart from "../../components/BarChart"
 import BarChartAcademic from "../../components/BarChartAcademic"
+import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
+import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
 import BarChartStudent from "../../components/BarChartStudent"
@@ -57,7 +59,7 @@ const Dashbaord = () => {
                 display="flex" justifyContent="space-between"
                 alignItems="center"
             >
-                <Header title="แดชบอร์ดข้อมูลด้านหลักสูตร" subtitle=""/>
+                <Header title="แดชบอร์ด" subtitle="แดชบอร์ดแสดงช้อมูล" />
 
             </Box>
 
@@ -180,13 +182,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานวิชาการ
+                            จำนวนผลงานติพิมพ์ฐาน Scopus
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.publicationScopus && <BarChartPublicationScopus isDashboard={true} data={dashboardReducer?.result?.publicationScopus} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -206,13 +208,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ภายในประเทศ
+                            จำนวนผลงานติพิมพ์ฐาน ISI(SCIE)
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -232,7 +234,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ต่างประเทศ
+                            จำนวนผลงานตีพิมพ์ตามสาขา
                         </Typography>
                         <Box
                             height="245px"
