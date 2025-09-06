@@ -207,7 +207,8 @@ const Sidebar = () => {
 
                     {/* MENU ITEMS */}
                     <Box paddingLeft={!isSidebar ? undefined : '2%'} >
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
+
+                        {/* { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
                            ? <Item
                                 title="แดชบอร์ด"
                                 to="/dashboard"
@@ -216,7 +217,47 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             /> : undefined
                          }
+  */}
  
+                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="แดชบอร์ด" icon={<HomeOutlinedIcon />}>
+                            <Item
+                                title="ด้านบุคลากร"
+                                to="/dashboard/dashboard1"
+                                icon={<WbIncandescentIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ด้านกิจการนิสิต"
+                                to="/dashboard/dashboard2"
+                                icon={<MedicalInformationIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                            <Item
+                                title="ด้านหลักสูตร"
+                                to="/dashboard/dashboard3"
+                                icon={<FmdBadIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ด้านวิจัย"
+                                to="/dashboard/dashboard4"
+                                icon={<WbIncandescentIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            /> 
+                            <Item
+                                title="ด้านแผนและงบประมาณ"
+                                to="/dashboard/dashboard5"
+                                icon={<PlaylistAddCheckIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                                                        
+                         </SubMenu>   : undefined  }  
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="1.ด้านบุคลากร" icon={<WbIncandescentIcon />}>
