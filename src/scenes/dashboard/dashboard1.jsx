@@ -24,6 +24,7 @@ import BarChartTeacher from "../../components/BarChartTeacher"
 import GeographyChart from "../../components/GeographyChart"
 import PieChart from "../../components/PieChart"
 import StatBox from "../../components/StatBox"
+import StatBoxStudent from "../../components/StatBoxStudent"
 import StatBoxStaff from "../../components/StatBoxStaff"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
@@ -77,30 +78,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBoxStaff
-                        title={dashboardReducer.result && dashboardReducer.result.student}
-                        subtitle="จำนวนนิสิต"
-                        icon={
-                            <GrassIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBoxStaff
-                        title={dashboardReducer.result && dashboardReducer.result.staff}
-                        subtitle="จำนวนบุคลากร"
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountDept}
+                        subtitle="ภาควิชา"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -119,9 +99,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBoxStaff
-                        title={dashboardReducer.result && dashboardReducer.result.user}
-                        subtitle="จำนวนผู้ใช้"
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountBachelor}
+                        subtitle="หลักสูตร ป.ตรี"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -140,11 +120,32 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBoxStaff
-                        title={dashboardReducer.result && dashboardReducer.result.log}
-                        subtitle="จำนวน Log"
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountMaster}
+                        subtitle="หลักสูตร ป.โท"
                         icon={
-                            <WarehouseIcon
+                            <PeopleOutlinedIcon
+                                sx={{
+                                    color: colors.greenAccent[600],
+                                    fontSize: "26px"
+                                }}
+                            />
+                        }
+                    />
+                </Box>
+
+                <Box
+                    gridColumn="span 3"
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountPhd}
+                        subtitle="หลักสูตร ป.เอก"
+                        icon={
+                            <PeopleOutlinedIcon
                                 sx={{
                                     color: colors.greenAccent[600],
                                     fontSize: "26px"

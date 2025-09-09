@@ -238,7 +238,7 @@ const Sidebar = () => {
                             <Item
                                 title="ด้านกิจการนิสิต"
                                 to="/dashboard/dashboard2"
-                                icon={<MedicalInformationIcon />}
+                                icon={<SchoolIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
@@ -285,7 +285,7 @@ const Sidebar = () => {
                             <Item
                                 title="ข้อมูลการลาบุคลากร"
                                 to="/leaverecord"
-                                icon={<SchoolIcon />}
+                                icon={<PeopleOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />                            
@@ -293,7 +293,7 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  }                          
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="2.ด้านกิจการนิสิต" icon={<MedicalInformationIcon />}>
+                           ? <SubMenu title="2.ด้านกิจการนิสิต" icon={<SchoolIcon />}>
                             <Item
                                 title="ข้อมูลนิสิต"
                                 to="/student"

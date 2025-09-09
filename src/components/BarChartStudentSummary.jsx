@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
 
-const BarChartPublishedInter = ({ isDashboard = false, data }) => {
+const BarChartStudentSummary = ({ isDashboard = false, data }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -45,14 +45,14 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                 }
             }}
             keys={[
-                'international',
+                'bachelor',
             ]}
-            indexBy="catalog"
+            indexBy="department"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'paired' }}
+            colors={{ scheme: 'nivo' }}
             defs={[
                 {
                     id: 'dots',
@@ -88,7 +88,7 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'catalog',
+                legend: isDashboard ? undefined : 'position',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -96,7 +96,7 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'catalog',
+                legend: isDashboard ? undefined : 'Academic Position',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
@@ -138,9 +138,8 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
             ]}
             role="application"
             ariaLabel="Nivo bar chart demo"
-            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in catalog: " + e.indexValue }}
+            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in position: " + e.indexValue }}
         />
     )
 }
-
-export default BarChartPublishedInter
+export default BarChartStudentSummary

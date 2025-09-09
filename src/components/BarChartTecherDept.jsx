@@ -1,8 +1,9 @@
 import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
+import { mockBarData as data } from '../data/mockDataTecher'
 
-const BarChartPublishedInter = ({ isDashboard = false, data }) => {
+const BarChartTecherDept = ({ isDashboard = false }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -45,10 +46,15 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                 }
             }}
             keys={[
-                'international',
+                "ผศ.ดร.",
+                "รศ.ดร.",
+                "อ.ดร.",
+                "อ.",
+                'ศ.ดร.',
             ]}
-            indexBy="catalog"
-            margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
+            indexBy="department"
+            groupMode="grouped"
+            margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
@@ -73,6 +79,20 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                     spacing: 10
                 }
             ]}
+            fill={[
+                {
+                    match: {
+                        id: 'fries'
+                    },
+                    id: 'dots'
+                },
+                {
+                    match: {
+                        id: 'sandwich'
+                    },
+                    id: 'lines'
+                }
+            ]}
             borderColor={{
                 from: 'color',
                 modifiers: [
@@ -88,7 +108,7 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'catalog',
+                legend: isDashboard ? undefined : 'department',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -96,13 +116,13 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'catalog',
+                legend: isDashboard ? undefined : 'department',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
             enableLabel={true}
-            labelSkipWidth={12}
-            labelSkipHeight={12}
+            labelSkipWidth={10}
+            labelSkipHeight={10}
             labelTextColor={{
                 from: 'color',
                 modifiers: [
@@ -138,9 +158,9 @@ const BarChartPublishedInter = ({ isDashboard = false, data }) => {
             ]}
             role="application"
             ariaLabel="Nivo bar chart demo"
-            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in catalog: " + e.indexValue }}
+            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in department: " + e.indexValue }}
         />
     )
 }
 
-export default BarChartPublishedInter
+export default BarChartTecherDept

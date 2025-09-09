@@ -100,7 +100,7 @@ const BarChartStudent = ({ isDashboard = false, data }) => {
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
-            enableLabel={false}
+            enableLabel={true}
             layout="horizontal"
             labelSkipWidth={12}
             labelSkipHeight={12}
