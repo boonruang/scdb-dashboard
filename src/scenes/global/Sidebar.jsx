@@ -222,9 +222,16 @@ const Sidebar = () => {
                          { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="แดชบอร์ด" icon={<HomeOutlinedIcon />}>
                             <Item
+                                title="หน้ารวม"
+                                to="/dashboard"
+                                icon={<DehazeIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                            
+                            <Item
                                 title="ด้านบุคลากร"
                                 to="/dashboard/dashboard1"
-                                icon={<WbIncandescentIcon />}
+                                icon={<PeopleOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
@@ -260,7 +267,7 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  }  
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="1.ด้านบุคลากร" icon={<WbIncandescentIcon />}>
+                           ? <SubMenu title="1.ด้านบุคลากร" icon={<PeopleOutlinedIcon />}>
                             <Item
                                 title="ข้อมูลคลากร"
                                 to="/staff"

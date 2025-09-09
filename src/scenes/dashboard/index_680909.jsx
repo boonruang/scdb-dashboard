@@ -166,68 +166,6 @@ const Dashbaord = () => {
                 {/* END ROW 1 */}
 
                 {/* START ROW 2 */}
-
-                {/* START TABLE1 */}
-                <Box
-                    gridColumn="span 4"
-                    gridRow="span 2"
-                    backgroundColor={colors.primary[400]}
-                    overflow="auto"
-                >
-                    <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        borderBottom={`2px solid ${colors.primary[500]}`}
-                        colors={colors.grey[100]}
-                        p="15px"
-                    >
-                        <Typography
-                            color={colors.grey[100]}
-                            variant='h5'
-                            fontWeight="600"
-                        >
-                            ปี 2025
-                        </Typography>
-                    </Box>
-                        {dashboardReducer?.result?.publicationTable &&
-                        Object.values(dashboardReducer?.result?.publicationTable).map((item, key) => (
-                            <Box
-                            key={key}
-                            display="flex"
-                            sx={{ m: 1 }}
-                            >
-                            {/* description */}
-                            <Box sx={{ width: "220px" }}>
-                                <Typography
-                                color={colors.greenAccent[500]}
-                                variant="h5"
-                                fontWeight="600"
-                                >
-                                {item.description}
-                                </Typography>
-                            </Box>
-
-                            {/* amount */}
-                            <Box sx={{ width: "100px" }} color={colors.grey[100]}>
-                                {item.amount}
-                            </Box>
-
-                            {/* target */}
-                            <Box sx={{ width: "200px" }} color={colors.grey[100]}>
-                                (เป้าหมาย {item.target})
-                            </Box>
-
-                            {/* remark */}
-                            <Box sx={{ flex: 1 }} color={colors.grey[100]}>
-                                {item.remark}
-                            </Box>
-                            </Box>
-                        ))}
-                </Box>
-
-                {/* END TABLE1 */}
-
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -277,6 +215,32 @@ const Dashbaord = () => {
                             mt="-25px"
                         >
                             {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
+                        </Box>
+                    </Box>                     
+                </Box>
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            จำนวนผลงานตีพิมพ์ตามสาขา
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
