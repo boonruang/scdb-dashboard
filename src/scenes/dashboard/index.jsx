@@ -20,7 +20,8 @@ import BarChartPublicationScopus from "../../components/BarChartPublicationScopu
 import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
-import BarChartStudent from "../../components/BarChartStudent"
+import BarChartStudent from "../../components/BarChartStudent" 
+import BarChartAcademicPosition from "../../components/BarChartAcademicPosition" 
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
 import GeographyChart from "../../components/GeographyChart"
@@ -300,13 +301,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนนิสิต
+                            จำนวนบุคลากร
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -326,16 +327,16 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนบุคลากร
+                            ตำแหน่งทางวิชากร
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicPosition && <BarChartAcademicPosition isDashboard={true} data={dashboardReducer?.result?.academicPosition} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box>                
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"

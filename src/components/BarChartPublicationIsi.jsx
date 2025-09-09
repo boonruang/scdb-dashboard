@@ -52,7 +52,7 @@ const BarChartPublicationIsi = ({ isDashboard = false, data }) => {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'accent' }}
+            colors={{ scheme: 'nivo' }}
             defs={[
                 {
                     id: 'dots',

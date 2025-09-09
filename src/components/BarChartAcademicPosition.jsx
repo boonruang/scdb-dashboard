@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
 
-const BarChartTeacher = ({ isDashboard = false, data }) => {
+const BarChartAcademicPosition = ({ isDashboard = false, data }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -45,14 +45,14 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
                 }
             }}
             keys={[
-                'teacher',
+                'amount',
             ]}
-            indexBy="catalog"
+            indexBy="position"
             margin={{ top: 50, right: 135, bottom: 50, left: 40 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'paired' }}
+            colors={{ scheme: 'accent' }}
             defs={[
                 {
                     id: 'dots',
@@ -88,7 +88,7 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'catalog',
+                legend: isDashboard ? undefined : 'position',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -96,12 +96,11 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : 'farmer',
+                legend: isDashboard ? undefined : 'Academic Position',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
             enableLabel={false}
-            layout="horizontal"
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor={{
@@ -139,9 +138,9 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
             ]}
             role="application"
             ariaLabel="Nivo bar chart demo"
-            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in catalog: " + e.indexValue }}
+            barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in position: " + e.indexValue }}
         />
     )
 }
 
-export default BarChartTeacher
+export default BarChartAcademicPosition
