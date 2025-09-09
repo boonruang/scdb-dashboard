@@ -13,14 +13,14 @@ const StatBoxStudent = ({ title, subtitle, icon }) => {
             <Box display="flex" justifyContent="center">
                 <Box>
                     <Typography
-                        variant="h1"
+                        variant="h2"
                         fontWeight="bold"
                         sx={{ color: colors.grey[100], textAlign: 'center' }}
                     >
                         {title}
                     </Typography>
                     <Typography
-                        variant="h2"
+                        variant="h3"
                         sx={{ color: colors.greenAccent[500], textAlign: 'center' }}
                     >
                         {subtitle}

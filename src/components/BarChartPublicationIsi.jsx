@@ -100,7 +100,7 @@ const BarChartPublicationIsi = ({ isDashboard = false, data }) => {
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
-            enableLabel={false}
+            enableLabel={true}
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor={{

@@ -14,19 +14,21 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import TrafficIcon from "@mui/icons-material/Traffic"
 import LineChart from "../../components/LineChart"
-// import BarChart from "../../components/BarChart"
+import BarChartTecherDept from "../../components/BarChartTecherDept"
 import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
 import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
 import BarChartStudent from "../../components/BarChartStudent" 
+import BarChartStudentSummary from "../../components/BarChartStudentSummary" 
 import BarChartAcademicPosition from "../../components/BarChartAcademicPosition" 
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
 import GeographyChart from "../../components/GeographyChart"
 import PieChart from "../../components/PieChart"
 import StatBox from "../../components/StatBox"
+import StatBoxStudent from "../../components/StatBoxStudent"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
 // import { getHerbalPrice } from 'actions/herbalprice.action';
@@ -79,34 +81,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.student}
-                        subtitle="จำนวนนิสิต"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <GrassIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.staff}
-                        subtitle="จำนวนบุคลากร"
-                        progress={dashboardReducer.result && dashboardReducer.result.staffPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.staffPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountDept}
+                        subtitle="ภาควิชา"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -125,11 +102,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.user}
-                        subtitle="จำนวนผู้ใช้"
-                        progress={dashboardReducer.result && dashboardReducer.result.userPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.userPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountBachelor}
+                        subtitle="หลักสูตร ป.ตรี"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -148,13 +123,11 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.log}
-                        subtitle="จำนวน Log"
-                        progress={dashboardReducer.result && dashboardReducer.result.logPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.logPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountMaster}
+                        subtitle="หลักสูตร ป.โท"
                         icon={
-                            <WarehouseIcon
+                            <PeopleOutlinedIcon
                                 sx={{
                                     color: colors.greenAccent[600],
                                     fontSize: "26px"
@@ -164,6 +137,26 @@ const Dashbaord = () => {
                     />
                 </Box>
 
+                <Box
+                    gridColumn="span 3"
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountPhd}
+                        subtitle="หลักสูตร ป.เอก"
+                        icon={
+                            <PeopleOutlinedIcon
+                                sx={{
+                                    color: colors.greenAccent[600],
+                                    fontSize: "26px"
+                                }}
+                            />
+                        }
+                    />
+                </Box>
                 {/* END ROW 1 */}
 
                 {/* START ROW 2 */}
@@ -301,13 +294,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนบุคลากร
+                            จำนวนนิสิตปริญญาตรี
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.studentSummary && <BarChartStudentSummary isDashboard={true} data={dashboardReducer?.result?.studentSummary} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -338,31 +331,25 @@ const Dashbaord = () => {
                     </Box>                     
                 </Box>                
                 <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
+                    gridColumn="span 4"
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
                 >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
+                    <Typography
+                        variant='h5'
+                        fontWeight="600"
+                        sx={{ p: "30px 30px 0 30px" }}
                     >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนอาจารย์
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboardReducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
+                        ตำแหน่งทางวิชากรตามสาขา
+                    </Typography>
+                    <Box
+                        height="250px"
+                        mt="-25px"
+                    >
+                        <BarChartTecherDept isDashboard={true} />
+                    </Box>
                 </Box>
+
 
                 {/* END ROW 3 */}
 

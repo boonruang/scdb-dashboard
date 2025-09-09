@@ -24,6 +24,7 @@ import BarChartTeacher from "../../components/BarChartTeacher"
 import GeographyChart from "../../components/GeographyChart"
 import PieChart from "../../components/PieChart"
 import StatBox from "../../components/StatBox"
+import StatBoxStudent from "../../components/StatBoxStudent"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
 // import { getHerbalPrice } from 'actions/herbalprice.action';
@@ -76,34 +77,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.student}
-                        subtitle="จำนวนนิสิต"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <GrassIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.staff}
-                        subtitle="จำนวนบุคลากร"
-                        progress={dashboardReducer.result && dashboardReducer.result.staffPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.staffPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountDept}
+                        subtitle="ภาควิชา"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -122,11 +98,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.user}
-                        subtitle="จำนวนผู้ใช้"
-                        progress={dashboardReducer.result && dashboardReducer.result.userPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.userPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountBachelor}
+                        subtitle="หลักสูตร ป.ตรี"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -145,13 +119,32 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.log}
-                        subtitle="จำนวน Log"
-                        progress={dashboardReducer.result && dashboardReducer.result.logPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.logPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountMaster}
+                        subtitle="หลักสูตร ป.โท"
                         icon={
-                            <WarehouseIcon
+                            <PeopleOutlinedIcon
+                                sx={{
+                                    color: colors.greenAccent[600],
+                                    fontSize: "26px"
+                                }}
+                            />
+                        }
+                    />
+                </Box>
+
+                <Box
+                    gridColumn="span 3"
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountPhd}
+                        subtitle="หลักสูตร ป.เอก"
+                        icon={
+                            <PeopleOutlinedIcon
                                 sx={{
                                     color: colors.greenAccent[600],
                                     fontSize: "26px"
