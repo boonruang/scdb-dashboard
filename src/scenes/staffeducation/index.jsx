@@ -102,6 +102,12 @@ const Staffeducations = () => {
       flex: 1.5,
       cellClassName: "name-column--cell"
     },
+    {
+      field: 'year',
+      headerName: 'ปีศึกษา',
+      flex: 1.5,
+      cellClassName: "name-column--cell"
+    },    
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
         return (
           <Box>

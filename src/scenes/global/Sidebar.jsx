@@ -228,21 +228,21 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />                            
-                            <Item
+                            {/* <Item
                                 title="ด้านบุคลากร"
                                 to="/dashboard/dashboard1"
                                 icon={<PeopleOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                             <Item
-                                title="ด้านกิจการนิสิต"
+                                title="ข้อมูลนิสิต"
                                 to="/dashboard/dashboard2"
                                 icon={<SchoolIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
-                            <Item
+                            {/* <Item
                                 title="ด้านหลักสูตร"
                                 to="/dashboard/dashboard3"
                                 icon={<FmdBadIcon />}
@@ -262,7 +262,7 @@ const Sidebar = () => {
                                 icon={<PlaylistAddCheckIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                                                         
                          </SubMenu>   : undefined  }  
 
@@ -282,13 +282,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
-                            <Item
+                            {/* <Item
                                 title="ข้อมูลการลาบุคลากร"
                                 to="/leaverecord"
                                 icon={<PeopleOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                            
+                            />                             */}
                                                         
                          </SubMenu>   : undefined  }                          
 
@@ -371,13 +371,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="การติดตามเอกสาร"
                                 to="/document"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> 
+                            />  */}
                          </SubMenu>   : undefined  }         
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
