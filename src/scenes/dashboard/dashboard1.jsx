@@ -15,9 +15,12 @@ import TrafficIcon from "@mui/icons-material/Traffic"
 import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
+import BarChartTecherDept from "../../components/BarChartTecherDept"
 import BarChartStudent from "../../components/BarChartStudent"
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
+import BarChartStudentSummary from "../../components/BarChartStudentSummary" 
+import BarChartAcademicPosition from "../../components/BarChartAcademicPosition" 
 import StatBox from "../../components/StatBox"
 import StatBoxStudent from "../../components/StatBoxStudent"
 import StatBoxStaff from "../../components/StatBoxStaff"
@@ -247,13 +250,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานวิชาการ
+                            จำนวนนิสิตปริญญาตรี
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.studentSummary && <BarChartStudentSummary isDashboard={true} data={dashboardReducer?.result?.studentSummary} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -273,41 +276,34 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ภายในประเทศ
+                            ตำแหน่งทางวิชากร
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicPosition && <BarChartAcademicPosition isDashboard={true} data={dashboardReducer?.result?.academicPosition} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box>                
                 <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
+                    gridColumn="span 4"
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
                 >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
+                    <Typography
+                        variant='h5'
+                        fontWeight="600"
+                        sx={{ p: "30px 30px 0 30px" }}
                     >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานตีพิมพ์ต่างประเทศ
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
+                        ตำแหน่งทางวิชากรตามสาขา
+                    </Typography>
+                    <Box
+                        height="250px"
+                        mt="-25px"
+                    >
+                        <BarChartTecherDept isDashboard={true} />
+                    </Box>
                 </Box>
 
                 {/* END ROW 3 */}
