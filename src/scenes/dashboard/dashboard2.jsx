@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Box, Button, IconButton, Typography, useTheme } from '@mui/material'
 import { tokens } from "../../theme"
 import Header from '../../components/Header'
-import { mockTransactions } from "../../data/mockData"
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined"
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import ParkIcon from '@mui/icons-material/Park';
@@ -11,8 +10,6 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined"
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import TrafficIcon from "@mui/icons-material/Traffic"
-import LineChart from "../../components/LineChart"
-// import BarChart from "../../components/BarChart"
 import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
 import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
@@ -21,18 +18,12 @@ import BarChartPublishedInter from "../../components/BarChartPublishedInter"
 import BarChartStudent from "../../components/BarChartStudent"
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
-import GeographyChart from "../../components/GeographyChart"
-import PieChart from "../../components/PieChart"
 import StatBox from "../../components/StatBox"
 import StatBoxStudent from "../../components/StatBoxStudent"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
-// import { getHerbalPrice } from 'actions/herbalprice.action';
-// import { getHerbalsPricelist } from 'actions/herbal.action';
-// import { getHerbalPriceyear } from 'actions/herbalpriceyear.action';
 import { getDashboard } from 'actions/dashboard.action'
 import ProgressCircleCal from 'components/ProgressCircleCal'
-// import BarChartCollaborativefarm from 'components/BarChartCollaborativefarm'
 
 let newDate = new Date()
 let date = newDate.getDate();

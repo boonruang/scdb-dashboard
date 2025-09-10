@@ -1,10 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getHerbalByKeyword } from '../actions/herbal.action'
 import { Box,Typography,useTheme,CardActionArea,Grid  } from "@mui/material"
 import { tokens } from '../theme';
 import {Card,CardMedia,CardContent,Button } from '@mui/material';
-import { getHerbalSelectedById } from '../actions/herbalselected.action'
 import CircularProgress from '@mui/material/CircularProgress';
 import IosShareIcon from '@mui/icons-material/IosShare';
 
@@ -14,11 +12,25 @@ const Item = ( {result} ) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
+  const fileInputRef = useRef(null);
+
   const dispatch = useDispatch()
 
-  const ExportExcelButton = (url) => {
-    window.location.href = url
-  }
+  // const ImportExcelButton = (url) => {
+  //       window.location.href = url
+  // }
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("ไฟล์ที่เลือก:", file.name);
+      // TODO: เขียนโค้ดนำไฟล์ไปประมวลผล เช่น อ่าน Excel
+    }
+  };
 
   return (
     <Grid item xs={12} sm={4} ms={4} >
@@ -26,9 +38,9 @@ const Item = ( {result} ) => {
           <CardActionArea >
             <CardMedia
               component="img"
-              height="100"
+              height="200"
               image={imagesUrl+result.image}
-              alt="herbal"
+              alt="scdb"
               style={{borderRadius: '5px'}}
             />            
               <CardContent>
@@ -40,8 +52,14 @@ const Item = ( {result} ) => {
                   {result.description.substring(0, 70)}
                   </Typography>
                 </Box>
- 
-                  <Button  onClick={() => ExportExcelButton(result.export)}
+                  <input
+                    type="file"
+                    accept=".xlsx,.xls"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
+                  <Button  onClick={handleButtonClick}
                       sx={{
                           backgroundColor: colors.blueAccent[700],
                           color: colors.grey[100],
@@ -54,7 +72,7 @@ const Item = ( {result} ) => {
                       }}
                   >
                       <IosShareIcon sx={{ mr: "10px" }} />
-                      ส่งออกไฟล์ Excel
+                      นำเข้าไฟล์ Excel
                   </Button>               
               </CardContent>
           </CardActionArea>
@@ -63,27 +81,19 @@ const Item = ( {result} ) => {
         )
       }
 
-const Cardexportdata = ({mockExportData}) => {
+const Cardexportdata = ({mockImportData}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
   const dispatch = useDispatch()
-
-  // useEffect(() => {
-  //   dispatch(getHerbalByKeyword(searchTerm))
-  //   console.log('useEffect is called', searchTerm)
-  // },[dispatch,searchTerm])
-
-  // const { result, isFetching, isError } = useSelector((state) => state.app.herbalReducer)
   
   let content
 
- if (mockExportData ) {
-    // const results = result?.features
+ if (mockImportData ) {
     content = (
       <Grid container spacing={5} style={{ marginTop: "20px"}}>
           {
-            Object.values(mockExportData).map(result => {
+            Object.values(mockImportData).map(result => {
               return <Item key={result.id} result={result} />
             })
           }
