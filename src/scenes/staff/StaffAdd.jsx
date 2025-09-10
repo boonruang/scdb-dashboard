@@ -13,7 +13,8 @@ import {
     Grid,
     styled,
     Card,
-    CardMedia    
+    CardMedia,
+    MenuItem    
   } from '@mui/material'
 
 import {
@@ -28,6 +29,7 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { addStaff } from '../../actions/staff.action'
+import { getStafftype } from '../../actions/stafftype.action'
 import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -55,11 +57,12 @@ const initialValues = {
 }
 
 const userSchema = yup.object().shape({
-    name: yup.string().required("ต้องใส่"),
+    firstname: yup.string().required("ต้องใส่"),
+    lastname: yup.string().required("ต้องใส่"),
     position: yup.string().required("ต้องใส่"),
-    staff_type: yup.string().required("ต้องใส่"),
-    email: yup.string().required("ต้องใส่"),
-    office_location: yup.string().required("ต้องใส่"),
+    // stafftypeId: yup.string().required("ต้องใส่"),
+    // email: yup.string().required("ต้องใส่"),
+    // office_location: yup.string().required("ต้องใส่"),
 }) 
 
 const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
@@ -67,6 +70,7 @@ const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 const Item = ({image}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+
   console.log('image in Item => ',image)
   return (
     <Grid item xs={12} sm={4} ms={4} >
@@ -96,6 +100,20 @@ const StaffAdd = () => {
 
   const [open, setOpen] = useState(false)
 
+  const [stafftypeData, setStafftypeData] = useState([])
+
+  const stafftypeReducer = useSelector((state) => state.app.stafftypeReducer)
+
+
+    useEffect(() => {
+        dispatch(getStafftype())
+  },[dispatch])
+
+  useEffect(() => {
+    setStafftypeData(stafftypeReducer.result)
+    },[stafftypeReducer.result])  
+
+
    const handleSubmitButton = (values) => {
     setOpen(true)
     // console.log(values)
@@ -120,7 +138,16 @@ const StaffAdd = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('name', values.title)
+              formData.append('firstname', values.firstname)
+              formData.append('lastname', values.lastname)
+              formData.append('position', values.position)
+              formData.append('position_no', values.position_no)
+              formData.append('education', values.education)
+              formData.append('education', values.startdate)
+              formData.append('birthday', values.birthday)
+              formData.append('email', values.email)
+              formData.append('office_location', values.office_location)
+              formData.append('stafftypeId', values.stafftypeId)
               console.log('values',values)
               dispatch(addStaff(navigate, formData))
               setSubmitting(false)
@@ -147,10 +174,23 @@ const StaffAdd = () => {
                         label="ชื่อ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.name}
-                        name="name"
-                        error={!!touched.name && !!errors.name}
-                        helperText={touched.name && errors.name}
+                        value={values?.firstname}
+                        name="firstname"
+                        error={!!touched.firstname && !!errors.firstname}
+                        helperText={touched.firstname && errors.firstname}
+                        sx={{ gridColumn: "span 1" }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="นามสกุล"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.lastname}
+                        name="lastname"
+                        error={!!touched.lastname && !!errors.lastname}
+                        helperText={touched.lastname && errors.lastname}
                         sx={{ gridColumn: "span 1" }}
                     />
                     <TextField
@@ -170,15 +210,48 @@ const StaffAdd = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ประเภท"
+                        label="หมายเลขตำแหน่ง"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.staff_type}
-                        name="staff_type"
-                        error={!!touched.staff_type && !!errors.staff_type}
-                        helperText={touched.staff_type && errors.staff_type}
+                        value={values?.position_no}
+                        name="position_no"
+                        error={!!touched.position_no && !!errors.position_no}
+                        helperText={touched.position_no && errors.position_no}
                         sx={{ gridColumn: "span 1" }}
-                    />                       
+                    />                      
+                     <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วุฒิการศึกษา"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.education}
+                        name="education"
+                        error={!!touched.education && !!errors.education}
+                        helperText={touched.education && errors.education}
+                        sx={{ gridColumn: "span 1" }}
+                    /> 
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ประเภท"
+                        select
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.stafftype_id}
+                        name="producttypeId"
+                        error={!!touched.stafftypeId && !!errors.stafftypeId}
+                        helperText={touched.stafftypeId && errors.stafftypeId}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} >
+                        { stafftypeData && stafftypeData.map((item,key) => (
+                        <MenuItem key={key} value={item.stafftype_id} >
+                            {item.stafftype_id+'-'+item.name}
+                        </MenuItem>  
+                        ))} 
+                        </TextField>                                           
                     <TextField
                         fullWidth
                         variant="filled"
@@ -191,7 +264,33 @@ const StaffAdd = () => {
                         error={!!touched.email && !!errors.email}
                         helperText={touched.email && errors.email}
                         sx={{ gridColumn: "span 1" }}
-                    />                       
+                    />       
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="บรรจุ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.startdate}
+                        name="startdate"
+                        error={!!touched.startdate && !!errors.startdate}
+                        helperText={touched.startdate && errors.startdate}
+                        sx={{ gridColumn: "span 1" }}
+                    />  
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันเกิด"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.birthday}
+                        name="birthday"
+                        error={!!touched.birthday && !!errors.birthday}
+                        helperText={touched.birthday && errors.birthday}
+                        sx={{ gridColumn: "span 1" }}
+                    />                                                           
                     <TextField
                         fullWidth
                         variant="filled"
@@ -204,7 +303,27 @@ const StaffAdd = () => {
                         error={!!touched.office_location && !!errors.office_location}
                         helperText={touched.office_location && errors.office_location}
                         sx={{ gridColumn: "span 1" }}
-                    />                       
+                    />   
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="สังกัดภาควิชา"
+                        select
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.stafftype_id}
+                        name="producttypeId"
+                        error={!!touched.stafftypeId && !!errors.stafftypeId}
+                        helperText={touched.stafftypeId && errors.stafftypeId}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} >
+                        { stafftypeData && stafftypeData.map((item,key) => (
+                        <MenuItem key={key} value={item.stafftype_id} >
+                            {item.stafftype_id+'-'+item.name}
+                        </MenuItem>  
+                        ))} 
+                        </TextField>                                          
                      </Box>
                 </Box>
                 
