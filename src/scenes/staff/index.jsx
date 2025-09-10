@@ -101,9 +101,19 @@ const Staffs = () => {
       cellClassName: "name-column--cell"
     },
     {
+      field: 'name',
+      headerName: 'ประเภท',
+      flex: 0.6,
+      renderCell: (params) => {
+        return params.row.Stafftype?.name || 'N/A';
+      }
+    },  
+    {
       field: 'education',
       headerName: 'วุฒิการศึกษา',
       flex: 1,
+      headerAlign: "center",
+      align: "center",      
       cellClassName: "name-column--cell"
     },
     {
