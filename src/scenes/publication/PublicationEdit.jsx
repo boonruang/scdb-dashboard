@@ -114,7 +114,7 @@ const PublicationEdit = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
     return <Box m="20px">
-        <Header title="ปรับปรุงข้อมูล" subtitle="ปรับปรุงข้อมูลการโพสต์ข้อความ" />
+        <Header title="ปรับปรุงข้อมูล"/>
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={th}>
         <Formik
             // onSubmit={handleFormSubmit}
