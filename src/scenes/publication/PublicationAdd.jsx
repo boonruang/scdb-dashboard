@@ -114,7 +114,7 @@ const PublicationAdd = () => {
     }
 
     return <Box m="20px">
-        <Header title="เพิ่มโพสต์" subtitle="เพิ่มการโพสต์ข้อความ" />
+        <Header title="เพิ่มข้อมูล" />
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={th}>
         <Formik
             // onSubmit={handleFormSubmit}

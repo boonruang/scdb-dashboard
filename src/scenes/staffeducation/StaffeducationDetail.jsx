@@ -64,7 +64,7 @@ const StaffeducationDetail = () => {
 
 
       return <Box m="20px">
-        <Header title="รายละเอียดข้อมูล" subtitle="รายละเอียดข้อมูลการโพสต์ข้อความ" />
+        <Header title="รายละเอียดข้อมูล"  />
                 <Box>
                     <Box mt='40px'>                
                     <Box 
