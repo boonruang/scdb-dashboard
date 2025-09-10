@@ -8,13 +8,6 @@ import Dashbaord2 from "./scenes/dashboard/dashboard2";
 import Dashbaord3 from "./scenes/dashboard/dashboard3";
 import Dashbaord4 from "./scenes/dashboard/dashboard4";
 import Dashbaord5 from "./scenes/dashboard/dashboard5";
-import Team from "./scenes/team";
-import Contacts from "./scenes/contacts";
-import Form from "./scenes/form";
-import Calendar from "./scenes/calendar";
-import Bar from "./scenes/bar";
-import Pie from "./scenes/pie";
-import Line from "./scenes/line";
 import ThankyouReg from 'components/Thankyoupage'
 import Terms from 'components/Terms'
 // import Registration from 'components/Registration'
@@ -78,6 +71,7 @@ import UsersAdd from "scenes/users/add";
 import Log from "scenes/log";
 import UsersEdit from "scenes/users/edit";
 import UsersDetail from "scenes/users/detail";
+import Importdata from "scenes/importdata";
 
 function App() {
   const dispatch = useDispatch()
@@ -112,8 +106,6 @@ function App() {
         </Route>
 
         <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>
-          <Route path="team" element={<Team />} />
-          <Route path="contacts" element={<Contacts />} />
           <Route path="system/log" element={<Log />} />
           <Route path="users/add" element={<UsersAdd />} />
           <Route path="users/detail" element={<UsersDetail />} />
@@ -161,16 +153,17 @@ function App() {
           <Route path="document/edit" element={<DocumentEdit />} />
           <Route path="document" element={<DocumentList />} />   
 
+          <Route path="importdata" element={<Importdata />} />   
+
           <Route path="leaverecord/add" element={<LeaverecordAdd />} />
           <Route path="leaverecord/detail" element={<LeaverecordDetail />} />
           <Route path="leaverecord/edit" element={<LeaverecordEdit />} />
           <Route path="leaverecord" element={<LeaverecordList />} />                  
-          <Route path="calendar" element={<Calendar />} />
-          <Route path="bar" element={<Bar />} />
-          <Route path="pie" element={<Pie />} />
-          <Route path="line" element={<Line />} />
-
-          <Route path="form" element={<Form />} />
+          {/* <Route path="calendar" element={<Calendar />} /> */}
+          {/* <Route path="bar" element={<Bar />} /> */}
+          {/* <Route path="pie" element={<Pie />} /> */}
+          {/* <Route path="line" element={<Line />} /> */}
+          {/* <Route path="form" element={<Form />} /> */}
         </Route>
         <Route element={<SecureRoute allowedRoles={[ROLES.Admin]} /> }>
          {/* Admin here */}

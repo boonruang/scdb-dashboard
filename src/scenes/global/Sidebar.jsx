@@ -378,10 +378,21 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
-                         </SubMenu>   : undefined  }                           
+                         </SubMenu>   : undefined  }         
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="6.สำหรับผู้ดูแลระบบ" icon={<PeopleOutlinedIcon />}>
+                           ? <SubMenu title="6.หน้านำเข้าข้อมูล" icon={<IosShareIcon />}>
+                            <Item
+                                title="รายการแฟ้มเอกสาร"
+                                to="/importdata"
+                                icon={<FolderOpenIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                         </SubMenu>   : undefined  }                                                  
+
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                           ? <SubMenu title="7.สำหรับผู้ดูแลระบบ" icon={<PeopleOutlinedIcon />}>
                             <Item
                                 title="ข้อมูลผู้ใช้"
                                 to="/users/list"
