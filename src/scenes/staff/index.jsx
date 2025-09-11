@@ -101,6 +101,12 @@ const Staffs = () => {
       cellClassName: "name-column--cell"
     },
     {
+      field: 'position_no',
+      headerName: 'เลขประจำตำแหน่ง',
+      flex: 0.5,
+      cellClassName: "name-column--cell"
+    },    
+    {
       field: 'name',
       headerName: 'ประเภท',
       flex: 0.6,

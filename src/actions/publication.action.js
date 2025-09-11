@@ -93,7 +93,7 @@ export const addPublication = (navigate, formData) => {
       let result = await httpClient.post(server.PUBLICATION_URL, formData)
       console.log('addPublication formData successfully: ', result)
       setTimeout(() => {
-        navigate('/staff')
+        navigate('/publication')
       },5000)
     } catch (error) {
       // failed
@@ -111,7 +111,7 @@ export const updatePublication = (navigate, formData) => {
       let result = await httpClient.put(server.PUBLICATION_URL, formData)
       console.log('editPublication formData successfully: ', result)
       setTimeout(() => {
-        navigate('/staff')
+        navigate('/publication')
       },5000)
     } catch (error) {
       // failed

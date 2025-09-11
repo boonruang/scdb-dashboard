@@ -94,7 +94,7 @@ export const addStaff = (navigate, formData) => {
       console.log('addStaff formData successfully: ', result)
       setTimeout(() => {
         navigate('/staff')
-      },5000)
+      },3000)
     } catch (error) {
       // failed
       console.log('addStaff formData Error: ', error.toString())
@@ -112,7 +112,7 @@ export const updateStaff = (navigate, formData) => {
       console.log('editStaff formData successfully: ', result)
       setTimeout(() => {
         navigate('/staff')
-      },5000)
+      },3000)
     } catch (error) {
       // failed
       console.log('editStaff formData Error: ', error.toString())

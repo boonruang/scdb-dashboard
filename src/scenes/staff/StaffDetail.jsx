@@ -15,37 +15,12 @@ import {
     Card,
     CardMedia    
   } from '@mui/material'
-import { format } from 'date-fns'
-import { th } from 'date-fns/locale'
 import Header from "../../components/Header"
 import { Formik, Field } from 'formik'
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate,useParams,useLocation } from 'react-router-dom'
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
-
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
-              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
 
 const StaffDetail = () => {
 
@@ -90,11 +65,21 @@ const StaffDetail = () => {
                         variant="filled"
                         type="text"
                         label="ชื่อ"
-                        value={location.state.row.name}
-                        name="name"
+                        value={location.state.row.firstname}
+                        name="firstname"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="นามสกุล"
+                        value={location.state.row.lastname}
+                        name="lastname"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
                     <TextField
                         fullWidth
                         variant="filled"
@@ -109,9 +94,59 @@ const StaffDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
+                        label="ตำแหน่ง"
+                        value={location.state.row.position}
+                        name="position"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="เลขประจำตำแหน่ง"
+                        value={location.state.row.position_no}
+                        name="position_no"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วุฒิการศึกษ"
+                        value={location.state.row.education}
+                        name="education"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
                         label="ประเภท"
-                        value={location.state.row.staff_type}
+                        value={location.state.row.Stafftype?.name}
                         name="staff_type"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันเริ่มงาน"
+                        value={location.state.row.startdate}
+                        name="startdate"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="วันเกิด"
+                        value={location.state.row.birthday}
+                        name="birthday"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />                    
@@ -134,7 +169,17 @@ const StaffDetail = () => {
                         name="office_location"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
-                    />                    
+                    />  
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ภาควิชา"
+                        value={location.state.row.Department?.dept_name}
+                        name="staff_type"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                                       
                     </Box>
                 </Box>
 

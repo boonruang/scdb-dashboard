@@ -93,6 +93,11 @@ export const HTTP_DOCUMENT_FETCHING = 'HTTP_DOCUMENT_FETCHING'
 export const HTTP_DOCUMENT_SUCCESS = 'HTTP_DOCUMENT_SUCCESS'
 export const HTTP_DOCUMENT_FAILED = 'HTTP_DOCUMENT_FAILED'
 
+// Document Page
+export const HTTP_DEPARTMENT_FETCHING = 'HTTP_DEPARTMENT_FETCHING'
+export const HTTP_DEPARTMENT_SUCCESS = 'HTTP_DEPARTMENT_SUCCESS'
+export const HTTP_DEPARTMENT_FAILED = 'HTTP_DEPARTMENT_FAILED'
+
 // Academic Program (ฝ่ายวิชาการ) Page
 export const HTTP_ACADEMIC_FETCHING = 'HTTP_ACADEMIC_FETCHING'
 export const HTTP_ACADEMIC_SUCCESS = 'HTTP_ACADEMIC_SUCCESS'
@@ -172,6 +177,7 @@ export const server = {
   PUBLICATION_URL: `publication`,
   PROJECT_URL: `project`,
   DOCUMENT_URL: `document`,
+  DEPARTMENT_URL: `department`,
   LOG_URL: `log`,
   REGISTER_URL: `register`,
   DASHBOARD_URL: `dashboard`,
