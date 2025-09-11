@@ -93,7 +93,7 @@ export const addProject = (navigate, formData) => {
       let result = await httpClient.post(server.PROJECT_URL, formData)
       console.log('addProject formData successfully: ', result)
       setTimeout(() => {
-        navigate('/staff')
+        navigate('/project')
       },5000)
     } catch (error) {
       // failed
@@ -111,7 +111,7 @@ export const updateProject = (navigate, formData) => {
       let result = await httpClient.put(server.PROJECT_URL, formData)
       console.log('editProject formData successfully: ', result)
       setTimeout(() => {
-        navigate('/staff')
+        navigate('/project')
       },5000)
     } catch (error) {
       // failed

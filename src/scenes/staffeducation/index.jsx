@@ -83,29 +83,45 @@ const Staffeducations = () => {
       cellClassName: "name-column--cell"
     },
     {
-      field: 'name',
-      headerName: 'ชื่อบุคคากร',
-      flex: 1,
+      field: 'firstname',
+      headerName: 'ชื่อ',
+      flex: 0.5,
       renderCell: (params) => {
-        return params.row.Staff?.name || 'N/A';
+        return params.row.Staff?.firstname || 'N/A';
       }
     },
     {
+      field: 'lastname',
+      headerName: 'นามสกุล',
+      flex: 0.5,
+      renderCell: (params) => {
+        return params.row.Staff?.lastname || 'N/A';
+      }
+    },
+    {
+      field: 'position',
+      headerName: 'ตำแหน่ง',
+      flex: 0.8,
+      renderCell: (params) => {
+        return params.row.Staff?.position || 'N/A';
+      }
+    },    
+    {
       field: 'degree',
       headerName: 'การศึกษา',
-      flex: 1.5,
+      flex: .8,
       cellClassName: "name-column--cell"
     },
     {
       field: 'university',
       headerName: 'สถานศึกษา',
-      flex: 1.5,
+      flex: .8,
       cellClassName: "name-column--cell"
     },
     {
       field: 'year',
       headerName: 'ปีศึกษา',
-      flex: 1.5,
+      flex: 0.5,
       cellClassName: "name-column--cell"
     },    
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {

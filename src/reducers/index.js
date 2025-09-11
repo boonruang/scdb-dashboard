@@ -18,6 +18,7 @@ import leaverecordReducer from "./leaverecord.reducer";
 import admissionPlanReducer from "./admissionPlan.reducer";   
 import documentReducer from "./document.reducer";   
 import stafftypeReducer from "./stafftype.reducer";   
+import departmentReducer from "./department.reducer";   
 
 export default combineReducers({
   appReducer,
@@ -39,4 +40,5 @@ export default combineReducers({
   admissionPlanReducer,
   documentReducer,
   stafftypeReducer,
+  departmentReducer,
 })

@@ -16,12 +16,6 @@ import {
     CardMedia    
   } from '@mui/material'
 
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import { th } from 'date-fns/locale';
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import Header from "../../components/Header"
@@ -114,7 +108,6 @@ const StudentgrantgrantAdd = () => {
 
     return <Box m="20px">
         <Header title="เพิ่มข้อมูล"/>
-        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={th}>
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
@@ -256,7 +249,6 @@ const StudentgrantgrantAdd = () => {
                 </form>
             )}
         </Formik>
-        </MuiPickersUtilsProvider>
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}
