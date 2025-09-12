@@ -17,6 +17,8 @@ import BarChartPublicationScopus from "../../components/BarChartPublicationScopu
 import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
+import BarChartPlanProject from "../../components/BarChartPlanProject"
+import BarChartPlanBudget from "../../components/BarChartPlanBudget"
 import BarChartStudent from "../../components/BarChartStudent"
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
@@ -173,17 +175,17 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานติพิมพ์ฐาน Scopus
+                            จำนวนโครงการ
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.publicationScopus && <BarChartPublicationScopus isDashboard={true} data={dashboardReducer?.result?.publicationScopus} />}
+                            {dashboardReducer?.result?.planProject && <BarChartPlanProject isDashboard={true} data={dashboardReducer?.result?.planProject} />}
                         </Box>
                     </Box>                     
                 </Box>
-                <Box
+                {/* <Box
                 gridColumn="span 4"
                 gridRow="span 2"
                 backgroundColor={colors.primary[400]}
@@ -199,7 +201,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานติพิมพ์ฐาน ISI(SCIE)
+                            การใช้งบประมาณ
                         </Typography>
                         <Box
                             height="245px"
@@ -208,7 +210,7 @@ const Dashbaord = () => {
                             {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box> */}
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -225,13 +227,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ตามสาขา
+                            การใช้งบประมาณ
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.planBudget && <BarChartPlanBudget isDashboard={true} data={dashboardReducer?.result?.planBudget} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -239,7 +241,7 @@ const Dashbaord = () => {
                 {/* END ROW 2 */}
 
                 {/* START ROW 3 */}
-                <Box
+                {/* <Box
                 gridColumn="span 4"
                 gridRow="span 2"
                 backgroundColor={colors.primary[400]}
@@ -316,7 +318,7 @@ const Dashbaord = () => {
                             {dashboardReducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box> */}
 
                 {/* END ROW 3 */}
 
