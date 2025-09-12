@@ -275,13 +275,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="ข้อมูลการศึกษาบุคลากร"
                                 to="/staffeducation"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> 
+                            />  */}
                             {/* <Item
                                 title="ข้อมูลการลาบุคลากร"
                                 to="/leaverecord"

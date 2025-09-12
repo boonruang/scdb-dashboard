@@ -80,15 +80,27 @@ const Students = () => {
     {
       field: 'id', // ใช้ 'id' ที่เราสร้าง alias ไว้
       headerName: 'ID',
+      flex: 0.3,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'studentOfficial_id', // ใช้ 'id' ที่เราสร้าง alias ไว้
+      headerName: 'รหัส',
       flex: 0.5,
       cellClassName: "name-column--cell"
     },
     {
-      field: 'name',
-      headerName: 'ชื่อ-สกุล',
-      flex: 1,
+      field: 'firstname',
+      headerName: 'ชื่อ',
+      flex: 0.5,
       cellClassName: "name-column--cell"
     },
+    {
+      field: 'lastname',
+      headerName: 'สกุล',
+      flex: 0.5,
+      cellClassName: "name-column--cell"
+    },    
     {
       field: 'program_name',
       headerName: 'หลักสูตร',
@@ -106,7 +118,7 @@ const Students = () => {
       flex: 1,
       // --- เปลี่ยนมาใช้ renderCell เช่นกัน ---
       renderCell: (params) => {
-        return params.row.advisor?.name || 'N/A';
+        return params.row.advisor?.firstname || 'N/A';
       }
     }
         ,
