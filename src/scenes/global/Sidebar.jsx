@@ -301,13 +301,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="ทุนการศึกษา"
                                 to="/studentgrant"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> 
+                            />  */}
                                                         
                          </SubMenu>   : undefined  } 
 
@@ -321,13 +321,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="แผนการรับนิสิต"
                                 to="/admissionplan"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> 
+                            />  */}
                                                         
                          </SubMenu>   : undefined  }                                               
 
