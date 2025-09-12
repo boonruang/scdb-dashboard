@@ -77,7 +77,7 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="รหัส"
+                        label="ลำดับ"
                         value={location.state.row.student_id}
                         name="id"
                         sx={{ gridColumn: "span 1" }}
@@ -87,12 +87,32 @@ const StudentDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
+                        label="รหัส"
+                        value={location.state.row.studentOfficial_id}
+                        name="id"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
                         label="ชื่อ"
-                        value={location.state.row.name}
-                        name="name"
+                        value={location.state.row.firstname}
+                        name="firstname"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="นามสกุล"
+                        value={location.state.row.lastname}
+                        name="lastname"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                    
                     <TextField
                         fullWidth
                         variant="filled"
@@ -108,7 +128,7 @@ const StudentDetail = () => {
                         variant="filled"
                         type="text"
                         label="ที่ปรึกษา"
-                        value={location.state.row.advisor?.name}
+                        value={location.state.row.advisor?.firstname}
                         name="advisor"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
