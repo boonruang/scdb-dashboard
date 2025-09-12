@@ -13,7 +13,8 @@ import {
     Grid,
     styled,
     Card,
-    CardMedia    
+    CardMedia,
+    MenuItem,    
   } from '@mui/material'
 
   import { Formik, Field } from 'formik'
@@ -22,6 +23,8 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { addStudent } from '../../actions/student.action'
+import { getStaff } from '../../actions/staff.action'
+import { getAcademicProgram } from '../../actions/academicProgram.action'
 import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -88,6 +91,29 @@ const StudentAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [staffData, setStaffData] = useState([])
+  const [academicProgramData, setAcademicProgramData] = useState([])
+  
+  const staffReducer = useSelector((state) => state.app.staffReducer)
+  const academicProgramReducer = useSelector((state) => state.app.academicProgramReducer)
+  
+  
+  
+    useEffect(() => {
+        dispatch(getStaff())
+    },[dispatch])
+  
+    useEffect(() => {
+        setStaffData(staffReducer.result)
+    },[staffReducer.result]) 
+
+    useEffect(() => {
+        dispatch(getAcademicProgram())
+    },[dispatch])
+  
+    useEffect(() => {
+        setAcademicProgramData(academicProgramReducer.result)
+    },[academicProgramReducer.result])     
 
    const handleSubmitButton = (values) => {
     setOpen(true)
@@ -136,41 +162,85 @@ const StudentAdd = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อ"
+                        label="รหัส"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.name}
-                        name="name"
-                        error={!!touched.name && !!errors.name}
-                        helperText={touched.name && errors.name}
+                        value={values?.studentOfficial_id}
+                        name="studentOfficial_id"
+                        error={!!touched.studentOfficial_id && !!errors.studentOfficial_id}
+                        helperText={touched.studentOfficial_id && errors.studentOfficial_id}
                         sx={{ gridColumn: "span 1" }}
                     />
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="สาขา"
+                        label="ชื่อ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.program_name}
-                        name="program_name"
-                        error={!!touched.program_name && !!errors.program_name}
-                        helperText={touched.program_name && errors.position}
+                        value={values?.firstname}
+                        name="firstname"
+                        error={!!touched.firstname && !!errors.firstname}
+                        helperText={touched.firstname && errors.nafirstnameme}
                         sx={{ gridColumn: "span 1" }}
-                    />       
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="นามสกุล"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.lastname}
+                        name="lastname"
+                        error={!!touched.lastname && !!errors.lastname}
+                        helperText={touched.lastname && errors.lastname}
+                        sx={{ gridColumn: "span 1" }}
+                    />                    
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="สาขาวิชา"
+                        select
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.program_id}
+                        name="program_id"
+                        error={!!touched.program_id && !!errors.program_id}
+                        helperText={touched.program_id && errors.program_id}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} 
+                        >
+                        { academicProgramData && academicProgramData.map((item,key) => (
+                        <MenuItem key={key} value={item.program_id} >
+                            {item.program_id+'-'+item.program_name}
+                        </MenuItem>  
+                        ))} 
+                    </TextField>             
+
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
                         label="ที่ปรึกษา"
+                        select
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.staff_type}
-                        name="advisor"
-                        error={!!touched.advisor && !!errors.advisor}
-                        helperText={touched.advisor && errors.advisor}
-                        sx={{ gridColumn: "span 1" }}
-                    />       
+                        value={values.advisor_staff_id}
+                        name="advisor_staff_id"
+                        error={!!touched.advisor_staff_id && !!errors.advisor_staff_id}
+                        helperText={touched.advisor_staff_id && errors.advisor_staff_id}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} 
+                        >
+                        { staffData && staffData.map((item,key) => (
+                        <MenuItem key={key} value={item.staff_id} >
+                            {item.staff_id+'-'+item.firstname+' '+item.lastname}
+                        </MenuItem>  
+                        ))} 
+                    </TextField>      
+
                      </Box>
                 </Box>
                 
