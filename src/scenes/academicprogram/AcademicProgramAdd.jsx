@@ -9,6 +9,7 @@ import {
     FormControlLabel,
     FormControl,
     useMediaQuery,
+    MenuItem,
   } from '@mui/material'
 
 import { Formik, Field } from 'formik'
@@ -17,6 +18,7 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { addAcademicProgram } from '../../actions/academicProgram.action'
+import { getDepartment } from '../../actions/department.action'
 import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
@@ -45,9 +47,17 @@ const AcademicProgramAdd = () => {
 
   const [open, setOpen] = useState(false)
 
-  const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
-  const INITIAL_ZOOM = 12
-  const [center, setCenter] = useState(INITIAL_CENTER);
+  const [departmentData, setDepartmentData] = useState([])
+  
+  const departmentReducer = useSelector((state) => state.app.departmentReducer)
+  
+    useEffect(() => {
+        dispatch(getDepartment())
+    },[dispatch])
+  
+    useEffect(() => {
+        setDepartmentData(departmentReducer.result)
+    },[departmentReducer.result]) 
 
   //  if (result) {
   //   console.log('role result',result)
@@ -119,8 +129,6 @@ const AcademicProgramAdd = () => {
                         onChange={handleChange}
                         value={values?.program_name}
                         name="name"
-                        multiline={true}
-                        minRows="2"                        
                         error={!!touched.program_name && !!errors.program_name}
                         helperText={touched.program_name && errors.program_name}
                         sx={{ gridColumn: "span 2" }}
@@ -134,28 +142,32 @@ const AcademicProgramAdd = () => {
                          onChange={handleChange}
                          value={values.degree_level}
                          name="degree_level"
-                         multiline={true}
-                         minRows="2"                         
                          error={!!touched.degree_level && !!errors.degree_level}
                          helperText={touched.degree_level && errors.degree_level}
                          sx={{ gridColumn: "span 2" }}
                      />       
+
                     <TextField
-                         fullWidth
-                         variant="filled"
-                         type="text"
-                         label="ภาควิชา"
-                         onBlur={handleBlur}
-                         onChange={handleChange}
-                         value={values.dept_name}
-                         name="dept_name"
-                         multiline={true}
-                         minRows="2"                         
-                         error={!!touched.dept_name && !!errors.dept_name}
-                         helperText={touched.dept_name && errors.dept_name}
-                         sx={{ gridColumn: "span 2" }}
-                     />       
-                     
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ภาควิชา"
+                        select
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.department_id}
+                        name="department_id"
+                        error={!!touched.department_id && !!errors.department_id}
+                        helperText={touched.department_id && errors.department_id}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} 
+                        >
+                        { departmentData && departmentData.map((item,key) => (
+                        <MenuItem key={key} value={item.department_id} >
+                            {item.department_id+'-'+item.dept_name}
+                        </MenuItem>  
+                        ))} 
+                    </TextField>                        
                      </Box>
                 </Box>
 
