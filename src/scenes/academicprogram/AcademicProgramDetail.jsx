@@ -29,26 +29,9 @@ const AcademicProgramDetail = () => {
 
   const location = useLocation()
 
-  console.log('Outsource add row', location.state.row)
-
-    const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
-    const INITIAL_ZOOM = 12
-    const [center, setCenter] = useState(INITIAL_CENTER);
+  console.log('Academic add row', location.state.row)
 
     const isNonMobile = useMediaQuery("(min-width:600px)")  
-
-
-    useEffect(() => {
-        if (location.state.row.latitude && location.state.row.latitude) {
-            setCenter({ lat: location.state.row.latitude, lng: location.state.row.longitude})
-        }
-    },[location.state.row])
-  // const [snackBarOpen, setSnackBarOpen] = useState(false)
-
-  // const [roleSelected, setRoleSelected] = useState('1')
-
-  // const { result } = useSelector((state) => state.app.roleReducer)
-
 
       return <Box m="20px">
         <Header title="รายละเอียดข้อมูล" subtitle="รายละเอียดข้อมูลหลักสูตร"  />
@@ -73,8 +56,6 @@ const AcademicProgramDetail = () => {
                         label="รหัส"
                         value={location.state.row.id}
                         name="id"
-                        multiline={true}
-                        minRows="2"                        
                         sx={{ gridColumn: "span 2" }}
                         InputLabelProps={{ shrink: true }}
                     />
@@ -85,8 +66,6 @@ const AcademicProgramDetail = () => {
                         label="ชื่อหลักสูตร"
                         value={location.state.row.program_name}
                         name="program_name"
-                        multiline={true}
-                        minRows="2"                        
                         sx={{ gridColumn: "span 2" }}
                         InputLabelProps={{ shrink: true }}
                     />
@@ -97,8 +76,6 @@ const AcademicProgramDetail = () => {
                          label="ปริญญา"
                          value={location.state.row.degree_level}
                          name="degree_level"
-                         multiline={true}
-                         minRows="2"                         
                          sx={{ gridColumn: "span 2" }}
                          InputLabelProps={{ shrink: true }}
                      />       
@@ -109,8 +86,6 @@ const AcademicProgramDetail = () => {
                          label="ภาควิชา"
                          value={location.state.row.Department?.dept_name}
                          name="dept_name"
-                         multiline={true}
-                         minRows="2"                         
                          sx={{ gridColumn: "span 2" }}
                          InputLabelProps={{ shrink: true }}
                      />       

@@ -9,6 +9,7 @@ import {
     FormControlLabel,
     FormControl,
     useMediaQuery,
+    MenuItem,
   } from '@mui/material'
 
 import { Formik, Field } from 'formik'
@@ -17,6 +18,7 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { updateAcademicProgram } from '../../actions/academicProgram.action'
+import { getDepartment } from '../../actions/department.action'
 import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
@@ -47,22 +49,18 @@ const AcademicEdit = () => {
 
   const [open, setOpen] = useState(false)
 
-  const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
-  const INITIAL_ZOOM = 12
-  const [initMap, setInitMap] =useState(INITIAL_CENTER)
-  const [center, setCenter] = useState(INITIAL_CENTER);    
-
+  const [departmentData, setDepartmentData] = useState([])
+  
+  const departmentReducer = useSelector((state) => state.app.departmentReducer)
+  
     useEffect(() => {
-    if (location.state.row.latitude && location.state.row.latitude) {
-        setInitMap({ lat: location.state.row.latitude, lng: location.state.row.longitude})
-    }
-    },[location.state.row])
-
+        dispatch(getDepartment())
+    },[dispatch])
+  
     useEffect(() => {
-        if (location.state.row.latitude && location.state.row.latitude) {
-            setCenter(initMap)
-        }
-    },[initMap])
+        setDepartmentData(departmentReducer.result)
+    },[departmentReducer.result])  
+
 
   //  if (result) {
   //   console.log('role result',result)
@@ -133,8 +131,6 @@ const AcademicEdit = () => {
                          label="รหัส"
                          value={values?.id}
                          name="id"
-                         multiline={true}
-                         minRows="2"                        
                          sx={{ gridColumn: "span 2" }}
                          disabled
                      />
@@ -148,8 +144,6 @@ const AcademicEdit = () => {
                         onChange={handleChange}
                         value={values?.program_name}
                         name="name"
-                        multiline={true}
-                        minRows="2"                        
                         error={!!touched.program_name && !!errors.program_name}
                         helperText={touched.program_name && errors.program_name}
                         sx={{ gridColumn: "span 2" }}
@@ -163,13 +157,11 @@ const AcademicEdit = () => {
                          onChange={handleChange}
                          value={values.degree_level}
                          name="degree_level"
-                         multiline={true}
-                         minRows="2"                         
                          error={!!touched.degree_level && !!errors.degree_level}
                          helperText={touched.degree_level && errors.degree_level}
                          sx={{ gridColumn: "span 2" }}
                      />       
-                    <TextField
+                    {/* <TextField
                          fullWidth
                          variant="filled"
                          type="text"
@@ -183,7 +175,28 @@ const AcademicEdit = () => {
                          error={!!touched.dept_name && !!errors.dept_name}
                          helperText={touched.dept_name && errors.dept_name}
                          sx={{ gridColumn: "span 2" }}
-                     />       
+                     />        */}
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ภาควิชา"
+                        select
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.department_id}
+                        name="department_id"
+                        error={!!touched.department_id && !!errors.department_id}
+                        helperText={touched.department_id && errors.department_id}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} 
+                        >
+                        { departmentData && departmentData.map((item,key) => (
+                        <MenuItem key={key} value={item.department_id} >
+                            {item.department_id+'-'+item.dept_name}
+                        </MenuItem>  
+                        ))} 
+                    </TextField>                       
                      </Box>
                 </Box>
                      
