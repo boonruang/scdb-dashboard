@@ -228,13 +228,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />                            
-                            {/* <Item
+                            <Item
                                 title="ด้านบุคลากร"
                                 to="/dashboard/dashboard1"
                                 icon={<PeopleOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> */}
+                            />
                             <Item
                                 title="ข้อมูลนิสิต"
                                 to="/dashboard/dashboard2"
@@ -242,27 +242,27 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
-                            {/* <Item
+                            <Item
                                 title="ด้านหลักสูตร"
                                 to="/dashboard/dashboard3"
                                 icon={<FmdBadIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                           <Item
                                 title="ด้านวิจัย"
                                 to="/dashboard/dashboard4"
                                 icon={<WbIncandescentIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
-                            <Item
+                             <Item
                                 title="ด้านแผนและงบประมาณ"
                                 to="/dashboard/dashboard5"
                                 icon={<PlaylistAddCheckIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> */}
+                            />
                                                         
                          </SubMenu>   : undefined  }  
 

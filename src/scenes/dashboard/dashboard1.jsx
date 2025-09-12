@@ -65,7 +65,7 @@ const Dashbaord = () => {
                 gap="20px"
             >
                 {/* ROW 1 */}
-                <Box
+                {/* <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
                     display="flex"
@@ -147,7 +147,7 @@ const Dashbaord = () => {
                             />
                         }
                     />
-                </Box>
+                </Box> */}
 
                 {/* END ROW 1 */}
 
@@ -168,33 +168,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนนิสิต
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboardReducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนบุคลากร
+                            บุคลากรรวม
                         </Typography>
                         <Box
                             height="245px"
@@ -220,7 +194,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนอาจารย์
+                            อาจารย์
                         </Typography>
                         <Box
                             height="245px"
@@ -230,11 +204,36 @@ const Dashbaord = () => {
                         </Box>
                     </Box>                     
                 </Box>
-
+                <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+                p="30px"
+                >
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 2"
+                        backgroundColor={colors.primary[400]}
+                    >
+                        <Typography
+                            variant='h5'
+                            fontWeight="600"
+                            sx={{ p: "30px 30px 0 30px" }}
+                        >
+                            สายสนับสนุน
+                        </Typography>
+                        <Box
+                            height="245px"
+                            mt="-25px"
+                        >
+                            {dashboardReducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                        </Box>
+                    </Box>                     
+                </Box>
                 {/* END ROW 2 */}                
 
                 {/* START ROW 3 */}
-                <Box
+                {/* <Box
                 gridColumn="span 4"
                 gridRow="span 2"
                 backgroundColor={colors.primary[400]}
@@ -259,7 +258,7 @@ const Dashbaord = () => {
                             {dashboardReducer?.result?.studentSummary && <BarChartStudentSummary isDashboard={true} data={dashboardReducer?.result?.studentSummary} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box> */}
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
