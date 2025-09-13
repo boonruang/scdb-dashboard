@@ -27,24 +27,6 @@ import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-    fontSize: "14px",
-    fontWeight: "bold",
-    padding: "10px 20px",
-    mr: "20px",
-    mb: "10px",
-  });
 
 const initialValues = {
     name: "",
@@ -59,28 +41,7 @@ const userSchema = yup.object().shape({
 }) 
 
 
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
-              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
-
-const StaffeducationEdit = () => {
+ const StaffeducationEdit = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     

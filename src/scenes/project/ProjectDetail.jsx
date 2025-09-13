@@ -147,22 +147,22 @@ const ProjectDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="สถานะ"
-                        value={location.state.row.status}
-                        name="status"
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                    
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
                         label="ภาควิชา"
                         value={location.state.row.Department.dept_name}
                         name="status"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
-                    />                    
+                    />     
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="สถานะ"
+                        value={location.state.row.status}
+                        name="status"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                                      
                     </Box>
                 </Box>
 

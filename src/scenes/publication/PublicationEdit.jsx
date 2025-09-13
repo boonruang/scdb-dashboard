@@ -27,58 +27,19 @@ import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-    fontSize: "14px",
-    fontWeight: "bold",
-    padding: "10px 20px",
-    mr: "20px",
-    mb: "10px",
-  });
 
 const initialValues = {
-    name: "",
+    title: "",
 }
 
 const userSchema = yup.object().shape({
-    // name: yup.string().required("ต้องใส่"),
-    // position: yup.string().required("ต้องใส่"),
-    // publication_type: yup.string().required("ต้องใส่"),
-    // email: yup.string().required("ต้องใส่"),
-    // office_location: yup.string().required("ต้องใส่"),
+    title: yup.string().required("ต้องใส่"),
+    journal_name: yup.string().required("ต้องใส่"),
+    publication_year: yup.number().required("ต้องใส่"),
+    quartile: yup.string().required("ต้องใส่"),
+    database_source: yup.string().required("ต้องใส่"),
 }) 
 
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
-              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
 
 const PublicationEdit = () => {
 
@@ -111,8 +72,12 @@ const PublicationEdit = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('publication_id', values.id)
+              formData.append('pub_id', values.pub_id)
               formData.append('title', values.title)
+              formData.append('journal_name', values.journal_name)
+              formData.append('publication_year', values.publication_year)
+              formData.append('quartile', values.quartile)
+              formData.append('database_source', values.database_source)
               console.log('values',values)
               dispatch(updatePublication(navigate, formData))
               setSubmitting(false)
@@ -137,6 +102,7 @@ const PublicationEdit = () => {
                         variant="outlined"
                         type="text"
                         label="รหัส"
+                        disabled
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.pub_id}
@@ -144,7 +110,6 @@ const PublicationEdit = () => {
                         error={!!touched.pub_id && !!errors.pub_id}
                         helperText={touched.pub_id && errors.pub_id}
                         sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
                     />                        
                     <TextField
                         fullWidth
@@ -154,11 +119,10 @@ const PublicationEdit = () => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.title}
-                        title="title"
+                        name="title"
                         error={!!touched.title && !!errors.title}
                         helperText={touched.title && errors.title}
                         sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
                     />
                     <TextField
                         fullWidth
@@ -172,7 +136,6 @@ const PublicationEdit = () => {
                         error={!!touched.journal_name && !!errors.journal_name}
                         helperText={touched.journal_name && errors.journal_name}
                         sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
                     />       
                     <TextField
                         fullWidth
@@ -186,7 +149,6 @@ const PublicationEdit = () => {
                         error={!!touched.publication_year && !!errors.publication_year}
                         helperText={touched.publication_year && errors.publication_year}
                         sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
                     />                       
                     <TextField
                         fullWidth
@@ -200,7 +162,6 @@ const PublicationEdit = () => {
                         error={!!touched.quartile && !!errors.quartile}
                         helperText={touched.quartile && errors.quartile}
                         sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
                     />                       
                     <TextField
                         fullWidth
@@ -214,7 +175,6 @@ const PublicationEdit = () => {
                         error={!!touched.database_source && !!errors.database_source}
                         helperText={touched.database_source && errors.database_source}
                         sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
                     />                    
                      </Box>
                 </Box>

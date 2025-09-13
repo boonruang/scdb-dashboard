@@ -44,7 +44,7 @@ const Publications = () => {
     }
 
     const handleDeleteClick = ({state}) => {
-        setRowId(state.row.publication_id)
+        setRowId(state.row.pub_id)
         setOpen(true)
     }
 

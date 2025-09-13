@@ -30,56 +30,16 @@ import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-    fontSize: "14px",
-    fontWeight: "bold",
-    padding: "10px 20px",
-    mr: "20px",
-    mb: "10px",
-  });
 
 const initialValues = {
-    name: "",
+    firstname: "",
 }
 
 const userSchema = yup.object().shape({
-    // title: yup.string().required("ต้องใส่"),
-    // excerpt: yup.string().required("ต้องใส่"),
-    // category: yup.string().required("ต้องใส่"),
+    firstname: yup.string().required("ต้องใส่"),
+    lastname: yup.string().required("ต้องใส่"),
 }) 
 
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
-              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
 
 const StudentEdit = () => {
 
@@ -135,8 +95,12 @@ const StudentEdit = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('student_id', values.id)
-              formData.append('title', values.title)
+              formData.append('student_id', values.student_id)
+              formData.append('studentOfficial_id', values.studentOfficial_id)
+              formData.append('firstname', values.firstname)
+              formData.append('lastname', values.lastname)
+              formData.append('program_id', values.program_id)
+              formData.append('advisor_staff_id', values.advisor_staff_id)
               console.log('values',values)
               dispatch(updateStudent(navigate, formData))
               setSubmitting(false)
@@ -160,14 +124,14 @@ const StudentEdit = () => {
                         fullWidth
                         variant="outlined"
                         type="text"
-                        label="รหัส"
+                        label="ลำดับ"
+                        disabled
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.student_id}
                         name="student_id"
                         error={!!touched.student_id && !!errors.student_id}
                         helperText={touched.student_id && errors.student_id}
-                        InputLabelProps={{ shrink: true }}
                         sx={{ gridColumn: "span 1" }}
                     />                        
                     <TextField
