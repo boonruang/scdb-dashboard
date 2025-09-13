@@ -56,28 +56,6 @@ const userSchema = yup.object().shape({
     office_location: yup.string().required("ต้องใส่"),
 }) 
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  console.log('image in Item => ',image)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              image={imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
 
 const StaffeducationAdd = () => {
 

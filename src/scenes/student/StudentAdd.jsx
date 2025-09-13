@@ -48,38 +48,13 @@ const VisuallyHiddenInput = styled('input')({
   });
 
 const initialValues = {
-    title: "",
+    firstname: "",
 }
 
 const userSchema = yup.object().shape({
-    title: yup.string().required("ต้องใส่"),
-    excerpt: yup.string().required("ต้องใส่"),
-    category: yup.string().required("ต้องใส่"),
-    date: yup.string().required("ต้องใส่"),
+    firstname: yup.string().required("ต้องใส่"),
+    lastname: yup.string().required("ต้องใส่"),
 }) 
-
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  console.log('image in Item => ',image)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              image={imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
 
 const StudentAdd = () => {
 
@@ -138,7 +113,11 @@ const StudentAdd = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('name', values.title)
+              formData.append('studentOfficial_id', values.studentOfficial_id)
+              formData.append('firstname', values.firstname)
+              formData.append('lastname', values.lastname)
+              formData.append('program_id', values.program_id)
+              formData.append('advisor_staff_id', values.advisor_staff_id)
               console.log('values',values)
               dispatch(addStudent(navigate, formData))
               setSubmitting(false)
@@ -165,7 +144,7 @@ const StudentAdd = () => {
                         label="รหัส"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.studentOfficial_id}
+                        value={values.studentOfficial_id}
                         name="studentOfficial_id"
                         error={!!touched.studentOfficial_id && !!errors.studentOfficial_id}
                         helperText={touched.studentOfficial_id && errors.studentOfficial_id}

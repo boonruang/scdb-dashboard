@@ -118,7 +118,7 @@ const Students = () => {
       flex: 1,
       // --- เปลี่ยนมาใช้ renderCell เช่นกัน ---
       renderCell: (params) => {
-        return params.row.advisor?.firstname || 'N/A';
+        return params.row.advisor?.firstname+' '+params.row.advisor?.lastname || 'N/A';
       }
     }
         ,

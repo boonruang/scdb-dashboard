@@ -26,57 +26,17 @@ import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-    fontSize: "14px",
-    fontWeight: "bold",
-    padding: "10px 20px",
-    mr: "20px",
-    mb: "10px",
-  });
-
 const initialValues = {
     title: "",
 }
 
 const userSchema = yup.object().shape({
-    name: yup.string().required("ต้องใส่"),
-    position: yup.string().required("ต้องใส่"),
-    publication_type: yup.string().required("ต้องใส่"),
-    email: yup.string().required("ต้องใส่"),
-    office_location: yup.string().required("ต้องใส่"),
+    title: yup.string().required("ต้องใส่"),
+    journal_name: yup.string().required("ต้องใส่"),
+    publication_year: yup.number().required("ต้องใส่"),
+    quartile: yup.string().required("ต้องใส่"),
+    database_source: yup.string().required("ต้องใส่"),
 }) 
-
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  console.log('image in Item => ',image)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              image={imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
 
 const PublicationAdd = () => {
 
@@ -112,7 +72,11 @@ const PublicationAdd = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('name', values.title)
+              formData.append('title', values.title)
+              formData.append('journal_name', values.journal_name)
+              formData.append('publication_year', values.publication_year)
+              formData.append('quartile', values.quartile)
+              formData.append('database_source', values.database_source)
               console.log('values',values)
               dispatch(addPublication(navigate, formData))
               setSubmitting(false)
@@ -139,8 +103,8 @@ const PublicationAdd = () => {
                         label="ชื่อเรื่อง"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.title}
-                        title="title"
+                        value={values.title}
+                        name="title"
                         error={!!touched.title && !!errors.title}
                         helperText={touched.title && errors.title}
                         sx={{ gridColumn: "span 1" }}
@@ -152,7 +116,7 @@ const PublicationAdd = () => {
                         label="วารสาร"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.journal_name}
+                        value={values.journal_name}
                         name="journal_name"
                         error={!!touched.journal_name && !!errors.journal_name}
                         helperText={touched.journal_name && errors.journal_name}
@@ -165,7 +129,7 @@ const PublicationAdd = () => {
                         label="ปีที่ตีพิมพ์"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.publication_year}
+                        value={values.publication_year}
                         name="publication_year"
                         error={!!touched.publication_year && !!errors.publication_year}
                         helperText={touched.publication_year && errors.publication_year}
@@ -178,7 +142,7 @@ const PublicationAdd = () => {
                         label="คลอไทล์"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.quartile}
+                        value={values.quartile}
                         name="quartile"
                         error={!!touched.quartile && !!errors.quartile}
                         helperText={touched.quartile && errors.quartile}
@@ -191,7 +155,7 @@ const PublicationAdd = () => {
                         label="ฐานข้อมูล"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.database_source}
+                        value={values.database_source}
                         name="database_source"
                         error={!!touched.database_source && !!errors.database_source}
                         helperText={touched.database_source && errors.database_source}

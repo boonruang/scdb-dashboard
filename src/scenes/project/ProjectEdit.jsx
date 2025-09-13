@@ -13,7 +13,8 @@ import {
     Grid,
     styled,
     Card,
-    CardMedia    
+    CardMedia,
+    MenuItem,
   } from '@mui/material'
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
@@ -21,29 +22,15 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProject } from '../../actions/project.action'
+import { getDepartment } from 'actions/department.action'
 import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
-
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-    fontSize: "14px",
-    fontWeight: "bold",
-    padding: "10px 20px",
-    mr: "20px",
-    mb: "10px",
-  });
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { th } from 'date-fns/locale';  
 
 const initialValues = {
     name: "",
@@ -57,28 +44,6 @@ const userSchema = yup.object().shape({
     // office_location: yup.string().required("ต้องใส่"),
 }) 
 
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
-              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
-
 const ProjectEdit = () => {
 
   const theme = useTheme()
@@ -91,6 +56,20 @@ const ProjectEdit = () => {
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [departmentData, setDepartmentData] = useState([])
+
+  const departmentReducer = useSelector((state) => state.app.departmentReducer)
+
+
+    useEffect(() => {
+        dispatch(getDepartment())
+    },[dispatch])
+
+
+    useEffect(() => {
+        setDepartmentData(departmentReducer.result)
+    },[departmentReducer.result])  
+
 
    const handleSubmitButton = (values) => {
     setOpen(true)
@@ -106,12 +85,20 @@ const ProjectEdit = () => {
 
     return <Box m="20px">
         <Header title="ปรับปรุงข้อมูล" />
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={th}>
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('project_id', values.id)
-              formData.append('title', values.title)
+              formData.append('project_id', values.project_id)
+              formData.append('project_name', values.project_name)
+              formData.append('project_type', values.project_type)
+              formData.append('responsible_dept_id', values.responsible_dept_id)
+              formData.append('start_date', values.start_date)
+              formData.append('end_date', values.end_date)
+              formData.append('budget_source', values.budget_source)
+              formData.append('budget_amount', values.budget_amount)
+              formData.append('status', values.status)
               console.log('values',values)
               dispatch(updateProject(navigate, formData))
               setSubmitting(false)
@@ -153,7 +140,7 @@ const ProjectEdit = () => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.project_name}
-                        title="project_name"
+                        name="project_name"
                         error={!!touched.project_name && !!errors.project_name}
                         helperText={touched.project_name && errors.project_name}
                         sx={{ gridColumn: "span 1" }}
@@ -172,35 +159,55 @@ const ProjectEdit = () => {
                         helperText={touched.project_type && errors.project_type}
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
-                    />       
+                    />    
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="วันเริ่มต้น"
+                        label="โดยภาควิชา"
+                        select
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.start_date}
-                        name="start_date"
-                        error={!!touched.start_date && !!errors.start_date}
-                        helperText={touched.start_date && errors.start_date}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                       
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
+                        value={values.responsible_dept_id}
+                        name="responsible_dept_id"                         
+                        error={!!touched.responsible_dept_id && !!errors.responsible_dept_id}
+                        helperText={touched.responsible_dept_id && errors.responsible_dept_id}
+                        defaultValue=""
+                        sx={{ gridColumn: "span 1" }} >
+                        { departmentData && departmentData.map((item,key) => (
+                        <MenuItem key={key} value={item.department_id} >
+                            {item.department_id+'-'+item.dept_name}
+                        </MenuItem>  
+                        ))} 
+                    </TextField>                        
+                    <DatePicker
                         label="วันเริ่มต้น"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.end_date}
-                        name="end_date"
-                        error={!!touched.end_date && !!errors.end_date}
-                        helperText={touched.end_date && errors.end_date}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                       
+                        value={values.start_date ? new Date(values.start_date) : null}
+                        onChange={(value) => setFieldValue("start_date", value)}
+                        format="d MMMM yyyy"
+                        slotProps={{
+                        textField: {
+                            fullWidth: true,
+                            variant: "outlined",
+                            sx: { gridColumn: "span 1" },
+                            InputLabelProps: { shrink: true }
+                        }
+                        }}
+                        />
+                    <DatePicker
+                        label="สิ้นสุด"
+                        value={values.end_date ? new Date(values.end_date) : null }
+                        onChange={(value) => setFieldValue("end_date", value)}
+                        format="d MMMM yyyy"
+                        slotProps={{
+                        textField: {
+                            fullWidth: true,
+                            variant: "outlined",
+                            sx: { gridColumn: "span 1" },
+                            InputLabelProps: { shrink: true }
+                        }
+                        }}
+                    />                      
                     <TextField
                         fullWidth
                         variant="filled"
@@ -309,6 +316,7 @@ const ProjectEdit = () => {
                 </form>
             )}
         </Formik>
+        </LocalizationProvider>
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}

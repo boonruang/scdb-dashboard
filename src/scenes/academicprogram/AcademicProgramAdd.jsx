@@ -23,17 +23,13 @@ import { useNavigate } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
 const initialValues = {
-    name: "",
+    program_name: "",
 }
 
 const userSchema = yup.object().shape({
-    name: yup.string().required("ต้องใส่"),
-    author: yup.string().required("ต้องใส่"),
-    journal: yup.string().required("ต้องใส่"),
-    type: yup.string().required("ต้องใส่"),
-    press: yup.string().required("ต้องใส่"),
-    publishyear: yup.string().required("ต้องใส่").matches(/^[0-9]{4}$/,"ต้องประกอบด้วยตัวเลข 4 หลัก"),
-    edition: yup.string().required("ต้องใส่").matches(/^[0-9]{1}$/,"ต้องประกอบด้วยตัวเลข"),
+    program_name: yup.string().required("ต้องใส่"),
+    degree_level: yup.string().required("ต้องใส่"),
+
 }) // end yup
 
 const AcademicProgramAdd = () => {
@@ -59,10 +55,6 @@ const AcademicProgramAdd = () => {
         setDepartmentData(departmentReducer.result)
     },[departmentReducer.result]) 
 
-  //  if (result) {
-  //   console.log('role result',result)
-  //  }
-
    const handleSubmitButton = (values) => {
     setOpen(true)
     // console.log(values)
@@ -87,16 +79,9 @@ const AcademicProgramAdd = () => {
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('name', values.name)
-              formData.append('author', values.author)
-              formData.append('journal', values.journal)
-              formData.append('type', values.type)
-              formData.append('press', values.press)
-              formData.append('publishyear', values.publishyear)
-              formData.append('edition', values.edition)
-              formData.append('attachment', values.attachment)
-              formData.append('reference', values.reference)
-              formData.append('status', 'true')
+              formData.append('program_name', values.program_name)
+              formData.append('degree_level', values.degree_level)
+              formData.append('department_id', values.department_id)
               console.log('values',values)
               dispatch(addAcademicProgram(navigate, formData))
               setSubmitting(false)
@@ -128,7 +113,7 @@ const AcademicProgramAdd = () => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.program_name}
-                        name="name"
+                        name="program_name"
                         error={!!touched.program_name && !!errors.program_name}
                         helperText={touched.program_name && errors.program_name}
                         sx={{ gridColumn: "span 2" }}
