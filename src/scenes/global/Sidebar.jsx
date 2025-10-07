@@ -301,13 +301,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="ทุนการศึกษา"
                                 to="/studentgrant"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                             
+                            />                              */}
                             <Item
                                 title="นำเข้าข้อมูลนิสิต"
                                 to="/student/importdata"
