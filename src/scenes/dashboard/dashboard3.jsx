@@ -22,7 +22,7 @@ import StatBox from "../../components/StatBox"
 import StatBoxStudent from "../../components/StatBoxStudent"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
-import { getDashboard } from 'actions/dashboard.action'
+import { getDashboard } from 'actions/dashboard3.action'
 import ProgressCircleCal from 'components/ProgressCircleCal'
 
 let newDate = new Date()
@@ -41,7 +41,7 @@ const Dashbaord = () => {
         dispatch(getDashboard())
     },[dispatch])
 
-    const dashboardReducer = useSelector((state) => state.app.dashboardReducer)
+    const dashboard3Reducer = useSelector((state) => state.app.dashboard3Reducer)
 
     return (
         <Box m="20px">
@@ -69,7 +69,7 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBoxStudent
-                        title={dashboardReducer.result && dashboardReducer.result.amountDept}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountDept}
                         subtitle="ภาควิชา"
                         icon={
                             <PeopleOutlinedIcon
@@ -90,7 +90,7 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBoxStudent
-                        title={dashboardReducer.result && dashboardReducer.result.amountBachelor}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountBachelor}
                         subtitle="หลักสูตร ป.ตรี"
                         icon={
                             <PeopleOutlinedIcon
@@ -111,7 +111,7 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBoxStudent
-                        title={dashboardReducer.result && dashboardReducer.result.amountMaster}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountMaster}
                         subtitle="หลักสูตร ป.โท"
                         icon={
                             <PeopleOutlinedIcon
@@ -132,7 +132,7 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBoxStudent
-                        title={dashboardReducer.result && dashboardReducer.result.amountPhd}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountPhd}
                         subtitle="หลักสูตร ป.เอก"
                         icon={
                             <PeopleOutlinedIcon
@@ -156,10 +156,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentStat }
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentStat }
                         subtitle="สถิติ"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentStatPercent }
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentStatPercent *100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentStatPercent }
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentStatPercent *100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -179,10 +179,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentMath }
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentMath }
                         subtitle="คณิตศาสตร์"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentMathPercent }
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentMathPercent *100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentMathPercent }
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentMathPercent *100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -202,10 +202,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentChem}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentChem}
                         subtitle="เคมี"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentChemPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentChemPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentChemPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentChemPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -225,10 +225,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentBioChemInno}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentBioChemInno}
                         subtitle="นวัฒกรรมชีวเคมี"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentBioChemInnoPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentBioChemInnoPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentBioChemInnoPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentBioChemInnoPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -251,10 +251,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentBio}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentBio}
                         subtitle="ชีววิทยา"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentBioPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentBioPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentBioPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentBioPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -274,10 +274,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentMicro}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentMicro}
                         subtitle="จุลชีววิทยา"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentMicroPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentMicroPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentMicroPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentMicroPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -297,10 +297,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentGen}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentGen}
                         subtitle="พันธุศาสตร์โมเลกุล"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentGenPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentGenPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentGenPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentGenPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -320,10 +320,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentPhysic}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic}
                         subtitle="ฟิสิกส์"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPhysicPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPhysicPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysicPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysicPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -346,10 +346,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentApply}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentApply}
                         subtitle="ประยุกต์"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentApplyPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentApplyPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentApplyPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -369,10 +369,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentApplyEnergy}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyEnergy}
                         subtitle="ประยุกต์พลังงาน"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentApplyEnergyPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentApplyEnergyPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyEnergyPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentApplyEnergyPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -392,10 +392,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentApplyElec}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyElec}
                         subtitle="ประยุกต์อิเล็กทรอนิกส์"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentApplyElecPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentApplyElecPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyElecPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentApplyElecPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -415,10 +415,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentEnergy}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentEnergy}
                         subtitle="พลังงาน"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentEnergyPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentEnergyPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentEnergyPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentEnergyPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -441,10 +441,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentPhysicEdu}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysicEdu}
                         subtitle="กศ.บ.ฟิสิกส์"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPhysicEduPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPhysicEduPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysicEduPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysicEduPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -464,10 +464,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentPhysic21}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic21}
                         subtitle="ฟิสิกส์ 2.1"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPhysic21Percent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPhysic21Percent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic21Percent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysic21Percent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -487,10 +487,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentPhysic22}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic22}
                         subtitle="ฟิสิกส์ 2.2"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPhysic22Percent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPhysic22Percent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic22Percent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysic22Percent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -510,10 +510,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.studentTotal}
+                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentTotal}
                         subtitle="รวม"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentTotalPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentTotalPercent*100).toFixed(0) + '%'}
+                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentTotalPercent}
+                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentTotalPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{

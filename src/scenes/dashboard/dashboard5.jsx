@@ -25,7 +25,7 @@ import BarChartTeacher from "../../components/BarChartTeacher"
 import StatBox from "../../components/StatBox"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
-import { getDashboard } from 'actions/dashboard.action'
+import { getDashboard } from 'actions/dashboard5.action'
 import ProgressCircleCal from 'components/ProgressCircleCal'
 
 let newDate = new Date()
@@ -44,7 +44,7 @@ const Dashbaord = () => {
         dispatch(getDashboard())
     },[dispatch])
 
-    const dashboardReducer = useSelector((state) => state.app.dashboardReducer)
+    const dashboard5Reducer = useSelector((state) => state.app.dashboard5Reducer)
 
     return (
         <Box m="20px">
@@ -72,10 +72,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.student}
+                        title={dashboard5Reducer.result && dashboard5Reducer.result.student}
                         subtitle="จำนวนนิสิต"
-                        progress={dashboardReducer.result && dashboardReducer.result.studentPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.studentPercent*100).toFixed(0) + '%'}
+                        progress={dashboard5Reducer.result && dashboard5Reducer.result.studentPercent}
+                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.studentPercent*100).toFixed(0) + '%'}
                         icon={
                             <GrassIcon
                                 sx={{
@@ -95,10 +95,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.staff}
+                        title={dashboard5Reducer.result && dashboard5Reducer.result.staff}
                         subtitle="จำนวนบุคลากร"
-                        progress={dashboardReducer.result && dashboardReducer.result.staffPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.staffPercent*100).toFixed(0) + '%'}
+                        progress={dashboard5Reducer.result && dashboard5Reducer.result.staffPercent}
+                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.staffPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -118,10 +118,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.user}
+                        title={dashboard5Reducer.result && dashboard5Reducer.result.user}
                         subtitle="จำนวนผู้ใช้"
-                        progress={dashboardReducer.result && dashboardReducer.result.userPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.userPercent*100).toFixed(0) + '%'}
+                        progress={dashboard5Reducer.result && dashboard5Reducer.result.userPercent}
+                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.userPercent*100).toFixed(0) + '%'}
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -141,10 +141,10 @@ const Dashbaord = () => {
                     justifyContent="center"
                 >
                     <StatBox
-                        title={dashboardReducer.result && dashboardReducer.result.log}
+                        title={dashboard5Reducer.result && dashboard5Reducer.result.log}
                         subtitle="จำนวน Log"
-                        progress={dashboardReducer.result && dashboardReducer.result.logPercent}
-                        increase={dashboardReducer.result && (dashboardReducer.result.logPercent*100).toFixed(0) + '%'}
+                        progress={dashboard5Reducer.result && dashboard5Reducer.result.logPercent}
+                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.logPercent*100).toFixed(0) + '%'}
                         icon={
                             <WarehouseIcon
                                 sx={{
@@ -181,7 +181,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.planProject && <BarChartPlanProject isDashboard={true} data={dashboardReducer?.result?.planProject} />}
+                            {dashboard5Reducer?.result?.planProject && <BarChartPlanProject isDashboard={true} data={dashboard5Reducer?.result?.planProject} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -207,7 +207,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
+                            {dashboard5Reducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboard5Reducer?.result?.publicationISI} />}
                         </Box>
                     </Box>                     
                 </Box> */}
@@ -233,7 +233,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.planBudget && <BarChartPlanBudget isDashboard={true} data={dashboardReducer?.result?.planBudget} />}
+                            {dashboard5Reducer?.result?.planBudget && <BarChartPlanBudget isDashboard={true} data={dashboard5Reducer?.result?.planBudget} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -263,7 +263,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboard5Reducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboard5Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -289,7 +289,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboard5Reducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboard5Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -315,7 +315,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboardReducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboardReducer?.result?.academicWork} />}
+                            {dashboard5Reducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboard5Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box> */}
