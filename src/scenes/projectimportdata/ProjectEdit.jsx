@@ -14,17 +14,16 @@ import {
     styled,
     Card,
     CardMedia,
-    MenuItem    
+    MenuItem,
   } from '@mui/material'
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { addStaff } from '../../actions/staff.action'
-import { getStafftype } from '../../actions/stafftype.action'
+import { updateProject } from '../../actions/project.action'
 import { getDepartment } from 'actions/department.action'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
@@ -34,20 +33,18 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { th } from 'date-fns/locale';  
 
 const initialValues = {
-    firstname: "",
-    lastname: "",
+    name: "",
 }
 
 const userSchema = yup.object().shape({
-    firstname: yup.string().required("ต้องใส่"),
-    lastname: yup.string().required("ต้องใส่"),
-    position: yup.string().required("ต้องใส่"),
-    // stafftypeId: yup.string().required("ต้องใส่"),
+    // name: yup.string().required("ต้องใส่"),
+    // position: yup.string().required("ต้องใส่"),
+    // project_type: yup.string().required("ต้องใส่"),
     // email: yup.string().required("ต้องใส่"),
     // office_location: yup.string().required("ต้องใส่"),
 }) 
 
-const StaffAdd = () => {
+const ProjectEdit = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -56,29 +53,21 @@ const StaffAdd = () => {
 
   const navigate = useNavigate()
 
-  const [open, setOpen] = useState(false)
+  const location = useLocation()
 
-  const [stafftypeData, setStafftypeData] = useState([])
+  const [open, setOpen] = useState(false)
   const [departmentData, setDepartmentData] = useState([])
 
-  const stafftypeReducer = useSelector((state) => state.app.stafftypeReducer)
   const departmentReducer = useSelector((state) => state.app.departmentReducer)
 
 
     useEffect(() => {
-        dispatch(getStafftype())
-  },[dispatch])
-
-      useEffect(() => {
         dispatch(getDepartment())
-  },[dispatch])
+    },[dispatch])
 
-  useEffect(() => {
-    setStafftypeData(stafftypeReducer.result)
-    },[stafftypeReducer.result])  
 
-  useEffect(() => {
-    setDepartmentData(departmentReducer.result)
+    useEffect(() => {
+        setDepartmentData(departmentReducer.result)
     },[departmentReducer.result])  
 
 
@@ -94,140 +83,108 @@ const StaffAdd = () => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
-    const handleFormSubmit = (values) => {
-        console.log(values)
-        // dispatch(addUser(navigate,values))
-    }
-
     return <Box m="20px">
-        <Header title="เพิ่มข้อมูล"/>
+        <Header title="ปรับปรุงข้อมูล" />
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={th}>
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
-              formData.append('firstname', values.firstname)
-              formData.append('lastname', values.lastname)
-              formData.append('position', values.position)
-              formData.append('position_no', values.position_no)
-              formData.append('education', values.education)
-              formData.append('startdate', values.startdate)
-              formData.append('birthday', values.birthday)
-              formData.append('email', values.email)
-              formData.append('office_location', values.office_location)
-              formData.append('stafftype_id', values.stafftype_id)
-              formData.append('department_id', values.department_id)
+              formData.append('project_id', values.project_id)
+              formData.append('project_name', values.project_name)
+              formData.append('project_type', values.project_type)
+              formData.append('responsible_dept_id', values.responsible_dept_id)
+              formData.append('start_date', values.start_date)
+              formData.append('end_date', values.end_date)
+              formData.append('budget_source', values.budget_source)
+              formData.append('budget_amount', values.budget_amount)
+              formData.append('status', values.status)
               console.log('values',values)
-              dispatch(addStaff(navigate, formData))
+              dispatch(updateProject(navigate, formData))
               setSubmitting(false)
             }}
-            initialValues={initialValues}
+            initialValues={location?.state?.row}
             validationSchema={userSchema}
         >
             {({ values, errors, touched, isSubmitting, dirty, isValid, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
                     <Box>
-                    <Box mt='40px'>                
+                    <Box mt='20px'>                
                     <Box 
                         display="grid"
                         gap="30px"
-                        gridTemplateColumns="repeat(3, minmax(0, 1fr))"
+                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                         sx={{
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
                     <TextField
                         fullWidth
-                        variant="filled"
+                        variant="outlined"
                         type="text"
-                        label="ชื่อ"
+                        label="รหัส"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.firstname}
-                        name="firstname"                        
-                        error={!!touched.firstname && !!errors.firstname}
-                        helperText={touched.firstname && errors.firstname}
+                        value={values?.project_id}
+                        name="project_id"
+                        error={!!touched.project_id && !!errors.project_id}
+                        helperText={touched.project_id && errors.project_id}
                         sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                        
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อโครงการ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.project_name}
+                        name="project_name"
+                        error={!!touched.project_name && !!errors.project_name}
+                        helperText={touched.project_name && errors.project_name}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
                     />
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="นามสกุล"
+                        label="ประเภทโครงการ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.lastname}
-                        name="lastname"                         
-                        error={!!touched.lastname && !!errors.lastname}
-                        helperText={touched.lastname && errors.lastname}
+                        value={values?.project_type}
+                        name="project_type"
+                        error={!!touched.project_type && !!errors.project_type}
+                        helperText={touched.project_type && errors.project_type}
                         sx={{ gridColumn: "span 1" }}
-                    />
+                        InputLabelProps={{ shrink: true }}
+                    />    
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ตำแหน่ง"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.position}
-                        name="position"                          
-                        error={!!touched.position && !!errors.position}
-                        helperText={touched.position && errors.position}
-                        sx={{ gridColumn: "span 1" }}
-                    />       
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="เลขประจำตำแหน่ง"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.position_no}
-                        name="position_no"                       
-                        error={!!touched.position_no && !!errors.position_no}
-                        helperText={touched.position_no && errors.position_no}
-                        sx={{ gridColumn: "span 1" }}
-                    />                      
-                     <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="วุฒิการศึกษา"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.education}
-                        name="education"                         
-                        error={!!touched.education && !!errors.education}
-                        helperText={touched.education && errors.education}
-                        sx={{ gridColumn: "span 1" }}
-                    /> 
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="ประเภท"
+                        label="โดยภาควิชา"
                         select
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values.stafftype_id}
-                        name="stafftype_id"
-                        error={!!touched.stafftype_id && !!errors.stafftype_id}
-                        helperText={touched.stafftype_id && errors.stafftype_id}
+                        value={values.responsible_dept_id}
+                        name="responsible_dept_id"                         
+                        error={!!touched.responsible_dept_id && !!errors.responsible_dept_id}
+                        helperText={touched.responsible_dept_id && errors.responsible_dept_id}
                         defaultValue=""
-                        sx={{ gridColumn: "span 1" }} 
-                        >
-                        { stafftypeData && stafftypeData.map((item,key) => (
-                        <MenuItem key={key} value={item.stafftype_id} >
-                            {item.stafftype_id+'-'+item.name}
+                        sx={{ gridColumn: "span 1" }} >
+                        { departmentData && departmentData.map((item,key) => (
+                        <MenuItem key={key} value={item.department_id} >
+                            {item.department_id+'-'+item.dept_name}
                         </MenuItem>  
                         ))} 
-                    </TextField>                                           
-      
-                        <DatePicker
-                        label="วันที่บรรจุ"
-                        value={values.startdate ? new Date(values.startdate) : null}
-                        onChange={(value) => setFieldValue("startdate", value)}
-                        format="d MMMM yyyy" // แค่กำหนดรูปแบบ baseline
+                    </TextField>                        
+                    <DatePicker
+                        label="วันเริ่มต้น"
+                        value={values.start_date ? new Date(values.start_date) : null}
+                        onChange={(value) => setFieldValue("start_date", value)}
+                        format="d MMMM yyyy"
                         slotProps={{
                         textField: {
                             fullWidth: true,
@@ -238,10 +195,10 @@ const StaffAdd = () => {
                         }}
                         />
                     <DatePicker
-                        label="วันเกิด"
-                        value={values.birthday ? new Date(values.birthday) : null }
-                        onChange={(value) => setFieldValue("birthday", value)}
-                        format="d MMMM yyyy" // แค่กำหนดรูปแบบ baseline
+                        label="สิ้นสุด"
+                        value={values.end_date ? new Date(values.end_date) : null }
+                        onChange={(value) => setFieldValue("end_date", value)}
+                        format="d MMMM yyyy"
                         slotProps={{
                         textField: {
                             fullWidth: true,
@@ -250,76 +207,59 @@ const StaffAdd = () => {
                             InputLabelProps: { shrink: true }
                         }
                         }}
-                    />     
+                    />                      
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="อีเมล์"
+                        label="แหล่งงบประมาณ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.email}
-                        name="email"                         
-                        error={!!touched.email && !!errors.email}
-                        helperText={touched.email && errors.email}
+                        value={values?.budget_source}
+                        name="budget_source"
+                        error={!!touched.budget_source && !!errors.budget_source}
+                        helperText={touched.budget_source && errors.budget_source}
                         sx={{ gridColumn: "span 1" }}
-                    />                                         
+                        InputLabelProps={{ shrink: true }}
+                    />                       
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ออฟฟิศ"
+                        label="งบประมาณ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.office_location}
-                        name="office_location"                          
-                        error={!!touched.office_location && !!errors.office_location}
-                        helperText={touched.office_location && errors.office_location}
+                        value={values?.budget_amount}
+                        name="budget_amount"
+                        error={!!touched.budget_amount && !!errors.budget_amount}
+                        helperText={touched.budget_amount && errors.budget_amount}
                         sx={{ gridColumn: "span 1" }}
-                    />  
-                       
+                        InputLabelProps={{ shrink: true }}
+                    />                       
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ภาควิชา"                      
-                        select
+                        label="สถานะ"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values.department_id}
-                        name="department_id"                         
-                        error={!!touched.department_id && !!errors.department_id}
-                        helperText={touched.department_id && errors.department_id}
-                        defaultValue=""
-                        sx={{ gridColumn: "span 1" }} >
-                        { departmentData && departmentData.map((item,key) => (
-                        <MenuItem key={key} value={item.department_id} >
-                            {item.department_id+'-'+item.dept_name}
-                        </MenuItem>  
-                        ))} 
-                        </TextField>                                          
+                        value={values?.status}
+                        name="status"
+                        error={!!touched.status && !!errors.status}
+                        helperText={touched.status && errors.status}
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />                
                      </Box>
                 </Box>
-                
-                <Box 
-                        display="grid"
-                        gap="30px"
-                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        sx={{
-                            "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
-                        }}                    
-                    >
+
                       <Box display="flex" justifyContent="start"
                           sx={{
                             mt: "20px", 
                             gridColumn: "span 4"
                         }}                    
                       >
-
-                          <Box>
-                          </Box>
-                     </Box>             
-                  </Box>   
+                      </Box>  
                     </Box>
                     
                     <Box 
@@ -371,7 +311,7 @@ const StaffAdd = () => {
                         >
                             ยกเลิก
                         </Button>    
-                        </Box>
+                        </Box>                
                   </Box>   
                 </form>
             )}
@@ -387,4 +327,4 @@ const StaffAdd = () => {
     
 }
 
-export default StaffAdd
+export default ProjectEdit

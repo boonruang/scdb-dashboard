@@ -14,17 +14,18 @@ import {
     styled,
     Card,
     CardMedia,
-    MenuItem    
+    MenuItem,    
   } from '@mui/material'
+
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
-import { addStaff } from '../../actions/staff.action'
+import { updateStaff } from '../../actions/staff.action'
 import { getStafftype } from '../../actions/stafftype.action'
 import { getDepartment } from 'actions/department.action'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
@@ -34,7 +35,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { th } from 'date-fns/locale';  
 
 const initialValues = {
-    firstname: "",
+    firtname: "",
     lastname: "",
 }
 
@@ -47,7 +48,8 @@ const userSchema = yup.object().shape({
     // office_location: yup.string().required("ต้องใส่"),
 }) 
 
-const StaffAdd = () => {
+
+const StaffEdit = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)     
@@ -55,6 +57,8 @@ const StaffAdd = () => {
   const dispatch = useDispatch()    
 
   const navigate = useNavigate()
+
+  const location = useLocation()
 
   const [open, setOpen] = useState(false)
 
@@ -67,18 +71,21 @@ const StaffAdd = () => {
 
     useEffect(() => {
         dispatch(getStafftype())
-  },[dispatch])
+    },[dispatch])
 
-      useEffect(() => {
-        dispatch(getDepartment())
-  },[dispatch])
 
-  useEffect(() => {
-    setStafftypeData(stafftypeReducer.result)
+    useEffect(() => {
+        setStafftypeData(stafftypeReducer.result)
     },[stafftypeReducer.result])  
 
-  useEffect(() => {
-    setDepartmentData(departmentReducer.result)
+  
+    useEffect(() => {
+        dispatch(getDepartment())
+    },[dispatch])
+  
+
+    useEffect(() => {
+      setDepartmentData(departmentReducer.result)
     },[departmentReducer.result])  
 
 
@@ -94,18 +101,14 @@ const StaffAdd = () => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
-    const handleFormSubmit = (values) => {
-        console.log(values)
-        // dispatch(addUser(navigate,values))
-    }
-
     return <Box m="20px">
-        <Header title="เพิ่มข้อมูล"/>
+        <Header title="ปรับปรุงข้อมูล" />
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={th}>
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
               let formData = new FormData()
+              formData.append('staff_id', values.staff_id)
               formData.append('firstname', values.firstname)
               formData.append('lastname', values.lastname)
               formData.append('position', values.position)
@@ -118,24 +121,38 @@ const StaffAdd = () => {
               formData.append('stafftype_id', values.stafftype_id)
               formData.append('department_id', values.department_id)
               console.log('values',values)
-              dispatch(addStaff(navigate, formData))
+              dispatch(updateStaff(navigate, formData))
               setSubmitting(false)
             }}
-            initialValues={initialValues}
+            initialValues={location?.state?.row}
             validationSchema={userSchema}
         >
             {({ values, errors, touched, isSubmitting, dirty, isValid, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
                     <Box>
-                    <Box mt='40px'>                
+                    <Box mt='20px'>                
                     <Box 
                         display="grid"
                         gap="30px"
-                        gridTemplateColumns="repeat(3, minmax(0, 1fr))"
+                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                         sx={{
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        disabled
+                        type="text"
+                        label="รหัส"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.staff_id}
+                        name="staff_id"
+                        error={!!touched.staff_id && !!errors.staff_id}
+                        helperText={touched.staff_id && errors.staff_id}
+                        sx={{ gridColumn: "span 1" }}
+                    />                        
                     <TextField
                         fullWidth
                         variant="filled"
@@ -221,8 +238,7 @@ const StaffAdd = () => {
                             {item.stafftype_id+'-'+item.name}
                         </MenuItem>  
                         ))} 
-                    </TextField>                                           
-      
+                    </TextField>                                               
                         <DatePicker
                         label="วันที่บรรจุ"
                         value={values.startdate ? new Date(values.startdate) : null}
@@ -250,7 +266,8 @@ const StaffAdd = () => {
                             InputLabelProps: { shrink: true }
                         }
                         }}
-                    />     
+                    />                        
+  
                     <TextField
                         fullWidth
                         variant="filled"
@@ -263,7 +280,7 @@ const StaffAdd = () => {
                         error={!!touched.email && !!errors.email}
                         helperText={touched.email && errors.email}
                         sx={{ gridColumn: "span 1" }}
-                    />                                         
+                    />                           
                     <TextField
                         fullWidth
                         variant="filled"
@@ -277,12 +294,11 @@ const StaffAdd = () => {
                         helperText={touched.office_location && errors.office_location}
                         sx={{ gridColumn: "span 1" }}
                     />  
-                       
                     <TextField
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ภาควิชา"                      
+                        label="ภาควิชา"
                         select
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -291,35 +307,24 @@ const StaffAdd = () => {
                         error={!!touched.department_id && !!errors.department_id}
                         helperText={touched.department_id && errors.department_id}
                         defaultValue=""
-                        sx={{ gridColumn: "span 1" }} >
+                        sx={{ gridColumn: "span 1" }} 
+                        >
                         { departmentData && departmentData.map((item,key) => (
                         <MenuItem key={key} value={item.department_id} >
                             {item.department_id+'-'+item.dept_name}
                         </MenuItem>  
                         ))} 
-                        </TextField>                                          
+                        </TextField>                                                         
                      </Box>
                 </Box>
-                
-                <Box 
-                        display="grid"
-                        gap="30px"
-                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        sx={{
-                            "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
-                        }}                    
-                    >
+
                       <Box display="flex" justifyContent="start"
                           sx={{
                             mt: "20px", 
                             gridColumn: "span 4"
                         }}                    
                       >
-
-                          <Box>
-                          </Box>
-                     </Box>             
-                  </Box>   
+                      </Box>  
                     </Box>
                     
                     <Box 
@@ -371,7 +376,7 @@ const StaffAdd = () => {
                         >
                             ยกเลิก
                         </Button>    
-                        </Box>
+                        </Box>                
                   </Box>   
                 </form>
             )}
@@ -387,4 +392,4 @@ const StaffAdd = () => {
     
 }
 
-export default StaffAdd
+export default StaffEdit

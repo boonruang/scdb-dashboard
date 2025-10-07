@@ -20,6 +20,9 @@ import SecureRoute from "components/SecureRoute";
 import { ROLES } from './constants/index'
 import { useEffect } from "react";
 import * as loginActions from 'actions/login.action'
+
+import StudentImportData from "scenes/studentimportdata";
+
 import StudentList from "scenes/student";
 import StudentAdd from "scenes/student/StudentAdd"; 
 import StudentDetail from "scenes/student/StudentDetail"; 
@@ -32,10 +35,14 @@ import StaffList from "scenes/staff";
 import StaffAdd from "scenes/staff/StaffAdd"; 
 import StaffDetail from "scenes/staff/StaffDetail"; 
 import StaffEdit from "scenes/staff/StaffEdit"; 
+import StaffImportData from "scenes/staffimportdata"; 
+
 import StaffeducationList from "scenes/staffeducation";
 import StaffeducationAdd from "scenes/staffeducation/StaffeducationAdd"; 
 import StaffeducationDetail from "scenes/staffeducation/StaffeducationDetail"; 
 import StaffeducationEdit from "scenes/staffeducation/StaffeducationEdit"; 
+
+import AcademicProgramImportData from "scenes/academicprogramimportdata";
 
 import AcademicProgramList from "scenes/academicprogram";
 import AcademicProgramAdd from "scenes/academicprogram/AcademicProgramAdd"; 
@@ -47,10 +54,14 @@ import AdmissionPlanAdd from "scenes/admissionplan/AdmissionPlanAdd";
 import AdmissionPlanDetail from "scenes/admissionplan/AdmissionPlanDetail"; 
 import AdmissionPlanEdit from "scenes/admissionplan/AdmissionPlanEdit"; 
 
+import PublicationImportData from "scenes/publicationimportdata";
+
 import PublicationList from "scenes/publication";
 import PublicationAdd from "scenes/publication/PublicationAdd"; 
 import PublicationDetail from "scenes/publication/PublicationDetail"; 
 import PublicationEdit from "scenes/publication/PublicationEdit"; 
+
+import ProjectImportData from "scenes/projectimportdata";
 
 import ProjectList from "scenes/project";
 import ProjectAdd from "scenes/project/ProjectAdd"; 
@@ -115,6 +126,9 @@ function App() {
           <Route path="student/detail" element={<StudentDetail />} />
           <Route path="student/edit" element={<StudentEdit />} />
           <Route path="student" element={<StudentList />} />
+
+          <Route path="student/importdata" element={<StudentImportData />} />
+
           <Route path="studentgrant/add" element={<StudentgrantAdd />} />
           <Route path="studentgrant/detail" element={<StudentgrantDetail />} />
           <Route path="studentgrant/edit" element={<StudentgrantEdit />} />
@@ -123,6 +137,9 @@ function App() {
           <Route path="staff/detail" element={<StaffDetail />} />
           <Route path="staff/edit" element={<StaffEdit />} />
           <Route path="staff" element={<StaffList />} />
+
+          <Route path="staff/importdata" element={<StaffImportData />} />
+
           <Route path="staffeducation/add" element={<StaffeducationAdd />} />
           <Route path="staffeducation/detail" element={<StaffeducationDetail />} />
           <Route path="staffeducation/edit" element={<StaffeducationEdit />} />
@@ -132,6 +149,8 @@ function App() {
           <Route path="academicprogram/detail" element={<AcademicProgramDetail />} />
           <Route path="academicprogram/edit" element={<AcademicProgramEdit />} />
           <Route path="academicprogram" element={<AcademicProgramList />} />    
+
+          <Route path="academicprogram/importdata" element={<AcademicProgramImportData />} />    
 
           <Route path="admissionplan/add" element={<AdmissionPlanAdd />} />
           <Route path="admissionplan/detail" element={<AdmissionPlanDetail />} />
@@ -143,10 +162,14 @@ function App() {
           <Route path="publication/edit" element={<PublicationEdit />} />
           <Route path="publication" element={<PublicationList />} />     
 
+          <Route path="publication/importdata" element={<PublicationImportData />} />     
+
           <Route path="project/add" element={<ProjectAdd />} />
           <Route path="project/detail" element={<ProjectDetail />} />
           <Route path="project/edit" element={<ProjectEdit />} />
           <Route path="project" element={<ProjectList />} />     
+
+          <Route path="project/importdata" element={<ProjectImportData />} />     
 
           <Route path="document/add" element={<DocumentAdd />} />
           <Route path="document/detail" element={<DocumentDetail />} />

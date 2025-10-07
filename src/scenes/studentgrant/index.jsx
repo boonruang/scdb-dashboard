@@ -100,7 +100,7 @@ const Studentgrants = () => {
       headerName: 'นักศึกษา',
       flex: 1,
       renderCell: (params) => {
-        return params.row.Student?.name || 'N/A';
+        return params.row.Student?.firstname + ' ' + params.row.Student?.lastname || 'N/A';
       }
     }
         ,

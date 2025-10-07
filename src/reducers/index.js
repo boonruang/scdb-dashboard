@@ -19,6 +19,7 @@ import admissionPlanReducer from "./admissionPlan.reducer";
 import documentReducer from "./document.reducer";   
 import stafftypeReducer from "./stafftype.reducer";   
 import departmentReducer from "./department.reducer";   
+import staffuploadfileReducer from "./staffeducation.reducer";   
 
 export default combineReducers({
   appReducer,
@@ -41,4 +42,5 @@ export default combineReducers({
   documentReducer,
   stafftypeReducer,
   departmentReducer,
+  staffuploadfileReducer,
 })

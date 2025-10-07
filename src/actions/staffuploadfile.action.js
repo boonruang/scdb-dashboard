@@ -1,22 +1,22 @@
 import {
-  HTTP_STAFF_FAILED,
-  HTTP_STAFF_FETCHING,
-  HTTP_STAFF_SUCCESS,
+  HTTP_STAFFUPLOADFILE_FAILED,
+  HTTP_STAFFUPLOADFILE_FETCHING,
+  HTTP_STAFFUPLOADFILE_SUCCESS,
   server
 } from '../constants';
 import { httpClient } from '../utils/HttpClient';
 
 const setStateStaffToSuccess = (payload) => ({
-  type: HTTP_STAFF_SUCCESS,
+  type: HTTP_STAFFUPLOADFILE_SUCCESS,
   payload
 });
 
 const setStateStaffToFetching = () => ({
-  type: HTTP_STAFF_FETCHING
+  type: HTTP_STAFFUPLOADFILE_FETCHING
 });
 
 const setStateStaffToFailed = () => ({
-  type: HTTP_STAFF_FAILED
+  type: HTTP_STAFFUPLOADFILE_FAILED
 });
 
 
@@ -24,7 +24,7 @@ export const getStaffById = (id) => {
   return (dispatch) => {
     dispatch(setStateStaffToFetching());
     httpClient
-      .get(`${server.STAFF_URL}/select/${id}`)
+      .get(`${server.STAFFUPLOADFILE_URL}/select/${id}`)
       .then((result) => {
         dispatch(setStateStaffToSuccess(result.data));
       })
@@ -45,7 +45,7 @@ export const getStaffByKeyword = (searchTerm) => {
     if (keyword !== null && keyword !== '') {
       console.Staff('httpClient is called keyword ',keyword)
       httpClient
-        .get(`${server.STAFF_URL}/list/${keyword}`)
+        .get(`${server.STAFFUPLOADFILE_URL}/list/${keyword}`)
         .then((result) => {
           dispatch(setStateStaffToSuccess(result.data));
           console.Staff('setStateStaffToSuccess is called ',result.data)
@@ -60,7 +60,7 @@ export const getStaffByKeyword = (searchTerm) => {
 export const deleteStaff = (id) => {
   return async (dispatch) => {
     dispatch(setStateStaffToFetching());
-    await httpClient.delete(`${server.STAFF_URL}/${id}`);
+    await httpClient.delete(`${server.STAFFUPLOADFILE_URL}/${id}`);
     await doGetStaff(dispatch);
   };
 };
@@ -74,7 +74,7 @@ export const getStaff = () => {
 
 const doGetStaff = (dispatch) => {
   httpClient
-    .get(`${server.STAFF_URL}/list`)
+    .get(`${server.STAFFUPLOADFILE_URL}/list`)
     .then((result) => {
       dispatch(setStateStaffToSuccess(result.data));
     })
@@ -90,7 +90,7 @@ export const addStaff = (navigate, formData) => {
   return async (dispatch) => {
     try {
       // success
-      let result = await httpClient.post(server.STAFF_URL, formData)
+      let result = await httpClient.post(server.STAFFUPLOADFILE_URL, formData)
       console.log('addStaff formData successfully: ', result)
       setTimeout(() => {
         navigate('/staff')
@@ -108,7 +108,7 @@ export const updateStaff = (navigate, formData) => {
   return async (dispatch) => {
     try {
       // success
-      let result = await httpClient.put(server.STAFF_URL, formData)
+      let result = await httpClient.put(server.STAFFUPLOADFILE_URL, formData)
       console.log('editStaff formData successfully: ', result)
       setTimeout(() => {
         navigate('/staff')
@@ -116,6 +116,21 @@ export const updateStaff = (navigate, formData) => {
     } catch (error) {
       // failed
       console.log('editStaff formData Error: ', error.toString())
+    }
+  }
+}
+
+export const uploadFile = (navigate, formData) => {
+  console.log('uploadExcelFile action',navigate)
+  console.log('uploadExcelFile action',formData)
+  return async (dispatch) => {
+    try {
+      // success
+      let result = await httpClient.post(server.STAFFUPLOADFILE_URL, formData)
+      console.log('uploadFile formData successfully: ', result)
+    } catch (error) {
+      // failed
+      console.log('uploadFile formData Error: ', error.toString())
     }
   }
 }

@@ -97,13 +97,13 @@ const Staffs = () => {
     {
       field: 'position',
       headerName: 'ตำแหน่ง',
-      flex: 1,
+      flex: 0.6,
       cellClassName: "name-column--cell"
     },
     {
       field: 'position_no',
       headerName: 'เลขประจำตำแหน่ง',
-      flex: 0.5,
+      flex: 0.6,
       cellClassName: "name-column--cell"
     },    
     {
@@ -117,7 +117,7 @@ const Staffs = () => {
     {
       field: 'education',
       headerName: 'วุฒิการศึกษา',
-      flex: 1,
+      flex: 0.5,
       headerAlign: "center",
       align: "center",      
       cellClassName: "name-column--cell"
@@ -125,19 +125,25 @@ const Staffs = () => {
     {
       field: 'startdate',
       headerName: 'วันที่บรรจุ',
-      flex: 1,
+      flex: 0.6,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'birthday',
+      headerName: 'วันเกิด',
+      flex: 0.6,
       cellClassName: "name-column--cell"
     },
     {
       field: 'office_location',
       headerName: 'ออฟฟิศ',
-      flex: 1,
+      flex: 0.6,
       cellClassName: "name-column--cell"
     },
     {
       field: 'dept_name',
       headerName: 'ภาควิชา',
-      flex: 1.2,
+      flex: 1,
       renderCell: (params) => {
         return params.row.Department?.dept_name || 'N/A';
       }

@@ -275,13 +275,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            {/* <Item
-                                title="ข้อมูลการศึกษาบุคลากร"
-                                to="/staffeducation"
+                            <Item
+                                title="นำเข้าข้อมูลบุคลากร"
+                                to="/staff/importdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />  */}
+                            /> 
                             {/* <Item
                                 title="ข้อมูลการลาบุคลากร"
                                 to="/leaverecord"
@@ -301,13 +301,20 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            {/* <Item
+                            <Item
                                 title="ทุนการศึกษา"
                                 to="/studentgrant"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />  */}
+                            />                             
+                            <Item
+                                title="นำเข้าข้อมูลนิสิต"
+                                to="/student/importdata"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                             
                                                         
                          </SubMenu>   : undefined  } 
 
@@ -321,6 +328,14 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
+                            <Item
+                                title="นำเข้าข้อมูลหลักสูตร"
+                                to="/academicprogram/importdata"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                             
+                           
                             {/* <Item
                                 title="แผนการรับนิสิต"
                                 to="/admissionplan"
@@ -332,34 +347,26 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  }                                               
 
 
-                        <SubMenu title="4.ด้านการวิจัย" icon={<WbIncandescentIcon />}>
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
-                           ? <Item
+
+                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                         ? <SubMenu title="4.ด้านการวิจัย" icon={<WbIncandescentIcon />}>
+                           <Item
                                 title="ผลงานวิจัยตีพิมพ์"
                                 to="/publication"
                                 icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> : undefined  }  
+                            />
 
-                        {/* { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
-                           ? <Item
-                                title="ผลงานวิจัยตีพิมพ์ระดับชาติ"
-                                to="/student"
-                                icon={<HandshakeIcon />}
+                            <Item
+                                title="นำเข้าข้อมูลผลงานวิจัยตีพิมพ์"
+                                to="/publication/importdata"
+                                icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> : undefined  }                              
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
-                           ? <Item
-                                title="นวัตกรรม/อนุสิทธิบัตร"
-                                to="/student"
-                                icon={<Diversity3Icon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> : undefined  }      */}
+                            />                              
                             
-                         </SubMenu>                                               
+                         </SubMenu>   : undefined  }                                                 
 
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
@@ -371,6 +378,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
+                            <Item
+                                title="นำเข้าข้อมูลโครงการ"
+                                to="/project/importdata"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                               
                             {/* <Item
                                 title="การติดตามเอกสาร"
                                 to="/document"
@@ -383,7 +397,7 @@ const Sidebar = () => {
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="6.หน้านำเข้าข้อมูล" icon={<IosShareIcon />}>
                             <Item
-                                title="รายการแฟ้มเอกสาร"
+                                title="ไฟล์ต้นแบบนำเข้าข้อมูล"
                                 to="/importdata"
                                 icon={<FolderOpenIcon />}
                                 selected={selected}
