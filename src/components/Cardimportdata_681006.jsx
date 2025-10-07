@@ -20,10 +20,6 @@ const Item = ( {result} ) => {
     fileInputRef.current.click();
   };
 
-  const ExportExcelButton = (url) => {
-    window.location.href = url
-  }  
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -59,7 +55,7 @@ const Item = ( {result} ) => {
                     style={{ display: "none" }}
                     onChange={handleFileChange}
                   />
-                  <Button  onClick={() => ExportExcelButton(result.import)}
+                  <Button  onClick={handleButtonClick}
                       sx={{
                           backgroundColor: colors.blueAccent[700],
                           color: colors.grey[100],
@@ -72,7 +68,7 @@ const Item = ( {result} ) => {
                       }}
                   >
                       <IosShareIcon sx={{ mr: "10px" }} />
-                      ไฟล์ Template {result.description.substring(0, 70)}
+                      นำเข้าไฟล์ Excel
                   </Button>               
               </CardContent>
           </CardActionArea>

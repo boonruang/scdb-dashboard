@@ -8,7 +8,7 @@ const Importdata = () => {
 
     return (
         <Box m="20px">
-            <Header title="รายการแฟ้มข้อมูล" subtitle="รายการ templates เข้าข้อมูล"/>
+            <Header title="รายการแฟ้มข้อมูล" subtitle="รายการนำเข้าข้อมูล"/>
             <Box m="10px 0 0 0" height="100vh" sx={{ display: 'flex', justifyContent: "center", overflow:'scroll', overflowX: 'hidden'}}>
                 <Cardimportdata mockImportData={mockImportData} />
             </Box>
