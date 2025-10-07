@@ -12,18 +12,22 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined"
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import TrafficIcon from "@mui/icons-material/Traffic"
+import BarChartTecherDept from "../../components/BarChartTecherDept"
 import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
 import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
-import BarChartStudent from "../../components/BarChartStudent"
+import BarChartStudent from "../../components/BarChartStudent" 
+import BarChartStudentSummary from "../../components/BarChartStudentSummary" 
+import BarChartAcademicPosition from "../../components/BarChartAcademicPosition" 
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
 import StatBox from "../../components/StatBox"
+import StatBoxStudent from "../../components/StatBoxStudent"
 import ProgressCircle from "../../components/ProgressCircle"
 import { useDispatch, useSelector } from 'react-redux'
-import { getDashboard } from 'actions/dashboard4.action'
+import { getDashboard } from 'actions/dashboard.action'
 import ProgressCircleCal from 'components/ProgressCircleCal'
 
 let newDate = new Date()
@@ -42,7 +46,7 @@ const Dashbaord = () => {
         dispatch(getDashboard())
     },[dispatch])
 
-    const dashboard4Reducer = useSelector((state) => state.app.dashboard4Reducer)
+    const dashboardReducer = useSelector((state) => state.app.dashboardReducer)
 
     return (
         <Box m="20px">
@@ -50,7 +54,7 @@ const Dashbaord = () => {
                 display="flex" justifyContent="space-between"
                 alignItems="center"
             >
-                <Header title="แดชบอร์ดข้อมูลด้านวิจัย" subtitle=""/>
+                <Header title="แดชบอร์ด" subtitle="แดชบอร์ดแสดงช้อมูล" />
 
             </Box>
 
@@ -62,29 +66,6 @@ const Dashbaord = () => {
                 gap="20px"
             >
                 {/* ROW 1 */}
-                {/* <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard4Reducer.result && dashboard4Reducer.result.student}
-                        subtitle="จำนวนนิสิต"
-                        progress={dashboard4Reducer.result && dashboard4Reducer.result.studentPercent}
-                        increase={dashboard4Reducer.result && (dashboard4Reducer.result.studentPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <GrassIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
                 <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
@@ -92,11 +73,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboard4Reducer.result && dashboard4Reducer.result.staff}
-                        subtitle="จำนวนบุคลากร"
-                        progress={dashboard4Reducer.result && dashboard4Reducer.result.staffPercent}
-                        increase={dashboard4Reducer.result && (dashboard4Reducer.result.staffPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountDept}
+                        subtitle="ภาควิชา"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -115,11 +94,9 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboard4Reducer.result && dashboard4Reducer.result.user}
-                        subtitle="จำนวนผู้ใช้"
-                        progress={dashboard4Reducer.result && dashboard4Reducer.result.userPercent}
-                        increase={dashboard4Reducer.result && (dashboard4Reducer.result.userPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountBachelor}
+                        subtitle="หลักสูตร ป.ตรี"
                         icon={
                             <PeopleOutlinedIcon
                                 sx={{
@@ -138,13 +115,11 @@ const Dashbaord = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <StatBox
-                        title={dashboard4Reducer.result && dashboard4Reducer.result.log}
-                        subtitle="จำนวน Log"
-                        progress={dashboard4Reducer.result && dashboard4Reducer.result.logPercent}
-                        increase={dashboard4Reducer.result && (dashboard4Reducer.result.logPercent*100).toFixed(0) + '%'}
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountMaster}
+                        subtitle="หลักสูตร ป.โท"
                         icon={
-                            <WarehouseIcon
+                            <PeopleOutlinedIcon
                                 sx={{
                                     color: colors.greenAccent[600],
                                     fontSize: "26px"
@@ -152,11 +127,93 @@ const Dashbaord = () => {
                             />
                         }
                     />
-                </Box> */}
+                </Box>
 
+                <Box
+                    gridColumn="span 3"
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <StatBoxStudent
+                        title={dashboardReducer.result && dashboardReducer.result.amountPhd}
+                        subtitle="หลักสูตร ป.เอก"
+                        icon={
+                            <PeopleOutlinedIcon
+                                sx={{
+                                    color: colors.greenAccent[600],
+                                    fontSize: "26px"
+                                }}
+                            />
+                        }
+                    />
+                </Box>
                 {/* END ROW 1 */}
 
                 {/* START ROW 2 */}
+
+                {/* START TABLE1 */}
+                <Box
+                    gridColumn="span 4"
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
+                    overflow="auto"
+                >
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        borderBottom={`2px solid ${colors.primary[500]}`}
+                        colors={colors.grey[100]}
+                        p="15px"
+                    >
+                        <Typography
+                            color={colors.grey[100]}
+                            variant='h5'
+                            fontWeight="600"
+                        >
+                            ปี 2025
+                        </Typography>
+                    </Box>
+                        {dashboardReducer?.result?.publicationTable &&
+                        Object.values(dashboardReducer?.result?.publicationTable).map((item, key) => (
+                            <Box
+                            key={key}
+                            display="flex"
+                            sx={{ m: 1 }}
+                            >
+                            {/* description */}
+                            <Box sx={{ width: "220px" }}>
+                                <Typography
+                                color={colors.greenAccent[500]}
+                                variant="h5"
+                                fontWeight="600"
+                                >
+                                {item.description}
+                                </Typography>
+                            </Box>
+
+                            {/* amount */}
+                            <Box sx={{ width: "100px" }} color={colors.grey[100]}>
+                                {item.amount}
+                            </Box>
+
+                            {/* target */}
+                            <Box sx={{ width: "200px" }} color={colors.grey[100]}>
+                                (เป้าหมาย {item.target})
+                            </Box>
+
+                            {/* remark */}
+                            <Box sx={{ flex: 1 }} color={colors.grey[100]}>
+                                {item.remark}
+                            </Box>
+                            </Box>
+                        ))}
+                </Box>
+
+                {/* END TABLE1 */}
+
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -179,7 +236,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard4Reducer?.result?.publicationScopus && <BarChartPublicationScopus isDashboard={true} data={dashboard4Reducer?.result?.publicationScopus} />}
+                            {dashboardReducer?.result?.publicationScopus && <BarChartPublicationScopus isDashboard={true} data={dashboardReducer?.result?.publicationScopus} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -205,42 +262,15 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard4Reducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboard4Reducer?.result?.publicationISI} />}
+                            {dashboardReducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboardReducer?.result?.publicationISI} />}
                         </Box>
                     </Box>                     
                 </Box>
-                {/* <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานตีพิมพ์ตามสาขา
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box> */}
 
                 {/* END ROW 2 */}
 
-
                 {/* START ROW 3 */}
-         <Box
+                <Box
                 gridColumn="span 4"
                 gridRow="span 2"
                 backgroundColor={colors.primary[400]}
@@ -256,13 +286,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานวิชาการ
+                            จำนวนนิสิตปริญญาตรี
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.studentSummary && <BarChartStudentSummary isDashboard={true} data={dashboardReducer?.result?.studentSummary} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -282,42 +312,36 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนผลงานตีพิมพ์ภายในประเทศ
+                            ตำแหน่งทางวิชากร
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
+                            {dashboardReducer?.result?.academicPosition && <BarChartAcademicPosition isDashboard={true} data={dashboardReducer?.result?.academicPosition} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box>                
                 <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
+                    gridColumn="span 4"
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
                 >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
+                    <Typography
+                        variant='h5'
+                        fontWeight="600"
+                        sx={{ p: "30px 30px 0 30px" }}
                     >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานตีพิมพ์ต่างประเทศ
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
+                        ตำแหน่งทางวิชากรตามสาขา
+                    </Typography>
+                    <Box
+                        height="250px"
+                        mt="-25px"
+                    >
+                        <BarChartTecherDept isDashboard={true} />
+                    </Box>
                 </Box>
+
 
                 {/* END ROW 3 */}
 

@@ -221,13 +221,13 @@ const Sidebar = () => {
  
                          { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="แดชบอร์ด" icon={<HomeOutlinedIcon />}>
-                            <Item
+                            {/* <Item
                                 title="หน้ารวม"
                                 to="/dashboard"
                                 icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                            
+                            />                             */}
                             <Item
                                 title="ด้านบุคลากร"
                                 to="/dashboard/dashboard1"
