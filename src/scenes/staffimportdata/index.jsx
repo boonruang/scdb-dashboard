@@ -19,7 +19,6 @@ import UploadProgresBar from 'components/UploadProgresBar'
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
 const StaffImportData = () => {
     const theme = useTheme()
@@ -39,9 +38,6 @@ const StaffImportData = () => {
     const [progress, setProgress] = useState(0);
     const [showProgress, setShowProgress] = useState(false)
 
-    const message = 'กรุณายืนยันการลบข้อมูล'    
-
-    const { result, isFetching } = useSelector((state) => state.app.staffReducer)
 
     const loginReducer = useSelector((state) => state.app.loginReducer)
 
@@ -223,50 +219,7 @@ const handleImportAllData = () => {
       flex: 0.7,
       cellClassName: "name-column--cell"
     },
-    // { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
-    //     return (
-    //       <Box>
-    //         <Button
-    //           onClick={() => (navigate('/staff/detail',  { state: { row: params.row }} ))}
-    //           variant="outlined"
-    //           color="success"
-    //         >
-    //           รายละเอียด
-    //         </Button>
-            
-    //     { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-    //         ? <Button
-    //         onClick={() => (navigate('/staff/edit',  { state: { row: params.row }} ))}
-    //           variant="outlined"
-    //           color="info"
-    //           sx={{ ml: 1 }}            
-    //         >
-    //           แก้ไข
-    //         </Button> : undefined  }      
-
-    //     { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-    //         ? <Button
-    //         onClick={() => (navigate('/staff/edit',  { state: { row: params.row }} ))}
-    //           variant="outlined"
-    //           color="warning"
-    //           sx={{ ml: 1 }}            
-    //         >
-    //           นำเข้า
-    //         </Button> : undefined  }                           
-
-    //     {/* { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-    //         ? <Button
-    //         onClick={() => handleDeleteClick({ state: { row: params.row }})}
-    //           variant="outlined"
-    //           color="error"
-    //           sx={{ ml: 1 }} 
-    //         >
-    //           ลบ
-    //         </Button> : undefined  }  */}
-                
-    //       </Box>
-    //     );
-    //   } }         
+ 
     ]
 
     return (
@@ -309,7 +262,7 @@ const handleImportAllData = () => {
                       onChange={handleFileChange}
                     />  
                   </form>                
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleButtonClick}>
                         <Button  
                             sx={{
@@ -329,7 +282,7 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleImportAllData}>
                         <Button  
                             sx={{
@@ -348,7 +301,7 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined }     
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleClearData}>
                         <Button  
                             sx={{
@@ -370,8 +323,6 @@ const handleImportAllData = () => {
                 </Box>
                 { showProgress ? <UploadProgresBar /> : undefined }
                 
-                    { isFetching && <Box height="65vh" sx={{ display: 'flex', justifyContent: "center", alignItems: 'center'}}><CircularProgress /></Box>}
-                    { result ?
                     <DataGrid
                         // rows={result}
                         rows={data}
@@ -380,23 +331,9 @@ const handleImportAllData = () => {
                         slotProps={{
                             toolbar: {
                               csvOptions: { disableToolbarButton: true },
-                              printOptions: {
-                                disableToolbarButton: false,
-                                hideFooter: true,
-                                hideToolbar: true, 
-                                fields: [
-                                    'staff_id',
-                                    'name',
-                                    'position',
-                                    'staff_type',
-                                    'email',                                    
-                                    'office_location',
-                                ],
-                                fileName: 'staffs', 
-                                },
                             },
                           }}  
-                    /> : undefined}
+                    /> 
             </Box>
         </Box>
     )

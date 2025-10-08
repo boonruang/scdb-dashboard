@@ -19,7 +19,6 @@ import UploadProgresBar from 'components/UploadProgresBar'
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
 const ProjectImportData = () => {
     const theme = useTheme()
@@ -40,8 +39,6 @@ const ProjectImportData = () => {
     const [showProgress, setShowProgress] = useState(false)
 
     const message = 'กรุณายืนยันการลบข้อมูล'    
-
-    const { result, isFetching } = useSelector((state) => state.app.staffReducer)
 
     const loginReducer = useSelector((state) => state.app.loginReducer)
 
@@ -249,7 +246,7 @@ const handleImportAllData = () => {
                       onChange={handleFileChange}
                     />  
                   </form>                
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleButtonClick}>
                         <Button  
                             sx={{
@@ -269,7 +266,7 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleImportAllData}>
                         <Button  
                             sx={{
@@ -288,7 +285,7 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined }     
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleClearData}>
                         <Button  
                             sx={{
@@ -310,14 +307,12 @@ const handleImportAllData = () => {
                 </Box>
                 { showProgress ? <UploadProgresBar /> : undefined }
                 
-                    { isFetching && <Box height="65vh" sx={{ display: 'flex', justifyContent: "center", alignItems: 'center'}}><CircularProgress /></Box>}
-                    { result ?
                     <DataGrid
                         // rows={result}
                         rows={data}
                         columns={columns}
                         slots={{ toolbar: GridToolbar }}
-                    /> : undefined}
+                    />
             </Box>
         </Box>
     )
