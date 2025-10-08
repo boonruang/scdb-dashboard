@@ -1,9 +1,10 @@
 import { useTheme } from '@mui/material'
 import { ResponsiveBar } from '@nivo/bar'
 import { tokens } from '../theme'
-import { mockBarData as data } from '../data/mockDataTecher'
+// import { mockBarData as data } from '../data/mockDataTecher'
 
-const BarChartTecherDept = ({ isDashboard = false }) => {
+const BarChartTecherDept = ({ isDashboard = false, data }) => {
+
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
