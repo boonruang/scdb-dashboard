@@ -209,38 +209,12 @@ const Dashbaord = () => {
                         </Box>
                     </Box>                     
                 </Box>
-                {/* <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนผลงานตีพิมพ์ตามสาขา
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box> */}
 
                 {/* END ROW 2 */}
 
 
                 {/* START ROW 3 */}
-         <Box
+         {/* <Box
                 gridColumn="span 4"
                 gridRow="span 2"
                 backgroundColor={colors.primary[400]}
@@ -262,7 +236,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
+                            {dashboard1Reducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -288,7 +262,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard4Reducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
+                            {dashboard1Reducer?.result?.academicWork && <BarChartPublishedDomestic isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -317,7 +291,7 @@ const Dashbaord = () => {
                             {dashboard4Reducer?.result?.academicWork && <BarChartPublishedInter isDashboard={true} data={dashboard4Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
-                </Box>
+                </Box> */}
 
                 {/* END ROW 3 */}
 

@@ -17,7 +17,7 @@ import Avatar from '@mui/material/Avatar';
 
 const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
 
-const Publications = () => {
+const Publicationauthor = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -112,18 +112,6 @@ const Publications = () => {
       flex: 0.8,
       cellClassName: "name-column--cell"
     },
-    {
-      field: 'Staffs',
-      headerName: 'ผู้แต่ง',
-      flex: 0.8,
-      renderCell: (params) => {
-        const authors = params.row.Staffs;
-        if (authors && authors.length > 0) {
-          return authors.map(a => `${a.firstname} ${a.lastname}`).join(', ');
-        }
-        return 'N/A';
-      }
-    },   
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
         return (
           <Box>
@@ -269,4 +257,4 @@ const Publications = () => {
     )
 }
 
-export default Publications
+export default Publicationauthor

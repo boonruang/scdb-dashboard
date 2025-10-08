@@ -374,7 +374,7 @@ const Sidebar = () => {
                             <Item
                                 title="ข้อมูลโครงการ"
                                 to="/project"
-                                icon={<StickyNote2Icon />}
+                                icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
