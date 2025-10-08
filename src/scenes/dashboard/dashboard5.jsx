@@ -18,6 +18,7 @@ import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
 import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
 import BarChartPublishedInter from "../../components/BarChartPublishedInter"
 import BarChartPlanProject from "../../components/BarChartPlanProject"
+import BarChartProjectDept from "../../components/BarChartProjectDept"
 import BarChartPlanBudget from "../../components/BarChartPlanBudget"
 import BarChartStudent from "../../components/BarChartStudent"
 import BarChartStaff from "../../components/BarChartStaff"
@@ -32,6 +33,9 @@ let newDate = new Date()
 let date = newDate.getDate();
 let month = newDate.getMonth()+1;
 let year = newDate.getFullYear();
+
+
+const currentYear = new Date().getFullYear();
 
 const Dashbaord = () => {
 
@@ -63,102 +67,8 @@ const Dashbaord = () => {
                 gridAutoRows="140px"
                 gap="20px"
             >
-                {/* ROW 1 */}
-                {/* <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard5Reducer.result && dashboard5Reducer.result.student}
-                        subtitle="จำนวนนิสิต"
-                        progress={dashboard5Reducer.result && dashboard5Reducer.result.studentPercent}
-                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.studentPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <GrassIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
 
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard5Reducer.result && dashboard5Reducer.result.staff}
-                        subtitle="จำนวนบุคลากร"
-                        progress={dashboard5Reducer.result && dashboard5Reducer.result.staffPercent}
-                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.staffPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
 
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard5Reducer.result && dashboard5Reducer.result.user}
-                        subtitle="จำนวนผู้ใช้"
-                        progress={dashboard5Reducer.result && dashboard5Reducer.result.userPercent}
-                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.userPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard5Reducer.result && dashboard5Reducer.result.log}
-                        subtitle="จำนวน Log"
-                        progress={dashboard5Reducer.result && dashboard5Reducer.result.logPercent}
-                        increase={dashboard5Reducer.result && (dashboard5Reducer.result.logPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <WarehouseIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box> */}
-
-                {/* END ROW 1 */}
-
-                {/* START ROW 2 */}
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -175,7 +85,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            จำนวนโครงการ
+                            จำนวนโครงการปี {currentYear}
                         </Typography>
                         <Box
                             height="245px"
@@ -185,32 +95,7 @@ const Dashbaord = () => {
                         </Box>
                     </Box>                     
                 </Box>
-                {/* <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            การใช้งบประมาณ
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard5Reducer?.result?.publicationISI && <BarChartPublicationIsi isDashboard={true} data={dashboard5Reducer?.result?.publicationISI} />}
-                        </Box>
-                    </Box>                     
-                </Box> */}
+
                 <Box
                 gridColumn="span 4"
                 gridRow="span 2"
@@ -227,7 +112,7 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            การใช้งบประมาณ
+                            การใช้งบประมาณปี {currentYear}
                         </Typography>
                         <Box
                             height="245px"
@@ -238,92 +123,26 @@ const Dashbaord = () => {
                     </Box>                     
                 </Box>
 
-                {/* END ROW 2 */}
-
-                {/* START ROW 3 */}
-                {/* <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนนิสิต
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard5Reducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboard5Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
+ 
                 <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
+                    gridColumn="span 4"
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
                 >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
+                    <Typography
+                        variant='h5'
+                        fontWeight="600"
+                        sx={{ p: "30px 30px 0 30px" }}
                     >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนบุคลากร
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard5Reducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboard5Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
+                        โครงการแต่ละสาขาตามไตรมาศปี {currentYear}
+                    </Typography>
                     <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
+                        height="250px"
+                        mt="-25px"
                     >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            จำนวนอาจารย์
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard5Reducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboard5Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box> */}
-
-                {/* END ROW 3 */}
-
-                {/* START ROW 4 */}
-                {/* END ROW 4 */}
+                        {dashboard5Reducer?.result?.projectDeptbyQuater && <BarChartProjectDept isDashboard={true} data={dashboard5Reducer?.result?.projectDeptbyQuater} />}
+                    </Box>
+                </Box>                
 
 
             </Box>
