@@ -236,19 +236,19 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="ข้อมูลนิสิต"
+                                title="ข้อมูลนิสิตและหลักสูตร"
                                 to="/dashboard/dashboard2"
                                 icon={<SchoolIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             /> 
-                            <Item
+                            {/* <Item
                                 title="ด้านหลักสูตร"
                                 to="/dashboard/dashboard3"
                                 icon={<FmdBadIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                            <Item
                                 title="ด้านวิจัย"
                                 to="/dashboard/dashboard4"
