@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Typography, useTheme } from '@mui/material'
 import { tokens } from "../../theme"
 import Header from '../../components/Header'
 import BarChartTecherDept from "../../components/BarChartTecherDept"
-import BarChartStudent from "../../components/BarChartStudent"
+import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
 import BarChartAcademicPosition from "../../components/BarChartAcademicPosition" 
@@ -63,13 +63,13 @@ const Dashbaord = () => {
                             fontWeight="600"
                             sx={{ p: "30px 30px 0 30px" }}
                         >
-                            บุคลากรรวม
+                            บุคลากร
                         </Typography>
                         <Box
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard1Reducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
+                            {dashboard1Reducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -121,7 +121,7 @@ const Dashbaord = () => {
                             height="245px"
                             mt="-25px"
                         >
-                            {dashboard1Reducer?.result?.academicWork && <BarChartStudent isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
+                            {dashboard1Reducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
                         </Box>
                     </Box>                     
                 </Box>
@@ -170,7 +170,7 @@ const Dashbaord = () => {
                         height="250px"
                         mt="-25px"
                     >
-                        <BarChartTecherDept isDashboard={true} />
+                        {dashboard1Reducer?.result?.academicPositionDept && <BarChartTecherDept isDashboard={true} data={dashboard1Reducer?.result?.academicPositionDept} />}
                     </Box>
                 </Box>
 
