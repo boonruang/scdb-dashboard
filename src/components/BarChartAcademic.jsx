@@ -52,7 +52,7 @@ const BarChartAcademic = ({ isDashboard = false, data }) => {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={['#3b82f6', '#22c55e', '#a855f7', '#f59e0b']}
             defs={[
                 {
                     id: 'dots',

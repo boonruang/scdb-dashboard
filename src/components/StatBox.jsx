@@ -3,7 +3,7 @@ import { tokens } from "../theme"
 import ProgressCircle from "./ProgressCircle"
 
 
-const StatBox = ({ title, subtitle, icon, progress, increase }) => {
+const StatBox = ({ title, subtitle, icon, progress, increase, color }) => {
 
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
@@ -23,7 +23,7 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
                 </Box>
 
                 <Box>
-                    <ProgressCircle progress={progress} />
+                    <ProgressCircle progress={progress} color={color} />
                 </Box>
             </Box>
 

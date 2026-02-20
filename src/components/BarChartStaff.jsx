@@ -52,7 +52,7 @@ const BarChartStaff = ({ isDashboard = false, data }) => {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={['#22c55e']}
             defs={[
                 {
                     id: 'dots',

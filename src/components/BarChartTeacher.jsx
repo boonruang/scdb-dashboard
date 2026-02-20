@@ -52,7 +52,7 @@ const BarChartTeacher = ({ isDashboard = false, data }) => {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'paired' }}
+            colors={['#3b82f6']}
             defs={[
                 {
                     id: 'dots',

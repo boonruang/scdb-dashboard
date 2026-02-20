@@ -8,6 +8,7 @@ import Dashbaord2 from "./scenes/dashboard/dashboard2";
 import Dashbaord3 from "./scenes/dashboard/dashboard3";
 import Dashbaord4 from "./scenes/dashboard/dashboard4";
 import Dashbaord5 from "./scenes/dashboard/dashboard5";
+import Dashboard6 from "./scenes/dashboard/dashboard6";
 import ThankyouReg from 'components/Thankyoupage'
 import Terms from 'components/Terms'
 // import Registration from 'components/Registration'
@@ -114,6 +115,7 @@ function App() {
           <Route path="dashboard/dashboard3" element={<Dashbaord3 />} />
           <Route path="dashboard/dashboard4" element={<Dashbaord4 />} />
           <Route path="dashboard/dashboard5" element={<Dashbaord5 />} />
+          <Route path="dashboard/dashboard6" element={<Dashboard6 />} />
         </Route>
 
         <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>

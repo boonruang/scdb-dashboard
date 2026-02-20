@@ -24,7 +24,10 @@ import dashboard1Reducer from "./dashboard1.reducer";
 import dashboard2Reducer from "./dashboard2.reducer";   
 import dashboard3Reducer from "./dashboard3.reducer";   
 import dashboard4Reducer from "./dashboard4.reducer";   
-import dashboard5Reducer from "./dashboard5.reducer";   
+import dashboard5Reducer from "./dashboard5.reducer";
+import dashboardResearchReducer from "./dashboardResearch.reducer";
+import dashboardBudgetReducer from "./dashboardBudget.reducer";
+import dashboardAcademicPositionReducer from "./dashboardAcademicPosition.reducer";
 
 export default combineReducers({
   appReducer,
@@ -53,4 +56,7 @@ export default combineReducers({
   dashboard3Reducer,
   dashboard4Reducer,
   dashboard5Reducer,
+  dashboardResearchReducer,
+  dashboardBudgetReducer,
+  dashboardAcademicPositionReducer,
 })
