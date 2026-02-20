@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.google.com)",
+      "Read(//d/680612_science_msu/scdb-api/app/routes/**)",
+      "Read(//d/680612_science_msu/scdb-api/app/**)",
+      "Read(//d/680612_science_msu/scdb-api/**)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Read(//c/nvm4w/nodejs/node_modules//**)",
+      "Read(//d/680612_science_msu/**)"
+    ],
+    "additionalDirectories": [
+      "D:\\680612_science_msu\\docs"
+    ]
+  }
+}

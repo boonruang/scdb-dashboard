@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar"
-import { Box, IconButton, Typography, useTheme,MenuItem as MUIItem } from '@mui/material'
+import { Box, IconButton, Typography, useTheme, useMediaQuery, MenuItem as MUIItem } from '@mui/material'
 import { Link } from "react-router-dom"
 import "react-pro-sidebar/dist/css/styles.css"
 import { tokens } from "../../theme"
@@ -47,6 +47,8 @@ import LandscapeIcon from '@mui/icons-material/Landscape';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import SchoolIcon from '@mui/icons-material/School';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { useDispatch } from 'react-redux';
 import { showSidebar } from '../../actions/app.action'
 import { useSelector } from 'react-redux'
@@ -102,7 +104,11 @@ const Sidebar = () => {
 
     const { isSidebar } = useSelector((state) => state.app.appReducer)
 
-    console.log('isSidebar in Sidebar',isSidebar)  
+    const isSmallScreen = useMediaQuery('(max-width:767px)')
+    // mobile (<768px): collapse เสมอ / desktop: ตาม redux state
+    const collapsed = isSmallScreen ? true : !isSidebar
+
+    console.log('isSidebar in Sidebar',isSidebar)
     // console.log('isCollapsed',isCollapsed)  
 
     useEffect(() => {
@@ -153,7 +159,7 @@ const Sidebar = () => {
                 // }              
             }}
         >
-            <ProSidebar collapsed={!isSidebar} width='327px' >
+            <ProSidebar collapsed={collapsed} width='327px' >
                 <Menu iconShape='square'>
                     {/* LOGO AND MENU ICON */}
                     <MenuItem
@@ -186,7 +192,7 @@ const Sidebar = () => {
                     </MenuItem>
 
                     {/* USER */}
-                    {isSidebar && (
+                    {isSidebar && !isSmallScreen && (
                         <Box mb="25px">
                             <Box textAlign={"center"}>
                                 <Typography
@@ -236,6 +242,13 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
+                                title="ตำแหน่งทางวิชาการ"
+                                to="/dashboard/dashboard6"
+                                icon={<FmdBadIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="ข้อมูลนิสิตและหลักสูตร"
                                 to="/dashboard/dashboard2"
                                 icon={<SchoolIcon />}
@@ -263,7 +276,7 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                                                        
+                                                       
                          </SubMenu>   : undefined  }  
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))

@@ -1,184 +1,129 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, IconButton, Typography, useTheme } from '@mui/material'
+import React, { useEffect } from 'react'
+import { Box, Typography, useTheme } from '@mui/material'
 import { tokens } from "../../theme"
 import Header from '../../components/Header'
 import BarChartTecherDept from "../../components/BarChartTecherDept"
 import BarChartAcademic from "../../components/BarChartAcademic"
 import BarChartStaff from "../../components/BarChartStaff"
 import BarChartTeacher from "../../components/BarChartTeacher"
-import BarChartAcademicPosition from "../../components/BarChartAcademicPosition" 
+import BarChartAcademicPosition from "../../components/BarChartAcademicPosition"
 import { useDispatch, useSelector } from 'react-redux'
 import { getDashboard } from 'actions/dashboard1.action'
 
-let newDate = new Date()
-let date = newDate.getDate();
-let month = newDate.getMonth()+1;
-let year = newDate.getFullYear();
+// ── KPI card config ───────────────────────────────────────────────────
+const KPI_CONFIG = [
+    { label: 'อาจารย์ทั้งหมด', bg: '#1e3a5f', accent: '#3b82f6' },
+    { label: 'สายสนับสนุน',    bg: '#1a3a2a', accent: '#22c55e' },
+    { label: 'บุคลากรรวม',     bg: '#3b1f4a', accent: '#a855f7' },
+    { label: 'ภาควิชา',        bg: '#3b2a10', accent: '#f59e0b' },
+]
 
-const Dashbaord = () => {
+const KpiCard = ({ label, value, accent, bg }) => (
+    <Box sx={{
+        backgroundColor: bg,
+        borderLeft: `4px solid ${accent}`,
+        borderRadius: '8px',
+        p: '20px 24px',
+        display: 'flex', flexDirection: 'column', gap: '4px',
+        height: '100%', boxSizing: 'border-box',
+    }}>
+        <Typography variant="h6" sx={{ color: accent, fontWeight: 600 }}>{label}</Typography>
+        <Typography variant="h2" fontWeight="bold" sx={{ color: '#fff' }}>{value ?? '-'}</Typography>
+        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.72rem' }}>คน</Typography>
+    </Box>
+)
 
-    const dispatch = useDispatch()
-
+const ChartCard = ({ title, children, chartHeight = '220px' }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
+    return (
+        <Box sx={{
+            backgroundColor: colors.primary[400],
+            borderRadius: '8px',
+            p: '16px 20px',
+            height: '100%', boxSizing: 'border-box',
+        }}>
+            <Typography variant="h5" fontWeight="600" mb="4px" sx={{ color: colors.grey[100] }}>
+                {title}
+            </Typography>
+            <Box height={chartHeight}>
+                {children}
+            </Box>
+        </Box>
+    )
+}
+
+const Dashboard1 = () => {
+    const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getDashboard())
-    },[dispatch])
+    }, [dispatch])
 
-    const dashboard1Reducer = useSelector((state) => state.app.dashboard1Reducer)
+    const { result } = useSelector((state) => state.app.dashboard1Reducer)
+
+    const academicWork  = result?.academicWork || []
+    const totalAcademic = academicWork.reduce((s, d) => s + parseInt(d.academic || 0), 0)
+    const totalStaff    = academicWork.reduce((s, d) => s + parseInt(d.staff    || 0), 0)
+    const totalAll      = totalAcademic + totalStaff
+    const deptCount     = academicWork.length
+
+    const kpiValues = [totalAcademic, totalStaff, totalAll, deptCount]
 
     return (
         <Box m="20px">
-            <Box
-                display="flex" justifyContent="space-between"
-                alignItems="center"
-            >
+            <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="แดชบอร์ดข้อมูลด้านบุคลากร" subtitle="" />
-
             </Box>
 
-            {/* GRID & CHARTS */}
             <Box
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="140px"
                 gap="20px"
             >
-
-               {/* START ROW 2 */}
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            บุคลากร
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard1Reducer?.result?.academicWork && <BarChartAcademic isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            อาจารย์
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard1Reducer?.result?.academicWork && <BarChartTeacher isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            สายสนับสนุน
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard1Reducer?.result?.academicWork && <BarChartStaff isDashboard={true} data={dashboard1Reducer?.result?.academicWork} />}
-                        </Box>
-                    </Box>                     
-                </Box>
-                {/* END ROW 2 */}                
-
-                {/* START ROW 3 */}   
-                <Box
-                gridColumn="span 4"
-                gridRow="span 2"
-                backgroundColor={colors.primary[400]}
-                p="30px"
-                >
-                    <Box
-                        gridColumn="span 4"
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                    >
-                        <Typography
-                            variant='h5'
-                            fontWeight="600"
-                            sx={{ p: "30px 30px 0 30px" }}
-                        >
-                            ตำแหน่งทางวิชากร
-                        </Typography>
-                        <Box
-                            height="245px"
-                            mt="-25px"
-                        >
-                            {dashboard1Reducer?.result?.academicPosition && <BarChartAcademicPosition isDashboard={true} data={dashboard1Reducer?.result?.academicPosition} />}
-                        </Box>
-                    </Box>                     
-                </Box>                
-                <Box
-                    gridColumn="span 4"
-                    gridRow="span 2"
-                    backgroundColor={colors.primary[400]}
-                >
-                    <Typography
-                        variant='h5'
-                        fontWeight="600"
-                        sx={{ p: "30px 30px 0 30px" }}
-                    >
-                        ตำแหน่งทางวิชากรตามสาขา
-                    </Typography>
-                    <Box
-                        height="250px"
-                        mt="-25px"
-                    >
-                        {dashboard1Reducer?.result?.academicPositionDept && <BarChartTecherDept isDashboard={true} data={dashboard1Reducer?.result?.academicPositionDept} />}
+                {/* ROW 1 — KPI Cards */}
+                {KPI_CONFIG.map((c, i) => (
+                    <Box key={i} gridColumn="span 3" gridRow="span 1">
+                        <KpiCard label={c.label} value={kpiValues[i]} accent={c.accent} bg={c.bg} />
                     </Box>
+                ))}
+
+                {/* ROW 2–3 — Charts บุคลากร */}
+                <Box gridColumn="span 4" gridRow="span 2">
+                    <ChartCard title="บุคลากรรวมตามสาขา">
+                        {academicWork.length > 0 && <BarChartAcademic isDashboard={true} data={academicWork} />}
+                    </ChartCard>
                 </Box>
 
-                {/* END ROW 3 */}
+                <Box gridColumn="span 4" gridRow="span 2">
+                    <ChartCard title="อาจารย์ตามสาขา">
+                        {academicWork.length > 0 && <BarChartTeacher isDashboard={true} data={academicWork} />}
+                    </ChartCard>
+                </Box>
+
+                <Box gridColumn="span 4" gridRow="span 2">
+                    <ChartCard title="สายสนับสนุนตามสาขา">
+                        {academicWork.length > 0 && <BarChartStaff isDashboard={true} data={academicWork} />}
+                    </ChartCard>
+                </Box>
+
+                {/* ROW 4–5 — ตำแหน่งทางวิชาการ */}
+                <Box gridColumn="span 4" gridRow="span 2">
+                    <ChartCard title="ตำแหน่งทางวิชาการ">
+                        {result?.academicPosition && <BarChartAcademicPosition isDashboard={true} data={result.academicPosition} />}
+                    </ChartCard>
+                </Box>
+
+                <Box gridColumn="span 8" gridRow="span 2">
+                    <ChartCard title="ตำแหน่งทางวิชาการตามสาขา">
+                        {result?.academicPositionDept && <BarChartTecherDept isDashboard={true} data={result.academicPositionDept} />}
+                    </ChartCard>
+                </Box>
 
             </Box>
-        </Box >
+        </Box>
     )
 }
 
-export default Dashbaord
+export default Dashboard1
