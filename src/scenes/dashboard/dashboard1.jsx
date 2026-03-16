@@ -12,26 +12,29 @@ import { getDashboard } from 'actions/dashboard1.action'
 
 // ── KPI card config ───────────────────────────────────────────────────
 const KPI_CONFIG = [
-    { label: 'อาจารย์ทั้งหมด', bg: '#1a2d4a', accent: '#60a5fa' },
-    { label: 'สายสนับสนุน',    bg: '#142d1e', accent: '#4ade80' },
-    { label: 'บุคลากรรวม',     bg: '#2d1640', accent: '#c084fc' },
-    { label: 'ภาควิชา',        bg: '#2d200a', accent: '#fbbf24' },
+    { label: 'อาจารย์ทั้งหมด', accent: '#60a5fa' },
+    { label: 'สายสนับสนุน',    accent: '#4ade80' },
+    { label: 'บุคลากรรวม',     accent: '#c084fc' },
+    { label: 'ภาควิชา',        accent: '#fbbf24' },
 ]
 
-const KpiCard = ({ label, value, accent, bg }) => (
-    <Box sx={{
-        backgroundColor: bg,
-        borderLeft: `4px solid ${accent}`,
-        borderRadius: '8px',
-        p: '20px 24px',
-        display: 'flex', flexDirection: 'column', gap: '4px',
-        height: '100%', boxSizing: 'border-box',
-    }}>
-        <Typography variant="h6" sx={{ color: accent, fontWeight: 600 }}>{label}</Typography>
-        <Typography variant="h2" fontWeight="bold" sx={{ color: '#fff' }}>{value ?? '-'}</Typography>
-        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.72rem' }}>คน</Typography>
-    </Box>
-)
+const KpiCard = ({ label, value, accent }) => {
+    const theme = useTheme()
+    const colors = tokens(theme.palette.mode)
+    return (
+        <Box sx={{
+            backgroundColor: colors.primary[400],
+            borderRadius: '8px',
+            p: '20px 24px',
+            display: 'flex', flexDirection: 'column', gap: '4px',
+            height: '100%', boxSizing: 'border-box',
+        }}>
+            <Typography variant="h6" sx={{ color: accent, fontWeight: 600 }}>{label}</Typography>
+            <Typography variant="h2" fontWeight="bold" sx={{ color: colors.grey[100] }}>{value ?? '-'}</Typography>
+            <Typography variant="body2" sx={{ color: colors.grey[400], fontSize: '0.72rem' }}>คน</Typography>
+        </Box>
+    )
+}
 
 const ChartCard = ({ title, children, chartHeight = '220px' }) => {
     const theme = useTheme()
@@ -85,7 +88,7 @@ const Dashboard1 = () => {
                 {/* ROW 1 — KPI Cards */}
                 {KPI_CONFIG.map((c, i) => (
                     <Box key={i} gridColumn="span 3" gridRow="span 1">
-                        <KpiCard label={c.label} value={kpiValues[i]} accent={c.accent} bg={c.bg} />
+                        <KpiCard label={c.label} value={kpiValues[i]} accent={c.accent} />
                     </Box>
                 ))}
 
