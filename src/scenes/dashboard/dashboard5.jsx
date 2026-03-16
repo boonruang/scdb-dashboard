@@ -247,13 +247,13 @@ const DashboardBudget = () => {
                                                     }
                                                 }}
                                             >
-                                                <TableCell align="center" sx={{ color: colors.grey[400] }}>
+                                                <TableCell align="center" sx={{ color: colors.grey[400], fontSize: '14px' }}>
                                                     {(page - 1) * limit + idx + 1}
                                                 </TableCell>
-                                                <TableCell sx={{ color: colors.grey[200], fontWeight: '600', whiteSpace: 'nowrap' }}>
+                                                <TableCell sx={{ color: colors.grey[200], fontWeight: '600', whiteSpace: 'nowrap', fontSize: '14px' }}>
                                                     {row.budgetCode}
                                                 </TableCell>
-                                                <TableCell sx={{ color: colors.grey[100], maxWidth: 280 }}>
+                                                <TableCell sx={{ color: colors.grey[100], maxWidth: 280, fontSize: '14px' }}>
                                                     {row.name}
                                                 </TableCell>
                                                 <TableCell align="center">
@@ -261,25 +261,25 @@ const DashboardBudget = () => {
                                                         label={row.budgetType === '1.หมวดงบแผ่นดิน' ? 'งบแผ่นดิน' : 'งบรายได้'}
                                                         size="small"
                                                         sx={{
-                                                            height: 20, fontSize: '0.65rem',
+                                                            height: 20, fontSize: '12px',
                                                             backgroundColor: budgetTypeColor[row.budgetType] || colors.primary[300],
                                                             color: '#fff', fontWeight: 'bold'
                                                         }}
                                                     />
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[100], fontWeight: '600' }}>
+                                                <TableCell align="right" sx={{ color: colors.grey[100], fontWeight: '600', fontSize: '14px' }}>
                                                     {fmt(row.budget)}
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300] }}>
+                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
                                                     {row.q1Budget > 0 ? fmt(row.q1Budget) : '-'}
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300] }}>
+                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
                                                     {row.q2Budget > 0 ? fmt(row.q2Budget) : '-'}
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300] }}>
+                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
                                                     {row.q3Budget > 0 ? fmt(row.q3Budget) : '-'}
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300] }}>
+                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
                                                     {row.q4Budget > 0 ? fmt(row.q4Budget) : '-'}
                                                 </TableCell>
                                                 <TableCell align="center">
