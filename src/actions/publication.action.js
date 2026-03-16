@@ -89,15 +89,12 @@ export const addPublication = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.post(server.PUBLICATION_URL, formData)
       console.log('addPublication formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/publication')
-      },5000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('addPublication formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }
@@ -107,15 +104,12 @@ export const updatePublication = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.put(server.PUBLICATION_URL, formData)
       console.log('editPublication formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/publication')
-      },5000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('editPublication formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }

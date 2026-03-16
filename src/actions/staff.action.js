@@ -89,15 +89,12 @@ export const addStaff = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.post(server.STAFF_URL, formData)
       console.log('addStaff formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/staff')
-      },3000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('addStaff formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }
@@ -107,15 +104,12 @@ export const updateStaff = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.put(server.STAFF_URL, formData)
       console.log('editStaff formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/staff')
-      },3000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('editStaff formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }

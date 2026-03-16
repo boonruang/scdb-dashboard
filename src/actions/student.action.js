@@ -89,15 +89,12 @@ export const addStudent = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.post(server.STUDENT_URL, formData)
       console.log('addStudent formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/student')
-      },5000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('addStudent formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }
@@ -107,15 +104,12 @@ export const updateStudent = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.put(server.STUDENT_URL, formData)
       console.log('editStudent formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/student')
-      },5000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('editStudent formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }
