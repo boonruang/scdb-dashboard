@@ -211,11 +211,11 @@ const DashboardResearch = () => {
                             <TableBody>
                                 {summary?.topAuthors?.map((row) => (
                                     <TableRow key={row.rank}>
-                                        <TableCell sx={{ color: colors.grey[300] }}>{row.rank}</TableCell>
-                                        <TableCell sx={{ color: colors.grey[100] }}>{row.name}</TableCell>
-                                        <TableCell sx={{ color: colors.grey[300] }}>{row.dept}</TableCell>
+                                        <TableCell sx={{ color: colors.grey[300], fontSize: '14px' }}>{row.rank}</TableCell>
+                                        <TableCell sx={{ color: colors.grey[100], fontSize: '14px' }}>{row.name}</TableCell>
+                                        <TableCell sx={{ color: colors.grey[300], fontSize: '14px' }}>{row.dept}</TableCell>
                                         <TableCell align="center">
-                                            <Typography sx={{ color: colors.greenAccent[400], fontWeight: 'bold' }}>
+                                            <Typography sx={{ color: colors.greenAccent[400], fontWeight: 'bold', fontSize: '14px' }}>
                                                 {row.count}
                                             </Typography>
                                         </TableCell>
@@ -296,16 +296,16 @@ const DashboardResearch = () => {
                                     <TableBody>
                                         {publications?.data?.map((row) => (
                                             <TableRow key={row.id}>
-                                                <TableCell sx={{ color: colors.grey[100], whiteSpace: 'nowrap' }}>{row.author}</TableCell>
-                                                <TableCell sx={{ color: colors.grey[300] }}>{row.dept}</TableCell>
-                                                <TableCell sx={{ color: colors.grey[200], maxWidth: 260 }}>{row.title}</TableCell>
-                                                <TableCell align="center" sx={{ color: colors.grey[300] }}>{row.year}</TableCell>
+                                                <TableCell sx={{ color: colors.grey[100], whiteSpace: 'nowrap', fontSize: '14px' }}>{row.author}</TableCell>
+                                                <TableCell sx={{ color: colors.grey[300], fontSize: '14px' }}>{row.dept}</TableCell>
+                                                <TableCell sx={{ color: colors.grey[200], maxWidth: 260, fontSize: '14px' }}>{row.title}</TableCell>
+                                                <TableCell align="center" sx={{ color: colors.grey[300], fontSize: '14px' }}>{row.year}</TableCell>
                                                 <TableCell align="center">
                                                     <Typography sx={{
                                                         color: (row.quartile === 'Q1' || row.quartile === 'Tier 1')
                                                             ? colors.greenAccent[400] : colors.grey[300],
                                                         fontWeight: 'bold',
-                                                        fontSize: '0.75rem'
+                                                        fontSize: '14px'
                                                     }}>
                                                         {row.quartile}
                                                     </Typography>
