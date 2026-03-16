@@ -12,10 +12,10 @@ import { getDashboard } from 'actions/dashboard1.action'
 
 // ── KPI card config ───────────────────────────────────────────────────
 const KPI_CONFIG = [
-    { label: 'อาจารย์ทั้งหมด', bg: '#1e3a5f', accent: '#3b82f6' },
-    { label: 'สายสนับสนุน',    bg: '#1a3a2a', accent: '#22c55e' },
-    { label: 'บุคลากรรวม',     bg: '#3b1f4a', accent: '#a855f7' },
-    { label: 'ภาควิชา',        bg: '#3b2a10', accent: '#f59e0b' },
+    { label: 'อาจารย์ทั้งหมด', bg: '#1a2d4a', accent: '#60a5fa' },
+    { label: 'สายสนับสนุน',    bg: '#142d1e', accent: '#4ade80' },
+    { label: 'บุคลากรรวม',     bg: '#2d1640', accent: '#c084fc' },
+    { label: 'ภาควิชา',        bg: '#2d200a', accent: '#fbbf24' },
 ]
 
 const KpiCard = ({ label, value, accent, bg }) => (

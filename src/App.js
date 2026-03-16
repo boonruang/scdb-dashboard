@@ -108,8 +108,8 @@ function App() {
       <Route path="/" element={<Layout />}>
 
         <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>
-          <Route path="/" element={<Dashbaord />} />
-          <Route path="dashboard" element={<Dashbaord />} />
+          <Route path="/" element={<Dashbaord1 />} />
+          <Route path="dashboard" element={<Dashbaord1 />} />
           <Route path="dashboard/dashboard1" element={<Dashbaord1 />} />
           <Route path="dashboard/dashboard2" element={<Dashbaord2 />} />
           <Route path="dashboard/dashboard3" element={<Dashbaord3 />} />

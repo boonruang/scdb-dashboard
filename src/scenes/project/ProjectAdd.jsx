@@ -35,11 +35,21 @@ import { th } from 'date-fns/locale';
 
 const initialValues = {
     project_name: "",
+    project_type: "",
+    responsible_dept_id: "",
+    budget_source: "",
+    budget_amount: "",
+    status: ""
 }
 
 const userSchema = yup.object().shape({
-    project_name: yup.string().required("ต้องใส่"),
-    project_type: yup.string().required("ต้องใส่"),
+    project_name: yup.string().required("ต้องระบุชื่อโครงการ"),
+    project_type: yup.string().required("ต้องระบุประเภทโครงการ"),
+    responsible_dept_id: yup.mixed().required("ต้องระบุภาควิชาที่รับผิดชอบ"),
+    budget_amount: yup.number()
+        .typeError("งบประมาณต้องเป็นตัวเลขเท่านั้น")
+        .nullable()
+        .transform((value, originalValue) => String(originalValue).trim() === "" ? null : value),
 }) 
 
 const ProjectAdd = () => {
@@ -52,6 +62,8 @@ const ProjectAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState("ดำเนินการเรียบร้อยแล้ว")
+  const [isSuccess, setIsSuccess] = useState(false)
   const [departmentData, setDepartmentData] = useState([])
 
   const departmentReducer = useSelector((state) => state.app.departmentReducer)
@@ -68,8 +80,6 @@ const ProjectAdd = () => {
 
 
    const handleSubmitButton = (values) => {
-    setOpen(true)
-    // console.log(values)
    }
 
    const handleCancelButton = () => {
@@ -100,7 +110,16 @@ const ProjectAdd = () => {
               formData.append('budget_amount', values.budget_amount)
               formData.append('status', values.status)
               console.log('values',values)
-              dispatch(addProject(navigate, formData))
+              const res = await dispatch(addProject(navigate, formData))
+              if (res && res.success) {
+                  setMsg("บันทึกข้อมูลเรียบร้อยแล้ว")
+                  setIsSuccess(true)
+                  setOpen(true)
+              } else {
+                  setMsg("เกิดข้อผิดพลาด: " + (res?.error || "ไม่สามารถบันทึกข้อมูลได้"))
+                  setIsSuccess(false)
+                  setOpen(true)
+              }
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -269,7 +288,7 @@ const ProjectAdd = () => {
                           gridColumn: "span 2"
                       }}                    
                     >
-                        <Button  onClick={handleSubmitButton}
+                        <Button  
                             type='submit'
                             // disabled={isSubmitting}
                             disabled={!(dirty && isValid)}
@@ -313,8 +332,11 @@ const ProjectAdd = () => {
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}
-        submitFunction={() => setOpen(false)}
-        message={"ดำเนินการเรียบร้อยแล้ว"}
+        submitFunction={() => {
+            setOpen(false)
+            if (isSuccess) navigate('/project')
+        }}
+        message={msg}
         />          
     </Box >
     

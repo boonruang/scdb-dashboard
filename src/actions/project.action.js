@@ -89,15 +89,12 @@ export const addProject = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.post(server.PROJECT_URL, formData)
       console.log('addProject formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/project')
-      },5000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('addProject formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }
@@ -107,15 +104,12 @@ export const updateProject = (navigate, formData) => {
   console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
       let result = await httpClient.put(server.PROJECT_URL, formData)
       console.log('editProject formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/project')
-      },5000)
+      return { success: true, data: result.data }
     } catch (error) {
-      // failed
       console.log('editProject formData Error: ', error.toString())
+      return { success: false, error: error.message || error.toString() }
     }
   }
 }

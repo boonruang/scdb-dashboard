@@ -39,9 +39,9 @@ const initialValues = {
 }
 
 const userSchema = yup.object().shape({
-    firstname: yup.string().required("ต้องใส่"),
-    lastname: yup.string().required("ต้องใส่"),
-    position: yup.string().required("ต้องใส่"),
+    firstname: yup.string().required("ต้องระบุชื่อ"),
+    lastname: yup.string().required("ต้องระบุนามสกุล"),
+    position: yup.string().required("ต้องระบุตำแหน่ง"),
     // stafftypeId: yup.string().required("ต้องใส่"),
     // email: yup.string().required("ต้องใส่"),
     // office_location: yup.string().required("ต้องใส่"),
@@ -57,6 +57,8 @@ const StaffAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState("ดำเนินการเรียบร้อยแล้ว")
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const [stafftypeData, setStafftypeData] = useState([])
   const [departmentData, setDepartmentData] = useState([])
@@ -83,8 +85,7 @@ const StaffAdd = () => {
 
 
    const handleSubmitButton = (values) => {
-    setOpen(true)
-    // console.log(values)
+    // Moved to form submission
    }
 
    const handleCancelButton = () => {
@@ -118,7 +119,16 @@ const StaffAdd = () => {
               formData.append('stafftype_id', values.stafftype_id)
               formData.append('department_id', values.department_id)
               console.log('values',values)
-              dispatch(addStaff(navigate, formData))
+              const res = await dispatch(addStaff(navigate, formData))
+              if (res && res.success) {
+                  setMsg("บันทึกข้อมูลเรียบร้อยแล้ว")
+                  setIsSuccess(true)
+                  setOpen(true)
+              } else {
+                  setMsg("เกิดข้อผิดพลาด: " + (res?.error || "ไม่สามารถบันทึกข้อมูลได้"))
+                  setIsSuccess(false)
+                  setOpen(true)
+              }
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -336,7 +346,7 @@ const StaffAdd = () => {
                           gridColumn: "span 2"
                       }}                    
                     >
-                        <Button  onClick={handleSubmitButton}
+                        <Button  
                             type='submit'
                             // disabled={isSubmitting}
                             disabled={!(dirty && isValid)}
@@ -380,8 +390,11 @@ const StaffAdd = () => {
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}
-        submitFunction={() => setOpen(false)}
-        message={"ดำเนินการเรียบร้อยแล้ว"}
+        submitFunction={() => {
+            setOpen(false)
+            if (isSuccess) navigate('/staff')
+        }}
+        message={msg}
         />          
     </Box >
     

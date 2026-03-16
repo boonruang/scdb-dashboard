@@ -36,8 +36,12 @@ const initialValues = {
 }
 
 const userSchema = yup.object().shape({
-    firstname: yup.string().required("ต้องใส่"),
-    lastname: yup.string().required("ต้องใส่"),
+    studentOfficial_id: yup.string()
+        .matches(/^[0-9]+$/, "รหัสนิสิตต้องเป็นตัวเลขเท่านั้น")
+        .required("ต้องระบุรหัสนิสิต"),
+    firstname: yup.string().required("ต้องระบุชื่อ"),
+    lastname: yup.string().required("ต้องระบุนามสกุล"),
+    program_id: yup.mixed().required("ต้องเลือกสาขาวิชา"),
 }) 
 
 
@@ -53,6 +57,8 @@ const StudentEdit = () => {
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState("ดำเนินการเรียบร้อยแล้ว")
+  const [isSuccess, setIsSuccess] = useState(false)
   const [staffData, setStaffData] = useState([])
   const [academicProgramData, setAcademicProgramData] = useState([])
   
@@ -78,8 +84,6 @@ const StudentEdit = () => {
     },[academicProgramReducer.result])   
 
    const handleSubmitButton = (values) => {
-    setOpen(true)
-    // console.log(values)
    }
 
    const handleCancelButton = () => {
@@ -102,7 +106,16 @@ const StudentEdit = () => {
               formData.append('program_id', values.program_id)
               formData.append('advisor_staff_id', values.advisor_staff_id)
               console.log('values',values)
-              dispatch(updateStudent(navigate, formData))
+              const res = await dispatch(updateStudent(navigate, formData))
+              if (res && res.success) {
+                  setMsg("ปรับปรุงข้อมูลเรียบร้อยแล้ว")
+                  setIsSuccess(true)
+                  setOpen(true)
+              } else {
+                  setMsg("เกิดข้อผิดพลาด: " + (res?.error || "ไม่สามารถบันทึกข้อมูลได้"))
+                  setIsSuccess(false)
+                  setOpen(true)
+              }
               setSubmitting(false)
             }}
             initialValues={location?.state?.row}
@@ -157,7 +170,7 @@ const StudentEdit = () => {
                         value={values?.firstname}
                         name="firstname"
                         error={!!touched.firstname && !!errors.firstname}
-                        helperText={touched.firstname && errors.nafirstnameme}
+                        helperText={touched.firstname && errors.firstname}
                         sx={{ gridColumn: "span 1" }}
                     />
                     <TextField
@@ -242,7 +255,7 @@ const StudentEdit = () => {
                           gridColumn: "span 2"
                       }}                    
                     >
-                        <Button  onClick={handleSubmitButton}
+                        <Button  
                             type='submit'
                             // disabled={isSubmitting}
                             disabled={!(dirty && isValid)}
@@ -285,8 +298,11 @@ const StudentEdit = () => {
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}
-        submitFunction={() => setOpen(false)}
-        message={"ดำเนินการเรียบร้อยแล้ว"}
+        submitFunction={() => {
+            setOpen(false)
+            if (isSuccess) navigate('/student')
+        }}
+        message={msg}
         />          
     </Box >
     

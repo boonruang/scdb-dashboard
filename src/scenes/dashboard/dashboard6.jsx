@@ -50,23 +50,24 @@ const DashboardAcademicPosition = () => {
     }
 
     // ── ดึงข้อมูลจาก redux ──────────────────────────────────────────
-    const apiResult    = result?.result
-    const summary      = apiResult?.summary
-    const positionData = summary?.byPosition   || []   // [{position, count}]
-    const deptData     = summary?.byPositionDept || []  // [{dept, [pos]: count}]
-    const staffList    = apiResult?.data        || []
-    const total        = apiResult?.total       || 0
+    const listResult   = result?.list    || {}
+    const summary      = result?.summary || {}
+    const staffList    = listResult.staff        || []
+    const total        = listResult.total        || 0
     const totalPages   = Math.ceil(total / ROW_PER_PAGE)
+
+    const positionData = summary.byPosition     || []   // [{position, count}]
+    const deptData     = summary.byPositionDept || []   // [{department, [pos]: count}]
 
     // แปลง byPosition → format สำหรับ BarChartAcademicPosition (ต้องการ {position, amount})
     const chartPositionData = positionData.map(d => ({ position: d.position, amount: d.count }))
 
-    // แปลง byPositionDept → format สำหรับ BarChartTecherDept (ต้องการ {department, [pos]: count})
-    const chartDeptData = deptData.map(({ dept, ...rest }) => ({ department: dept, ...rest }))
-    const positionKeys  = summary?.positionKeys || []
+    // byPositionDept มี field department อยู่แล้ว ใช้ได้เลย
+    const chartDeptData = deptData
+    const positionKeys  = listResult.positionKeys || []
 
     // departments สำหรับ dropdown
-    const departments = [...new Set(deptData.map(d => d.dept).filter(Boolean))]
+    const departments = [...new Set(deptData.map(d => d.department).filter(Boolean))]
 
     // คำนวณ % ผู้มีตำแหน่ง (ไม่รวม อาจารย์)
     const totalCount   = positionData.reduce((s, d) => s + d.count, 0)
@@ -223,11 +224,10 @@ const DashboardAcademicPosition = () => {
                                             />
                                         </TableCell>
                                         <TableCell align="left" sx={{ color: colors.grey[100] }}>
-                                            {row.titleTh && <span style={{ color: colors.grey[400], marginRight: 4 }}>{row.titleTh}</span>}
-                                            {row.firstnameTh}&nbsp;&nbsp;{row.lastnameTh}
+                                            {row.name_th || '-'}
                                         </TableCell>
                                         <TableCell align="left" sx={{ color: colors.grey[300] }}>
-                                            {row.firstname}&nbsp;&nbsp;{row.lastname}
+                                            {row.name_en || '-'}
                                         </TableCell>
                                         <TableCell align="center" sx={{ color: colors.grey[300] }}>
                                             {row.education || '-'}

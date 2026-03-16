@@ -36,6 +36,9 @@ const initialValues = {
 }
 
 const userSchema = yup.object().shape({
+    studentOfficial_id: yup.string()
+        .matches(/^[0-9]+$/, "รหัสนิสิตต้องเป็นตัวเลขเท่านั้น")
+        .required("ต้องระบุรหัสนิสิต"),
     firstname: yup.string().required("ต้องใส่"),
     lastname: yup.string().required("ต้องใส่"),
 }) 

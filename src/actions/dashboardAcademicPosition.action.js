@@ -12,10 +12,14 @@ const setFailed   = () => ({ type: HTTP_DASHBOARD6_FAILED });
 
 export const getAcademicPositionList = ({ position = '', dept = '', search = '', page = 1, limit = 10 } = {}) => (dispatch) => {
   dispatch(setFetching());
-  httpClient
-    .get(`${server.DASHBOARD6_URL}/list`, {
-      params: { position, dept, search, page, limit }
+  Promise.all([
+    httpClient.get(`${server.DASHBOARD6_URL}/list`, { params: { position, dept, search, page, limit } }),
+    httpClient.get(`${server.DASHBOARD6_URL}/summary`),
+  ])
+    .then(([listRes, summaryRes]) => {
+      const listResult    = listRes.data?.result || {}
+      const summaryResult = summaryRes.data?.result || {}
+      dispatch(setSuccess({ list: listResult, summary: summaryResult }))
     })
-    .then((result) => dispatch(setSuccess(result.data)))
     .catch(() => dispatch(setFailed()));
 };

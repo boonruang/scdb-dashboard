@@ -33,11 +33,11 @@ const initialValues = {
 }
 
 const userSchema = yup.object().shape({
-    title: yup.string().required("ต้องใส่"),
-    journal_name: yup.string().required("ต้องใส่"),
-    publication_year: yup.number().required("ต้องใส่"),
-    quartile: yup.string().required("ต้องใส่"),
-    database_source: yup.string().required("ต้องใส่"),
+    title: yup.string().required("ต้องระบุชื่อเรื่อง"),
+    journal_name: yup.string().required("ต้องระบุนิตยสาร/วารสาร"),
+    publication_year: yup.number().required("ต้องระบุปีที่ตีพิมพ์"),
+    quartile: yup.string().required("ต้องระบุควอไทล์"),
+    database_source: yup.string().required("ต้องระบุฐานข้อมูล"),
 }) 
 
 
@@ -53,10 +53,10 @@ const PublicationEdit = () => {
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState("ดำเนินการเรียบร้อยแล้ว")
+  const [isSuccess, setIsSuccess] = useState(false)
 
    const handleSubmitButton = (values) => {
-    setOpen(true)
-    // console.log(values)
    }
 
    const handleCancelButton = () => {
@@ -79,7 +79,16 @@ const PublicationEdit = () => {
               formData.append('quartile', values.quartile)
               formData.append('database_source', values.database_source)
               console.log('values',values)
-              dispatch(updatePublication(navigate, formData))
+              const res = await dispatch(updatePublication(navigate, formData))
+              if (res && res.success) {
+                  setMsg("ปรับปรุงข้อมูลเรียบร้อยแล้ว")
+                  setIsSuccess(true)
+                  setOpen(true)
+              } else {
+                  setMsg("เกิดข้อผิดพลาด: " + (res?.error || "ไม่สามารถบันทึกข้อมูลได้"))
+                  setIsSuccess(false)
+                  setOpen(true)
+              }
               setSubmitting(false)
             }}
             initialValues={location?.state?.row}
@@ -202,7 +211,7 @@ const PublicationEdit = () => {
                           gridColumn: "span 2"
                       }}                    
                     >
-                        <Button  onClick={handleSubmitButton}
+                        <Button  
                             type='submit'
                             // disabled={isSubmitting}
                             disabled={!(dirty && isValid)}
@@ -245,8 +254,11 @@ const PublicationEdit = () => {
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}
-        submitFunction={() => setOpen(false)}
-        message={"ดำเนินการเรียบร้อยแล้ว"}
+        submitFunction={() => {
+            setOpen(false)
+            if (isSuccess) navigate('/publication')
+        }}
+        message={msg}
         />          
     </Box >
     

@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "allow": [
       "WebFetch(domain:docs.google.com)",
@@ -11,7 +14,8 @@
       "Read(//d/680612_science_msu/**)"
     ],
     "additionalDirectories": [
-      "D:\\680612_science_msu\\docs"
+      "D:\\680612_science_msu\\docs",
+      "C:\\Users\\Toyashi\\.claude\\teams\\scdb-frontend"
     ]
   }
 }
