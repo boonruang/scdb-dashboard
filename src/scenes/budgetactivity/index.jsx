@@ -49,15 +49,35 @@ const BudgetActivityList = () => {
   }
 
   const columns = [
-    { field: 'activity_id', headerName: 'ID', flex: 0.3 },
-    { field: 'budget_code', headerName: 'รหัสงบประมาณ', flex: 0.7, cellClassName: 'name-column--cell' },
-    { field: 'activity_code', headerName: 'รหัสกิจกรรม', flex: 0.8, cellClassName: 'name-column--cell' },
-    { field: 'activity_name', headerName: 'โครงการ/กิจกรรม (ย่อย)', flex: 2 },
-    { field: 'budget_requested', headerName: 'งบที่ขอ (บาท)', flex: 0.7, type: 'number' },
-    { field: 'start_date', headerName: 'เริ่มต้น', flex: 0.6 },
-    { field: 'end_date', headerName: 'สิ้นสุด', flex: 0.6 },
+    { field: 'activity_id',         headerName: 'ID',                    width: 60 },
+    { field: 'budget_code',         headerName: 'รหัสงบประมาณ',           width: 130, cellClassName: 'name-column--cell' },
+    { field: 'activity_code',       headerName: 'รหัสกิจกรรม',            width: 150, cellClassName: 'name-column--cell' },
+    { field: 'activity_name',       headerName: 'โครงการ/กิจกรรม (ย่อย)', width: 300 },
+    { field: 'budget_requested',    headerName: 'งบที่ขอ (บาท)',          width: 130, type: 'number' },
+    { field: 'start_date',          headerName: 'เริ่มต้น',               width: 110 },
+    { field: 'end_date',            headerName: 'สิ้นสุด',                width: 110 },
+    { field: 'target_student_y1',   headerName: 'นิสิต ปี1',              width: 90,  type: 'number' },
+    { field: 'target_student_y2',   headerName: 'นิสิต ปี2',              width: 90,  type: 'number' },
+    { field: 'target_student_y3',   headerName: 'นิสิต ปี3',              width: 90,  type: 'number' },
+    { field: 'target_student_y4',   headerName: 'นิสิต ปี4',              width: 90,  type: 'number' },
+    { field: 'target_admin',        headerName: 'ผู้บริหาร',              width: 90,  type: 'number' },
+    { field: 'target_academic',     headerName: 'วิชาการ',                width: 90,  type: 'number' },
+    { field: 'target_support',      headerName: 'สนับสนุน',               width: 90,  type: 'number' },
+    { field: 'target_student_ext',  headerName: 'นักเรียน',               width: 90,  type: 'number' },
+    { field: 'target_public',       headerName: 'บุคคลทั่วไป',            width: 100, type: 'number' },
+    { field: 'strategy',            headerName: 'ยุทธศาสตร์',             width: 120 },
+    { field: 'student_dev_standard',headerName: 'มาตรฐานนิสิต',           width: 120 },
+    { field: 'sdgs',                headerName: 'SDGs',                   width: 100 },
+    { field: 'bcg',                 headerName: 'BCG',                    width: 70 },
+    { field: 'smart_university',    headerName: 'Smart Univ.',            width: 100 },
+    { field: 'venue',               headerName: 'สถานที่',                 width: 160 },
+    { field: 'output_text',         headerName: 'ผลผลิต (output)',        width: 200 },
+    { field: 'target_value',        headerName: 'ค่าเป้าหมาย',            width: 150 },
+    { field: 'outcome',             headerName: 'ผลลัพธ์ (outcome)',       width: 200 },
+    { field: 'impact',              headerName: 'ผลกระทบ (Impact)',        width: 200 },
+    { field: 'note',                headerName: 'หมายเหตุ',               width: 150 },
     {
-      field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.2,
+      field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', width: 280,
       renderCell: (params) => (
         <Box>
           <Button onClick={() => navigate('/budgetactivity/detail', { state: { row: params.row } })}
