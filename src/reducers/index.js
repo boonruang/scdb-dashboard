@@ -29,6 +29,9 @@ import dashboardResearchReducer from "./dashboardResearch.reducer";
 import dashboardBudgetReducer from "./dashboardBudget.reducer";
 import dashboardAcademicPositionReducer from "./dashboardAcademicPosition.reducer";
 import authorProfileReducer from "./authorProfile.reducer";
+import budgetPlanReducer from "./budgetPlan.reducer";
+import budgetActivityReducer from "./budgetActivity.reducer";
+import budgetDisbursementReducer from "./budgetDisbursement.reducer";
 
 export default combineReducers({
   appReducer,
@@ -61,4 +64,7 @@ export default combineReducers({
   dashboardBudgetReducer,
   dashboardAcademicPositionReducer,
   authorProfileReducer,
+  budgetPlanReducer,
+  budgetActivityReducer,
+  budgetDisbursementReducer,
 })
