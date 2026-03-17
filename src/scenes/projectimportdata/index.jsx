@@ -53,25 +53,45 @@ const ProjectImportData = () => {
       // หา sheet ที่มีข้อมูลโครงการ (ข้ามถ้า sheet[0] ว่าง)
       let sheetIdx = 0
       for (let i = 0; i < wb.SheetNames.length; i++) {
-        const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[i]], { defval: '' })
-        if (rows.length > 0) { sheetIdx = i; break }
+        const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[i]], { header: 1, defval: '' })
+        if (rows.length > 1 && rows[1].some(v => v !== '')) { sheetIdx = i; break }
       }
 
       const ws = wb.Sheets[wb.SheetNames[sheetIdx]]
-      const raw = XLSX.utils.sheet_to_json(ws, { defval: '' })
+      // อ่านแบบ array เพราะ Excel ไฟล์มี merged header row ทำให้ row[0]=merged, row[1]=header จริง
+      const allRows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' })
 
-      const mapped = raw
-        .filter((r) => r['project_name'] || r['ชื่อโครงการ'] || r['โครงการ/กิจกรรม'])
+      // row[1] = header จริง, row[2]+ = ข้อมูล
+      // ถ้าไม่มี merged row (ไฟล์ทั่วไป) ให้ใช้ row[0] เป็น header
+      const headerRow = allRows[0].some(v => v !== '') && !allRows[0].every(v => v === '' || String(v).includes('\n'))
+        ? 0 : 1
+      const headers = allRows[headerRow]
+      const dataRows = allRows.slice(headerRow + 1).filter(r => r.some(v => v !== ''))
+
+      // map index ของ column ที่สำคัญ
+      const idx = (candidates) => candidates.reduce((found, c) => found !== -1 ? found : headers.findIndex(h => String(h).includes(c)), -1)
+
+      const iName     = idx(['โครงการ/กิจกรรม', 'project_name', 'ชื่อโครงการ'])
+      const iType     = idx(['หมวดงบประมาณ', 'project_type', 'ประเภทโครงการ'])
+      const iBudget   = idx(['งบประมาณจัดสรร', 'budget_amount', 'งบประมาณ'])
+      const iSource   = idx(['รหัสงบประมาณ', 'budget_source', 'แหล่งงบประมาณ'])
+      const iStart    = idx(['ระยะเวลาเริ่มต้น', 'start_date', 'วันเริ่มต้น'])
+      const iEnd      = idx(['ระยะเวลาสิ้นสุด', 'end_date', 'วันสิ้นสุด'])
+      const iDept     = idx(['responsible_dept_id', 'ภาควิชา'])
+      const iStatus   = idx(['สถานะ', 'status'])
+
+      const mapped = dataRows
+        .filter((r) => iName !== -1 && r[iName] !== '')
         .map((r, i) => ({
           id: i + 1,
-          project_name: String(r['project_name'] || r['ชื่อโครงการ'] || r['โครงการ/กิจกรรม'] || ''),
-          project_type: String(r['project_type'] || r['ประเภทโครงการ'] || ''),
-          responsible_dept_id: Number(r['responsible_dept_id'] || r['ภาควิชา'] || 1),
-          start_date: excelSerialToDate(r['start_date'] || r['วันเริ่มต้น'] || r['ระยะเวลาเริ่มต้น']),
-          end_date: excelSerialToDate(r['end_date'] || r['วันสิ้นสุด'] || r['ระยะเวลาสิ้นสุด']),
-          budget_source: String(r['budget_source'] || r['แหล่งงบประมาณ'] || ''),
-          budget_amount: Number(r['budget_amount'] || r['งบประมาณ'] || 0),
-          status: String(r['status'] || r['สถานะ'] || ''),
+          project_name:        String(iName   !== -1 ? r[iName]   : ''),
+          project_type:        String(iType   !== -1 ? r[iType]   : ''),
+          responsible_dept_id: Number(iDept   !== -1 ? r[iDept]   : 1) || 1,
+          start_date:          excelSerialToDate(iStart  !== -1 ? r[iStart]  : null),
+          end_date:            excelSerialToDate(iEnd    !== -1 ? r[iEnd]    : null),
+          budget_source:       String(iSource !== -1 ? r[iSource] : ''),
+          budget_amount:       Number(iBudget !== -1 ? r[iBudget] : 0) || 0,
+          status:              String(iStatus !== -1 ? r[iStatus] : ''),
         }))
 
       setData(mapped)
