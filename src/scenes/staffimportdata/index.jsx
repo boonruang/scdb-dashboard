@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, useTheme,Button } from "@mui/material"
+import { Box, useTheme, Button, MenuItem, Select, FormControl, InputLabel, Typography } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
 import AddIcon from '@mui/icons-material/Add';
@@ -33,10 +33,13 @@ const StaffImportData = () => {
     const [open, setOpen] = useState(false)
     const [rowId, setRowId] = useState(null)
 
-    const [rows, setRows] = useState([]);  // ⬅️ ประกาศตรงนี้
+    const [rows, setRows] = useState([]);
 
     const [progress, setProgress] = useState(0);
     const [showProgress, setShowProgress] = useState(false)
+    const [sheetNames, setSheetNames] = useState([])
+    const [selectedSheet, setSelectedSheet] = useState('')
+    const [workbookRef, setWorkbookRef] = useState(null)
 
 
     const loginReducer = useSelector((state) => state.app.loginReducer)
@@ -63,8 +66,21 @@ const StaffImportData = () => {
     setData([]);
     setShowProgress(false);
     setProgress(0);
+    setSheetNames([]);
+    setSelectedSheet('');
+    setWorkbookRef(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
+    }
+  };
+
+  const handleSheetChange = (e) => {
+    const name = e.target.value;
+    setSelectedSheet(name);
+    if (workbookRef) {
+      const sheet = workbookRef.Sheets[name];
+      const parsedData = XLSX.utils.sheet_to_json(sheet);
+      setData(parsedData.map((row, i) => ({ id: i + 1, ...row })));
     }
   };
 
@@ -119,11 +135,14 @@ const handleImportAllData = () => {
       const dataArray = new Uint8Array(arrayBuffer);
       const workbook = XLSX.read(dataArray, { type: "array" });
 
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
+      setWorkbookRef(workbook);
+      setSheetNames(workbook.SheetNames);
+      // auto-select first sheet
+      const firstName = workbook.SheetNames[0];
+      setSelectedSheet(firstName);
+      const sheet = workbook.Sheets[firstName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
-
-      setData(parsedData);
+      setData(parsedData.map((row, i) => ({ id: i + 1, ...row })));
 
       // โหลดเสร็จ → progress = 100%
       clearInterval(interval);
@@ -321,6 +340,17 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined } 
                 </Box>
+                {sheetNames.length > 0 && (
+                  <Box display="flex" alignItems="center" gap="12px" mb="10px">
+                    <Typography variant="body2" sx={{ color: colors.grey[300] }}>เลือก Sheet:</Typography>
+                    <FormControl size="small" sx={{ minWidth: 220 }}>
+                      <Select value={selectedSheet} onChange={handleSheetChange} sx={{ color: colors.grey[100] }}>
+                        {sheetNames.map(n => <MenuItem key={n} value={n}>{n}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                    <Typography variant="body2" sx={{ color: colors.grey[400] }}>{data.length} แถว</Typography>
+                  </Box>
+                )}
                 { showProgress ? <UploadProgresBar /> : undefined }
                 
                     <DataGrid
