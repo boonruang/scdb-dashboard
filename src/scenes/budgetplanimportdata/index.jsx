@@ -38,19 +38,22 @@ const BudgetPlanImportData = () => {
     reader.onload = (event) => {
       const wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' })
       const ws = wb.Sheets[wb.SheetNames[1]] // Sheet "แผนโครงการ"
-      const raw = XLSX.utils.sheet_to_json(ws, { defval: '' })
-      const mapped = raw
-        .filter((r) => r['รหัสงบประมาณ'])
-        .map((r, i) => ({
+      // อ่านแบบ array เพราะ Excel มี merged header row ทำให้ row[0]=merged, row[1]=header จริง
+      const allRows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' })
+      // row[1] = header จริง (รหัสงบประมาณ, โครงการ/กิจกรรม, ...)
+      const headers = allRows[1]
+      const dataRows = allRows.slice(2).filter(r => r[0] !== '')
+
+      const mapped = dataRows.map((r, i) => ({
           id: i + 1,
-          budget_code: String(r['รหัสงบประมาณ'] || ''),
-          project_name: String(r['โครงการ/กิจกรรม'] || ''),
-          budget_type: String(r['หมวดงบประมาณ'] || ''),
-          budget_amount: Number(r['งบประมาณจัดสรร'] || 0),
-          plan_q1: Number(r['แผนการใช้จ่ายงบประมาณไตรมาส 1'] || 0),
-          plan_q2: Number(r['แผนการใช้จ่ายงบประมาณไตรมาส 2'] || 0),
-          plan_q3: Number(r['แผนการใช้จ่ายงบประมาณไตรมาส 3'] || 0),
-          plan_q4: Number(r['แผนการใช้จ่ายงบประมาณไตรมาส 4'] || 0),
+          budget_code:   String(r[headers.indexOf('รหัสงบประมาณ')] || ''),
+          project_name:  String(r[headers.indexOf('โครงการ/กิจกรรม')] || ''),
+          budget_type:   String(r[headers.indexOf('หมวดงบประมาณ')] || ''),
+          budget_amount: Number(r[headers.indexOf('งบประมาณจัดสรร')] || 0),
+          plan_q1:       Number(r[headers.indexOf('แผนการใช้จ่ายงบประมาณไตรมาส 1')] || 0),
+          plan_q2:       Number(r[headers.indexOf('แผนการใช้จ่ายงบประมาณไตรมาส 2')] || 0),
+          plan_q3:       Number(r[headers.indexOf('แผนการใช้จ่ายงบประมาณไตรมาส 3')] || 0),
+          plan_q4:       Number(r[headers.indexOf('แผนการใช้จ่ายงบประมาณไตรมาส 4')] || 0),
         }))
       setData(mapped)
       clearInterval(interval); setProgress(100)

@@ -40,17 +40,28 @@ const BudgetActivityImportData = () => {
     reader.onload = (event) => {
       const wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' })
       const ws = wb.Sheets[wb.SheetNames[2]] // Sheet "ขออนุมัติจัดโครงการ"
-      const raw = XLSX.utils.sheet_to_json(ws, { defval: '' })
-      const mapped = raw
-        .filter((r) => r['รหัสงบประมาณ'] && r['โครงการ/กิจกรรม (ย่อย)'])
+      // row[0]=merged header, row[1]=header จริง, row[2]+= ข้อมูล
+      const allRows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' })
+      const headers = allRows[1]
+      const dataRows = allRows.slice(2).filter(r => r[0] !== '')
+
+      const iCode     = headers.findIndex(h => String(h).includes('รหัสงบประมาณ'))
+      const iActCode  = headers.findIndex(h => String(h).includes('รหัสโครงการ/กิจกรรม'))
+      const iActName  = headers.findIndex(h => String(h).includes('โครงการ/กิจกรรม (ย่อย)'))
+      const iBudget   = headers.findIndex(h => String(h).includes('งบประมาณที่ขอ'))
+      const iStart    = headers.findIndex(h => String(h).includes('ระยะเวลาเริ่มต้น'))
+      const iEnd      = headers.findIndex(h => String(h).includes('ระยะเวลาสิ้นสุด'))
+
+      const mapped = dataRows
+        .filter((r) => r[iActName] !== '')
         .map((r, i) => ({
           id: i + 1,
-          budget_code: String(r['รหัสงบประมาณ'] || ''),
-          activity_code: String(r['รหัสโครงการ/กิจกรรม (ย่อย)'] || ''),
-          activity_name: String(r['โครงการ/กิจกรรม (ย่อย)'] || ''),
-          budget_requested: Number(r['งบประมาณที่ขอ\n(บาท)'] || r['งบประมาณที่ขอ'] || 0),
-          start_date: excelSerialToDate(r['ระยะเวลาเริ่มต้นโครงการ\n(ว/ด/ป)'] || r['ระยะเวลาเริ่มต้นโครงการ']),
-          end_date: excelSerialToDate(r['ระยะเวลาสิ้นสุดโครงการ\n(ว/ด/ป)'] || r['ระยะเวลาสิ้นสุดโครงการ']),
+          budget_code:      String(iCode    !== -1 ? r[iCode]    : ''),
+          activity_code:    String(iActCode !== -1 ? r[iActCode] : ''),
+          activity_name:    String(iActName !== -1 ? r[iActName] : ''),
+          budget_requested: Number(iBudget  !== -1 ? r[iBudget]  : 0) || 0,
+          start_date:       excelSerialToDate(iStart !== -1 ? r[iStart] : null),
+          end_date:         excelSerialToDate(iEnd   !== -1 ? r[iEnd]   : null),
         }))
       setData(mapped)
       clearInterval(interval); setProgress(100)

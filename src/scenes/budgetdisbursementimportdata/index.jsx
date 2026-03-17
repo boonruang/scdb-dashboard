@@ -40,16 +40,25 @@ const BudgetDisbursementImportData = () => {
     reader.onload = (event) => {
       const wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' })
       const ws = wb.Sheets[wb.SheetNames[3]] // Sheet "เบิกจ่ายงบประมาณ"
-      const raw = XLSX.utils.sheet_to_json(ws, { defval: '' })
-      const mapped = raw
-        .filter((r) => r['รหัสโครงการ/กิจกรรม (ย่อย)'])
+      // row[0]=merged header, row[1]=header จริง, row[2]+= ข้อมูล
+      const allRows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' })
+      const headers = allRows[1]
+      const dataRows = allRows.slice(2).filter(r => r[0] !== '')
+
+      const iActCode = headers.findIndex(h => String(h).includes('รหัสโครงการ/กิจกรรม'))
+      const iDate    = headers.findIndex(h => String(h).includes('ว/ด/ป'))
+      const iType    = headers.findIndex(h => String(h).includes('ประเภท'))
+      const iAmount  = headers.findIndex(h => String(h).includes('งบประมาณที่เบิก'))
+      const iNote    = headers.findIndex(h => String(h).includes('หมายเหตุ'))
+
+      const mapped = dataRows
         .map((r, i) => ({
           id: i + 1,
-          activity_code: String(r['รหัสโครงการ/กิจกรรม (ย่อย)'] || ''),
-          disburse_date: excelSerialToDate(r['ว/ด/ป']),
-          disburse_type: String(r['ประเภท'] || '').trim(),
-          amount: Number(r['งบประมาณที่เบิก\n(บาท)'] || r['งบประมาณที่เบิก'] || 0),
-          note: String(r['หมายเหตุ'] || ''),
+          activity_code: String(iActCode !== -1 ? r[iActCode] : ''),
+          disburse_date: excelSerialToDate(iDate !== -1 ? r[iDate] : null),
+          disburse_type: String(iType   !== -1 ? r[iType]   : '').trim(),
+          amount:        Number(iAmount  !== -1 ? r[iAmount]  : 0) || 0,
+          note:          String(iNote    !== -1 ? r[iNote]    : ''),
         }))
       setData(mapped)
       clearInterval(interval); setProgress(100)
