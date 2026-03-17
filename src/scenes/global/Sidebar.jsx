@@ -410,14 +410,28 @@ const Sidebar = () => {
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                               
-                            {/* <Item
-                                title="การติดตามเอกสาร"
-                                to="/document"
+                            />
+                            <Item
+                                title="นำเข้าแผนโครงการ/งบประมาณ"
+                                to="/budgetplan/importdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />  */}
+                            />
+                            <Item
+                                title="นำเข้าข้อมูลกิจกรรม"
+                                to="/budgetactivity/importdata"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="นำเข้าข้อมูลเบิกจ่าย"
+                                to="/budgetdisbursement/importdata"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
                          </SubMenu>   : undefined  }         
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))

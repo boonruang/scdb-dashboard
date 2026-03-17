@@ -68,6 +68,9 @@ import PublicationDetail from "scenes/publication/PublicationDetail";
 import PublicationEdit from "scenes/publication/PublicationEdit"; 
 
 import ProjectImportData from "scenes/projectimportdata";
+import BudgetPlanImportData from "scenes/budgetplanimportdata";
+import BudgetActivityImportData from "scenes/budgetactivityimportdata";
+import BudgetDisbursementImportData from "scenes/budgetdisbursementimportdata";
 
 import ProjectList from "scenes/project";
 import ProjectAdd from "scenes/project/ProjectAdd"; 
@@ -181,7 +184,10 @@ function App() {
           <Route path="project/edit" element={<ProjectEdit />} />
           <Route path="project" element={<ProjectList />} />     
 
-          <Route path="project/importdata" element={<ProjectImportData />} />     
+          <Route path="project/importdata" element={<ProjectImportData />} />
+          <Route path="budgetplan/importdata" element={<BudgetPlanImportData />} />
+          <Route path="budgetactivity/importdata" element={<BudgetActivityImportData />} />
+          <Route path="budgetdisbursement/importdata" element={<BudgetDisbursementImportData />} />
 
           <Route path="document/add" element={<DocumentAdd />} />
           <Route path="document/detail" element={<DocumentDetail />} />
