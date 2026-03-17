@@ -33,25 +33,29 @@ const PublicationImportData2 = () => {
     reader.readAsArrayBuffer(file)
     reader.onload = (event) => {
       const wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' })
-      const ws = wb.Sheets[wb.SheetNames[2]] // Sheet "Paper 2025"
+      // SheetNames: [0]=dashboard design, [1]=Author profile, [2]=Author profile สายสนับสนุน, [3]=Paper
+      const ws = wb.Sheets[wb.SheetNames[3]] // Sheet "Paper"
       const raw = XLSX.utils.sheet_to_json(ws, { defval: '' })
+      // Paper sheet columns: คอลัมน์ 1=paper ID (P1,P2..), ID(A)=author ID, ชื่อเรื่อง, ค.ศ., ฯลฯ
+      // unique papers only (deduplicate by คอลัมน์ 1)
+      const seenPapers = new Set()
       const mapped = raw
-        .filter((r) => r['ชื่อเรื่อง'])
+        .filter((r) => r['ชื่อเรื่อง'] && !seenPapers.has(r['คอลัมน์ 1']) && seenPapers.add(r['คอลัมน์ 1']))
         .map((r, i) => ({
           id: i + 1,
-          spreadsheet_id: String(r['ID(A)'] || ''),
-          title: String(r['ชื่อเรื่อง'] || ''),
+          spreadsheet_id: String(r['คอลัมน์ 1'] || ''),
+          title: String(r['ชื่อเรื่อง'] || '').trim(),
           journal_name: String(r['ชื่อวารสาร'] || ''),
           publication_year: Number(r['ค.ศ.'] || 0),
           issn: String(r['ISSN'] || ''),
-          doi: String(r['DOI'] || ''),
+          doi: String(r['DOI '] || r['DOI'] || '').trim(),
           quartile: String(r['Q (Scopus)'] || ''),
           q_scie: String(r['Q (SCIE)'] || ''),
           impact_factor: Number(r['IF'] || 0) || null,
-          is_scopus: r['Scopus'] === 'Y' || r['Scopus'] === 1,
-          is_isi: r['ISI'] === 'Y' || r['ISI'] === 1,
-          collab_type: r['ร่วมกับ'] === 'ต่างประเทศ' || r['ต่างปนะเทศ'] ? 'ต่างประเทศ' : 'ไทย',
-          is_international: r['ต่างปนะเทศ'] === 'Y' || r['ต่างปนะเทศ'] === 1,
+          is_scopus: r['Scopus'] === 1 || r['Scopus'] === '1',
+          is_isi: r['ISI'] === 1 || r['ISI'] === '1',
+          collab_type: String(r['ร่วมกับ'] || 'ไทย'),
+          is_international: r['ต่างปนะเทศ'] === 1 || r['ต่างปนะเทศ'] === '1',
           database_source: r['Scopus'] ? 'Scopus' : r['ISI'] ? 'ISI' : 'Other',
           photo_url: String(r['URL รูป (ตีพิมพ์)'] || ''),
         }))
@@ -109,7 +113,7 @@ const PublicationImportData2 = () => {
 
   return (
     <Box m="20px">
-      <Header title="นำเข้าผลงานวิจัยตีพิมพ์" subtitle="นำเข้าจากไฟล์ Excel (Sheet: Paper 2025)" />
+      <Header title="นำเข้าผลงานวิจัยตีพิมพ์" subtitle="นำเข้าจากไฟล์ Excel (Sheet: Paper)" />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
         <Box display="flex" justifyContent="end" mb="10px">
           <form>

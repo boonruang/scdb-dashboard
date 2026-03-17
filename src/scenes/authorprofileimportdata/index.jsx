@@ -30,8 +30,9 @@ const AuthorProfileImportData = () => {
   const [data, setData] = useState([])
   const [showProgress, setShowProgress] = useState(false)
   const [progress, setProgress] = useState(0)
-  // which sheet to read: 0 = สายวิชาการ, 1 = สายหนุน
-  const [sheetIndex, setSheetIndex] = useState(0)
+  // SheetNames: [0]=dashboard design, [1]=Author profile, [2]=Author profile สายสนับสนุน, [3]=Paper
+  // which sheet to read: 1 = สายวิชาการ, 2 = สายสนับสนุน
+  const [sheetIndex, setSheetIndex] = useState(1)
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -123,7 +124,7 @@ const AuthorProfileImportData = () => {
     padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover },
   })
   const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r))
-  const sheetLabel = sheetIndex === 0 ? 'สายวิชาการ (Sheet 1)' : 'สายสนับสนุน (Sheet 2)'
+  const sheetLabel = sheetIndex === 1 ? 'สายวิชาการ' : 'สายสนับสนุน'
 
   return (
     <Box m="20px">
@@ -135,8 +136,8 @@ const AuthorProfileImportData = () => {
           </form>
           {canEdit && (
             <Button
-              sx={btnStyle(sheetIndex === 0 ? colors.greenAccent[700] : colors.blueAccent[600], colors.greenAccent[900])}
-              onClick={() => setSheetIndex(sheetIndex === 0 ? 1 : 0)}
+              sx={btnStyle(sheetIndex === 1 ? colors.greenAccent[700] : colors.blueAccent[600], colors.greenAccent[900])}
+              onClick={() => setSheetIndex(sheetIndex === 1 ? 2 : 1)}
             >
               {sheetLabel}
             </Button>
