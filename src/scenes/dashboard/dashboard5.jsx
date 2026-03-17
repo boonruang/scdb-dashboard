@@ -65,16 +65,25 @@ const KpiCard = ({ icon, value, unit, label, iconBg, colSpan }) => {
 }
 
 // ── Budget Progress Bar ───────────────────────────────────────────────
-const BudgetBar = ({ budget, disbursed }) => {
-    const pct = budget > 0 ? Math.min(100, (disbursed / budget) * 100) : 0
-    const color = pct >= 80 ? '#4caf50' : pct >= 50 ? '#ff9800' : '#1976d2'
+const BudgetBar = ({ budget, disbursed, committed }) => {
+    const pctDisbursed = budget > 0 ? Math.min(100, (disbursed / budget) * 100) : 0
+    const pctCommitted = budget > 0 ? Math.min(100 - pctDisbursed, (committed / budget) * 100) : 0
+    const pctTotal     = Math.min(100, pctDisbursed + pctCommitted)
+    const totalColor   = pctTotal >= 80 ? '#4caf50' : pctTotal >= 50 ? '#ff9800' : '#1976d2'
     return (
-        <Box sx={{ width: '100%', minWidth: 80 }}>
-            <Box sx={{ height: 6, borderRadius: 3, backgroundColor: '#ffffff20', position: 'relative', overflow: 'hidden' }}>
-                <Box sx={{ width: `${pct}%`, height: '100%', backgroundColor: color, borderRadius: 3, transition: 'width 0.5s' }} />
+        <Box sx={{ width: '100%', minWidth: 160 }}>
+            <Box sx={{ height: 8, borderRadius: 4, backgroundColor: '#ffffff15', display: 'flex', overflow: 'hidden', mb: '4px' }}>
+                <Box sx={{ width: `${pctDisbursed}%`, height: '100%', backgroundColor: '#4caf50', transition: 'width 0.5s' }} />
+                <Box sx={{ width: `${pctCommitted}%`, height: '100%', backgroundColor: '#ff9800', transition: 'width 0.5s' }} />
             </Box>
-            <Typography variant="caption" sx={{ color, fontSize: '0.65rem' }}>
-                {pct.toFixed(1)}%
+            <Typography display="block" sx={{ color: '#4caf50', fontSize: '14px', whiteSpace: 'nowrap' }}>
+                จ่าย {pctDisbursed.toFixed(1)}%
+            </Typography>
+            <Typography display="block" sx={{ color: '#ff9800', fontSize: '14px', whiteSpace: 'nowrap' }}>
+                ผูกพัน {pctCommitted.toFixed(1)}%
+            </Typography>
+            <Typography display="block" sx={{ color: totalColor, fontSize: '14px', fontWeight: 'bold', whiteSpace: 'nowrap', borderTop: '1px solid rgba(255,255,255,0.1)', mt: '2px', pt: '2px' }}>
+                รวม {pctTotal.toFixed(1)}%
             </Typography>
         </Box>
     )
@@ -220,11 +229,11 @@ const DashboardBudget = () => {
                                             {headerCell('โครงการ/กิจกรรม')}
                                             {headerCell('หมวดงบ', 'center')}
                                             {headerCell('งบประมาณ (บาท)', 'right')}
-                                            {headerCell('ไตรมาส 1', 'right')}
-                                            {headerCell('ไตรมาส 2', 'right')}
-                                            {headerCell('ไตรมาส 3', 'right')}
-                                            {headerCell('ไตรมาส 4', 'right')}
-                                            {headerCell('% เบิกจ่าย', 'center')}
+                                            {headerCell('ไตรมาส 1', 'center')}
+                                            {headerCell('ไตรมาส 2', 'center')}
+                                            {headerCell('ไตรมาส 3', 'center')}
+                                            {headerCell('ไตรมาส 4', 'center')}
+                                            {headerCell('เบิกจ่าย / ผูกพัน', 'center')}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -247,43 +256,54 @@ const DashboardBudget = () => {
                                                     }
                                                 }}
                                             >
-                                                <TableCell align="center" sx={{ color: colors.grey[400], fontSize: '14px' }}>
+                                                <TableCell align="center" sx={{ color: colors.grey[400], fontSize: '14px', py: '12px' }}>
                                                     {(page - 1) * limit + idx + 1}
                                                 </TableCell>
-                                                <TableCell sx={{ color: colors.grey[200], fontWeight: '600', whiteSpace: 'nowrap', fontSize: '14px' }}>
+                                                <TableCell sx={{ color: colors.grey[200], fontWeight: '600', whiteSpace: 'nowrap', fontSize: '16px', py: '12px' }}>
                                                     {row.budgetCode}
                                                 </TableCell>
-                                                <TableCell sx={{ color: colors.grey[100], maxWidth: 280, fontSize: '14px' }}>
+                                                <TableCell sx={{ color: colors.grey[100], maxWidth: 320, fontSize: '16px', py: '12px' }}>
                                                     {row.name}
                                                 </TableCell>
-                                                <TableCell align="center">
+                                                <TableCell align="center" sx={{ py: '12px' }}>
                                                     <Chip
                                                         label={row.budgetType === '1.หมวดงบแผ่นดิน' ? 'งบแผ่นดิน' : 'งบรายได้'}
                                                         size="small"
                                                         sx={{
-                                                            height: 20, fontSize: '12px',
+                                                            height: 24, fontSize: '13px',
                                                             backgroundColor: budgetTypeColor[row.budgetType] || colors.primary[300],
                                                             color: '#fff', fontWeight: 'bold'
                                                         }}
                                                     />
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[100], fontWeight: '600', fontSize: '14px' }}>
+                                                <TableCell align="right" sx={{ color: colors.grey[100], fontWeight: '600', fontSize: '14px', py: '12px', whiteSpace: 'nowrap' }}>
                                                     {fmt(row.budget)}
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
-                                                    {row.q1Budget > 0 ? fmt(row.q1Budget) : '-'}
-                                                </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
-                                                    {row.q2Budget > 0 ? fmt(row.q2Budget) : '-'}
-                                                </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
-                                                    {row.q3Budget > 0 ? fmt(row.q3Budget) : '-'}
-                                                </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[300], fontSize: '14px' }}>
-                                                    {row.q4Budget > 0 ? fmt(row.q4Budget) : '-'}
-                                                </TableCell>
+                                                                {[1,2,3,4].map(q => {
+                                                    const disb = row[`q${q}Disbursed`] || 0
+                                                    const comm = row[`q${q}Committed`] || 0
+                                                    const total = disb + comm
+                                                    return (
+                                                    <TableCell key={q} align="right" sx={{ whiteSpace: 'nowrap', py: '12px', minWidth: 160 }}>
+                                                        <Box>
+                                                            <Typography display="block" sx={{ color: colors.grey[400], fontSize: '14px' }}>
+                                                                แผน {row[`q${q}Budget`] > 0 ? fmt(row[`q${q}Budget`]) : '-'}
+                                                            </Typography>
+                                                            <Typography display="block" sx={{ color: '#4caf50', fontSize: '14px' }}>
+                                                                จ่าย {disb > 0 ? fmt(disb) : '-'}
+                                                            </Typography>
+                                                            <Typography display="block" sx={{ color: '#ff9800', fontSize: '14px' }}>
+                                                                ผูกพัน {comm > 0 ? fmt(comm) : '-'}
+                                                            </Typography>
+                                                            <Typography display="block" sx={{ color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', borderTop: `1px solid ${colors.primary[300]}`, mt: '2px', pt: '2px' }}>
+                                                                รวม {total > 0 ? fmt(total) : '-'}
+                                                            </Typography>
+                                                        </Box>
+                                                    </TableCell>
+                                                    )
+                                                })}
                                                 <TableCell align="center">
-                                                    <BudgetBar budget={row.budget} disbursed={row.disbursed} />
+                                                    <BudgetBar budget={row.budget} disbursed={row.disbursed} committed={row.committed} />
                                                 </TableCell>
                                             </TableRow>
                                         ))}

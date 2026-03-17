@@ -55,15 +55,15 @@ const BudgetPlanList = () => {
     { field: 'plan_id', headerName: 'ID', flex: 0.3 },
     { field: 'budget_code', headerName: 'รหัสงบประมาณ', flex: 0.8, cellClassName: 'name-column--cell' },
     { field: 'project_name', headerName: 'โครงการ/กิจกรรม', flex: 2, cellClassName: 'name-column--cell' },
-    { field: 'budget_type', headerName: 'หมวดงบ', flex: 0.8 },
-    { field: 'budget_amount', headerName: 'งบประมาณ (บาท)', flex: 0.8, type: 'number' },
+    { field: 'budget_type', headerName: 'หมวดงบ', flex: 0.7 },
+    { field: 'budget_amount', headerName: 'งบประมาณ (บาท)', flex: 0.7, type: 'number' },
     { field: 'plan_q1', headerName: 'ไตรมาส 1', flex: 0.6, type: 'number' },
     { field: 'plan_q2', headerName: 'ไตรมาส 2', flex: 0.6, type: 'number' },
     { field: 'plan_q3', headerName: 'ไตรมาส 3', flex: 0.6, type: 'number' },
     { field: 'plan_q4', headerName: 'ไตรมาส 4', flex: 0.6, type: 'number' },
-    { field: 'fiscal_year', headerName: 'ปีงบประมาณ (ค.ศ.)', flex: 0.7 },
+    { field: 'fiscal_year', headerName: 'ปีงบประมาณ (ค.ศ.)', flex: 0.6 },
     {
-      field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.2,
+      field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', width: 260, minWidth: 260,
       renderCell: (params) => (
         <Box>
           <Button onClick={() => navigate('/budgetplan/detail', { state: { row: params.row } })}

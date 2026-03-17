@@ -56,7 +56,7 @@ const BudgetDisbursementList = () => {
     { field: 'amount', headerName: 'จำนวนเงิน (บาท)', flex: 0.7, type: 'number' },
     { field: 'note', headerName: 'หมายเหตุ', flex: 1.5 },
     {
-      field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.2,
+      field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', width: 280, minWidth: 280,
       renderCell: (params) => (
         <Box>
           <Button onClick={() => navigate('/budgetdisbursement/detail', { state: { row: params.row } })}
