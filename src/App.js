@@ -56,6 +56,9 @@ import AdmissionPlanDetail from "scenes/admissionplan/AdmissionPlanDetail";
 import AdmissionPlanEdit from "scenes/admissionplan/AdmissionPlanEdit"; 
 
 import PublicationImportData from "scenes/publicationimportdata";
+import PublicationImportData2 from "scenes/publicationimportdata2";
+import AuthorProfileList from "scenes/authorprofile";
+import AuthorProfileImportData from "scenes/authorprofileimportdata";
 
 import PublicationList from "scenes/publication";
 import PublicationAdd from "scenes/publication/PublicationAdd"; 
@@ -164,7 +167,10 @@ function App() {
           <Route path="publication/edit" element={<PublicationEdit />} />
           <Route path="publication" element={<PublicationList />} />     
 
-          <Route path="publication/importdata" element={<PublicationImportData />} />     
+          <Route path="publication/importdata" element={<PublicationImportData />} />
+          <Route path="publication/importdata2" element={<PublicationImportData2 />} />
+          <Route path="authorprofile" element={<AuthorProfileList />} />
+          <Route path="authorprofile/importdata" element={<AuthorProfileImportData />} />
 
           <Route path="project/add" element={<ProjectAdd />} />
           <Route path="project/detail" element={<ProjectDetail />} />
