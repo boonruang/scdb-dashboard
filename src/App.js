@@ -73,12 +73,15 @@ import BudgetActivityImportData from "scenes/budgetactivityimportdata";
 import BudgetDisbursementImportData from "scenes/budgetdisbursementimportdata";
 import BudgetPlanList from "scenes/budgetplan";
 import BudgetPlanAdd from "scenes/budgetplan/BudgetPlanAdd";
+import BudgetPlanDetail from "scenes/budgetplan/BudgetPlanDetail";
 import BudgetPlanEdit from "scenes/budgetplan/BudgetPlanEdit";
 import BudgetActivityList from "scenes/budgetactivity";
 import BudgetActivityAdd from "scenes/budgetactivity/BudgetActivityAdd";
+import BudgetActivityDetail from "scenes/budgetactivity/BudgetActivityDetail";
 import BudgetActivityEdit from "scenes/budgetactivity/BudgetActivityEdit";
 import BudgetDisbursementList from "scenes/budgetdisbursement";
 import BudgetDisbursementAdd from "scenes/budgetdisbursement/BudgetDisbursementAdd";
+import BudgetDisbursementDetail from "scenes/budgetdisbursement/BudgetDisbursementDetail";
 import BudgetDisbursementEdit from "scenes/budgetdisbursement/BudgetDisbursementEdit";
 
 import ProjectList from "scenes/project";
@@ -196,14 +199,17 @@ function App() {
           <Route path="project/importdata" element={<ProjectImportData />} />
           <Route path="budgetplan" element={<BudgetPlanList />} />
           <Route path="budgetplan/add" element={<BudgetPlanAdd />} />
+          <Route path="budgetplan/detail" element={<BudgetPlanDetail />} />
           <Route path="budgetplan/edit" element={<BudgetPlanEdit />} />
           <Route path="budgetplan/importdata" element={<BudgetPlanImportData />} />
           <Route path="budgetactivity" element={<BudgetActivityList />} />
           <Route path="budgetactivity/add" element={<BudgetActivityAdd />} />
+          <Route path="budgetactivity/detail" element={<BudgetActivityDetail />} />
           <Route path="budgetactivity/edit" element={<BudgetActivityEdit />} />
           <Route path="budgetactivity/importdata" element={<BudgetActivityImportData />} />
           <Route path="budgetdisbursement" element={<BudgetDisbursementList />} />
           <Route path="budgetdisbursement/add" element={<BudgetDisbursementAdd />} />
+          <Route path="budgetdisbursement/detail" element={<BudgetDisbursementDetail />} />
           <Route path="budgetdisbursement/edit" element={<BudgetDisbursementEdit />} />
           <Route path="budgetdisbursement/importdata" element={<BudgetDisbursementImportData />} />
 

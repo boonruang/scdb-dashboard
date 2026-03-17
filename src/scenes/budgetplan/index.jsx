@@ -66,6 +66,8 @@ const BudgetPlanList = () => {
       field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.2,
       renderCell: (params) => (
         <Box>
+          <Button onClick={() => navigate('/budgetplan/detail', { state: { row: params.row } })}
+            variant="outlined" color="success" sx={{ mr: 1 }}>รายละเอียด</Button>
           {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r)) &&
             <Button onClick={() => navigate('/budgetplan/edit', { state: { row: params.row } })}
               variant="outlined" color="info" sx={{ mr: 1 }}>แก้ไข</Button>}

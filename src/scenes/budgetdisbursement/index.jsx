@@ -59,6 +59,8 @@ const BudgetDisbursementList = () => {
       field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.2,
       renderCell: (params) => (
         <Box>
+          <Button onClick={() => navigate('/budgetdisbursement/detail', { state: { row: params.row } })}
+            variant="outlined" color="success" sx={{ mr: 1 }}>รายละเอียด</Button>
           {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r)) &&
             <Button onClick={() => navigate('/budgetdisbursement/edit', { state: { row: params.row } })}
               variant="outlined" color="info" sx={{ mr: 1 }}>แก้ไข</Button>}
