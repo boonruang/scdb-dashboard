@@ -412,6 +412,13 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
+                                title="แผนโครงการ/งบประมาณ"
+                                to="/budgetplan"
+                                icon={<MenuBookIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="นำเข้าแผนโครงการ/งบประมาณ"
                                 to="/budgetplan/importdata"
                                 icon={<StickyNote2Icon />}
@@ -419,9 +426,23 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
+                                title="ข้อมูลกิจกรรม"
+                                to="/budgetactivity"
+                                icon={<MenuBookIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="นำเข้าข้อมูลกิจกรรม"
                                 to="/budgetactivity/importdata"
                                 icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ข้อมูลเบิกจ่าย"
+                                to="/budgetdisbursement"
+                                icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
