@@ -14,9 +14,11 @@ import { bulkImportBudgetActivity } from '../../actions/budgetActivity.action'
 
 const excelSerialToDate = (serial) => {
   if (!serial || isNaN(serial)) return null
-  const date = new Date((serial - 25569) * 86400 * 1000)
-  return date.toISOString().split('T')[0]
+  return new Date((serial - 25569) * 86400 * 1000).toISOString().split('T')[0]
 }
+
+const num = (v) => Number(v) || 0
+const str = (v) => String(v || '').trim()
 
 const BudgetActivityImportData = () => {
   const theme = useTheme()
@@ -42,27 +44,46 @@ const BudgetActivityImportData = () => {
       const ws = wb.Sheets[wb.SheetNames[2]] // Sheet "ขออนุมัติจัดโครงการ"
       // row[0]=merged header, row[1]=header จริง, row[2]+= ข้อมูล
       const allRows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' })
-      const headers = allRows[1]
       const dataRows = allRows.slice(2).filter(r => r[0] !== '')
 
-      const iCode     = headers.findIndex(h => String(h).includes('รหัสงบประมาณ'))
-      const iActCode  = headers.findIndex(h => String(h).includes('รหัสโครงการ/กิจกรรม'))
-      const iActName  = headers.findIndex(h => String(h).includes('โครงการ/กิจกรรม (ย่อย)'))
-      const iBudget   = headers.findIndex(h => String(h).includes('งบประมาณที่ขอ'))
-      const iStart    = headers.findIndex(h => String(h).includes('ระยะเวลาเริ่มต้น'))
-      const iEnd      = headers.findIndex(h => String(h).includes('ระยะเวลาสิ้นสุด'))
-
+      // auto-generate activity_code: budget_code + running number (001, 002...)
+      const countPerBudget = {}
       const mapped = dataRows
-        .filter((r) => r[iActName] !== '')
-        .map((r, i) => ({
-          id: i + 1,
-          budget_code:      String(iCode    !== -1 ? r[iCode]    : ''),
-          activity_code:    String(iActCode !== -1 ? r[iActCode] : ''),
-          activity_name:    String(iActName !== -1 ? r[iActName] : ''),
-          budget_requested: Number(iBudget  !== -1 ? r[iBudget]  : 0) || 0,
-          start_date:       excelSerialToDate(iStart !== -1 ? r[iStart] : null),
-          end_date:         excelSerialToDate(iEnd   !== -1 ? r[iEnd]   : null),
-        }))
+        .filter(r => str(r[2]) !== '') // col[2] = activity_name ต้องมีค่า
+        .map((r, i) => {
+          const bc = str(r[0]) // col[0] = budget_code
+          countPerBudget[bc] = (countPerBudget[bc] || 0) + 1
+          const actCode = bc + String(countPerBudget[bc]).padStart(3, '0')
+          return {
+            id: i + 1,
+            budget_code:          bc,
+            activity_code:        actCode,
+            activity_name:        str(r[2]),
+            budget_requested:     num(r[3]),
+            start_date:           excelSerialToDate(r[18]),
+            end_date:             excelSerialToDate(r[19]),
+            target_student_y1:    num(r[4]),
+            target_student_y2:    num(r[5]),
+            target_student_y3:    num(r[6]),
+            target_student_y4:    num(r[7]),
+            target_admin:         num(r[8]),
+            target_academic:      num(r[9]),
+            target_support:       num(r[10]),
+            target_student_ext:   num(r[11]),
+            target_public:        num(r[12]),
+            strategy:             str(r[13]),
+            student_dev_standard: str(r[14]),
+            sdgs:                 str(r[15]),
+            bcg:                  str(r[16]),
+            smart_university:     str(r[17]),
+            venue:                str(r[20]),
+            output_text:          str(r[21]),
+            target_value:         str(r[22]),
+            outcome:              str(r[23]),
+            impact:               str(r[24]),
+            note:                 str(r[25]),
+          }
+        })
       setData(mapped)
       clearInterval(interval); setProgress(100)
       setTimeout(() => { setShowProgress(false); setProgress(0) }, 500)
@@ -80,7 +101,10 @@ const BudgetActivityImportData = () => {
     else alert('เกิดข้อผิดพลาด: ' + (res?.error || ''))
   }
 
-  const handleClear = () => { setData([]); setShowProgress(false); setProgress(0); if (fileInputRef.current) fileInputRef.current.value = null }
+  const handleClear = () => {
+    setData([]); setShowProgress(false); setProgress(0)
+    if (fileInputRef.current) fileInputRef.current.value = null
+  }
 
   const dgStyles = {
     '& .MuiDataGrid-root': { border: 1, borderColor: colors.greenAccent[500] },
@@ -90,13 +114,16 @@ const BudgetActivityImportData = () => {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ลำดับ', flex: 0.3, headerAlign: 'center', align: 'center' },
-    { field: 'budget_code', headerName: 'รหัสงบประมาณ', flex: 0.7, cellClassName: 'name-column--cell' },
-    { field: 'activity_code', headerName: 'รหัสกิจกรรม', flex: 0.8 },
-    { field: 'activity_name', headerName: 'ชื่อกิจกรรม', flex: 2 },
-    { field: 'budget_requested', headerName: 'งบที่ขอ (บาท)', flex: 0.7, type: 'number' },
-    { field: 'start_date', headerName: 'เริ่มต้น', flex: 0.6 },
-    { field: 'end_date', headerName: 'สิ้นสุด', flex: 0.6 },
+    { field: 'id',                  headerName: 'ลำดับ',          flex: 0.3, headerAlign: 'center', align: 'center' },
+    { field: 'budget_code',         headerName: 'รหัสงบประมาณ',   flex: 0.7, cellClassName: 'name-column--cell' },
+    { field: 'activity_code',       headerName: 'รหัสกิจกรรม',    flex: 0.9, cellClassName: 'name-column--cell' },
+    { field: 'activity_name',       headerName: 'ชื่อกิจกรรม',    flex: 2 },
+    { field: 'budget_requested',    headerName: 'งบที่ขอ (บาท)',  flex: 0.7, type: 'number' },
+    { field: 'start_date',          headerName: 'เริ่มต้น',        flex: 0.6 },
+    { field: 'end_date',            headerName: 'สิ้นสุด',         flex: 0.6 },
+    { field: 'venue',               headerName: 'สถานที่',          flex: 0.8 },
+    { field: 'sdgs',                headerName: 'SDGs',            flex: 0.5 },
+    { field: 'strategy',            headerName: 'ยุทธศาสตร์',      flex: 0.5 },
   ]
 
   const btnStyle = (bg, hover) => ({ backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover } })
@@ -104,7 +131,7 @@ const BudgetActivityImportData = () => {
 
   return (
     <Box m="20px">
-      <Header title="นำเข้าข้อมูลกิจกรรมโครงการ" subtitle="นำเข้าจากไฟล์ Excel (Sheet: เข้ากิจกรรม)" />
+      <Header title="นำเข้าข้อมูลกิจกรรมโครงการ" subtitle="นำเข้าจากไฟล์ Excel (Sheet: ขออนุมัติจัดโครงการ)" />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
         <Box display="flex" justifyContent="end" mb="10px">
           <form><input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} /></form>
