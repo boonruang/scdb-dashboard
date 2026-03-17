@@ -12,12 +12,12 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { bulkUpdateAuthorProfile } from '../../actions/authorProfile.action'
 
-// Map department Thai name → department_id based on faculty structure
+// Map department name → department_id (รองรับทั้งภาษาไทยและอังกฤษ)
 const DEPT_MAP = {
-  'ชีววิทยา': 1,
-  'คณิตศาสตร์': 2,
-  'เคมี': 3,
-  'ฟิสิกส์': 4,
+  'ชีววิทยา': 1, 'Biology': 1,
+  'คณิตศาสตร์': 2, 'Mathematics': 2, 'Math': 2,
+  'เคมี': 3, 'Chemistry': 3,
+  'ฟิสิกส์': 4, 'Physics': 4,
 }
 
 const AuthorProfileImportData = () => {
@@ -51,8 +51,8 @@ const AuthorProfileImportData = () => {
           id: i + 1,
           spreadsheet_id: String(r['ID(A)'] || ''),
           title_th: String(r['ตำแหน่งวิชาการ'] || ''),
-          firstname_th: String((r['รายชื่ออาจารย์'] || '').split(' ')[0] || ''),
-          lastname_th: String((r['รายชื่ออาจารย์'] || '').split(' ').slice(1).join(' ') || ''),
+          firstname_th: String((r['รายชื่ออาจารย์'] || '').trim().split(' ')[0] || ''),
+          lastname_th: String((r['รายชื่ออาจารย์'] || '').trim().split(' ').slice(1).join(' ') || ''),
           firstname: String(r['First Name'] || ''),
           lastname: String(r['Last Name'] || ''),
           position: String(r['ตำแหน่งวิชาการ'] || ''),
