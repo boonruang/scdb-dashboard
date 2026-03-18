@@ -61,6 +61,7 @@ const StaffEdit = () => {
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const [stafftypeData, setStafftypeData] = useState([])
   const [departmentData, setDepartmentData] = useState([])
@@ -107,6 +108,7 @@ const StaffEdit = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('staff_id', values.staff_id)
               formData.append('firstname', values.firstname)
@@ -122,6 +124,7 @@ const StaffEdit = () => {
               formData.append('department_id', values.department_id)
               console.log('values',values)
               dispatch(updateStaff(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={location?.state?.row}
@@ -344,7 +347,7 @@ const StaffEdit = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

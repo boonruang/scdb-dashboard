@@ -55,6 +55,7 @@ const UsersEdit = () => {
   const location = useLocation()
 
   const [snackBarOpen, setSnackBarOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const [roleSelected, setRoleSelected] = useState('1')
 
@@ -129,6 +130,7 @@ const UsersEdit = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('id', values.id)
               formData.append('username', values.username)
@@ -138,6 +140,7 @@ const UsersEdit = () => {
               formData.append('status', values.status)
               formData.append('roles', values.roles)
               dispatch(editUser(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             enableReinitialize
@@ -276,7 +279,7 @@ const UsersEdit = () => {
                       }} 
                     >
                     <Button  onClick={handleSubmitButton}
-                        disabled={!(dirty && isValid)}
+                        disabled={!(dirty && isValid) || submitted}
                         type='submit'
                         sx={{
                           backgroundColor: colors.greenAccent[600],

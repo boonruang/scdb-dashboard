@@ -42,6 +42,7 @@ const AcademicProgramAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const [departmentData, setDepartmentData] = useState([])
   
@@ -78,12 +79,14 @@ const AcademicProgramAdd = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('program_name', values.program_name)
               formData.append('degree_level', values.degree_level)
               formData.append('department_id', values.department_id)
               console.log('values',values)
               dispatch(addAcademicProgram(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -175,7 +178,7 @@ const AcademicProgramAdd = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

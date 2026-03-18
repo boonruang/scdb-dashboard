@@ -67,10 +67,17 @@ const BudgetPlanImportData = () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
     const ceYear = Number(fiscalYear) - 543
     const toImport = data.map(({ id, ...rest }) => ({ ...rest, fiscal_year: ceYear }))
-    if (!window.confirm(`นำเข้าข้อมูล ${toImport.length} รายการ ปีงบประมาณ ${fiscalYear}?`)) return
+    // แสดงสรุปก่อน confirm
+    const dupCodes = data.filter((r, i, arr) => arr.findIndex(x => x.budget_code === r.budget_code) !== i).map(r => r.budget_code)
+    let msg = `จะนำเข้า ${toImport.length} รายการ ปีงบประมาณ ${fiscalYear}\n`
+    msg += `• รหัสซ้ำในไฟล์: ${dupCodes.length > 0 ? dupCodes.join(', ') : 'ไม่มี'}\n`
+    msg += `\n(รหัสที่มีอยู่แล้วใน DB จะถูก update อัตโนมัติ)\n\nยืนยันการนำเข้า?`
+    if (!window.confirm(msg)) return
     const res = await dispatch(bulkImportBudgetPlan(toImport))
-    if (res?.success) { alert('นำเข้าข้อมูลสำเร็จ'); setData([]) }
-    else alert('เกิดข้อผิดพลาด: ' + (res?.error || ''))
+    if (res?.success) {
+      alert(`นำเข้าสำเร็จ\n• เพิ่มใหม่: ${res.data?.inserted} รายการ\n• อัปเดต: ${res.data?.updated} รายการ`)
+      setData([])
+    } else alert('เกิดข้อผิดพลาด: ' + (res?.error || res?.data?.result || ''))
   }
 
   const handleClear = () => { setData([]); setShowProgress(false); setProgress(0); if (fileInputRef.current) fileInputRef.current.value = null }

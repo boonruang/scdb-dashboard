@@ -34,8 +34,10 @@ const BudgetPlanAdd = () => {
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
+    if (submitted) return
     const formData = new FormData()
     Object.entries(values).forEach(([k, v]) => {
       // แปลงปี พ.ศ. → ค.ศ.
@@ -44,7 +46,7 @@ const BudgetPlanAdd = () => {
     })
     const res = await dispatch(addBudgetPlan(navigate, formData))
     if (res?.success) {
-      setMsg('บันทึกข้อมูลเรียบร้อยแล้ว'); setIsSuccess(true)
+      setMsg('บันทึกข้อมูลเรียบร้อยแล้ว'); setIsSuccess(true); setSubmitted(true)
     } else {
       setMsg('เกิดข้อผิดพลาด: ' + (res?.error || 'ไม่สามารถบันทึกข้อมูลได้')); setIsSuccess(false)
     }
@@ -97,7 +99,7 @@ const BudgetPlanAdd = () => {
                 value={values.plan_q4} onBlur={handleBlur} onChange={handleChange} sx={{ gridColumn: 'span 1' }} />
             </Box>
             <Box display="flex" mt="20px">
-              <Button type="submit" disabled={!(dirty && isValid) || isSubmitting} sx={btnStyle}>บันทึก</Button>
+              <Button type="submit" disabled={!(dirty && isValid) || isSubmitting || submitted} sx={btnStyle}>บันทึก</Button>
               <Button type="button" onClick={() => navigate(-1)} sx={btnStyle}>ยกเลิก</Button>
             </Box>
           </form>

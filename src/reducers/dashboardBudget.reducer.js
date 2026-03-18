@@ -5,6 +5,9 @@ import {
   HTTP_DASHBOARD_BUDGET_PROJECTS_FAILED,
   HTTP_DASHBOARD_BUDGET_PROJECTS_FETCHING,
   HTTP_DASHBOARD_BUDGET_PROJECTS_SUCCESS,
+  HTTP_DASHBOARD_BUDGET_ACTIVITIES_FETCHING,
+  HTTP_DASHBOARD_BUDGET_ACTIVITIES_SUCCESS,
+  HTTP_DASHBOARD_BUDGET_ACTIVITIES_FAILED,
 } from '../constants';
 
 const initialState = {
@@ -15,6 +18,9 @@ const initialState = {
   projects: null,
   isFetchingProjects: false,
   isErrorProjects: false,
+
+  activities: null,
+  isFetchingActivities: false,
 };
 
 const dashboardBudgetReducer = (state = initialState, { type, payload }) => {
@@ -34,6 +40,13 @@ const dashboardBudgetReducer = (state = initialState, { type, payload }) => {
       return { ...state, projects: payload.result, isFetchingProjects: false, isErrorProjects: false };
     case HTTP_DASHBOARD_BUDGET_PROJECTS_FAILED:
       return { ...state, projects: null, isFetchingProjects: false, isErrorProjects: true };
+
+    case HTTP_DASHBOARD_BUDGET_ACTIVITIES_FETCHING:
+      return { ...state, activities: null, isFetchingActivities: true };
+    case HTTP_DASHBOARD_BUDGET_ACTIVITIES_SUCCESS:
+      return { ...state, activities: payload, isFetchingActivities: false };
+    case HTTP_DASHBOARD_BUDGET_ACTIVITIES_FAILED:
+      return { ...state, activities: null, isFetchingActivities: false };
 
     default:
       return state;

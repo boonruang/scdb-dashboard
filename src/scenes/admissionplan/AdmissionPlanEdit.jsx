@@ -46,6 +46,7 @@ const AcademicEdit = () => {
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
   const INITIAL_ZOOM = 12
@@ -91,6 +92,7 @@ const AcademicEdit = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('id', values.id)
               formData.append('name', values.name)
@@ -105,6 +107,7 @@ const AcademicEdit = () => {
               formData.append('status', 'true')
               console.log('values',values)
               dispatch(updateAdmissionPlan(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={location.state.row}
@@ -207,7 +210,7 @@ const AcademicEdit = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

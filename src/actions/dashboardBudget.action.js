@@ -5,6 +5,9 @@ import {
   HTTP_DASHBOARD_BUDGET_PROJECTS_FAILED,
   HTTP_DASHBOARD_BUDGET_PROJECTS_FETCHING,
   HTTP_DASHBOARD_BUDGET_PROJECTS_SUCCESS,
+  HTTP_DASHBOARD_BUDGET_ACTIVITIES_FETCHING,
+  HTTP_DASHBOARD_BUDGET_ACTIVITIES_SUCCESS,
+  HTTP_DASHBOARD_BUDGET_ACTIVITIES_FAILED,
   server
 } from '../constants';
 import { httpClient } from '../utils/HttpClient';
@@ -38,4 +41,14 @@ export const getBudgetProjects = ({ fiscalYear, search = '', budgetType = '', pa
     })
     .then((result) => dispatch(setStateProjectsSuccess(result.data)))
     .catch(() => dispatch(setStateProjectsFailed()));
+};
+
+// ── Activities (expandable sub-table) ────────────────────────────────
+
+export const getBudgetActivities = (budgetCode) => (dispatch) => {
+  dispatch({ type: HTTP_DASHBOARD_BUDGET_ACTIVITIES_FETCHING });
+  httpClient
+    .get(`${server.DASHBOARD_BUDGET_URL}/activities`, { params: { budgetCode } })
+    .then((result) => dispatch({ type: HTTP_DASHBOARD_BUDGET_ACTIVITIES_SUCCESS, payload: result.data.result }))
+    .catch(() => dispatch({ type: HTTP_DASHBOARD_BUDGET_ACTIVITIES_FAILED }));
 };

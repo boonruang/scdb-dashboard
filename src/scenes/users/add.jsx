@@ -66,6 +66,7 @@ const UsersAdd = () => {
   const [roles, setRoles] = useState([])
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const roleReducer = useSelector((state) => state.app.roleReducer)
 
@@ -95,14 +96,16 @@ const UsersAdd = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('username', values.username)
               formData.append('password', values.password)
               formData.append('firstname', values.firstname)
               formData.append('lastname', values.lastname)
               formData.append('status', values.status)
-              formData.append('roles', JSON.stringify(values.roles)) 
+              formData.append('roles', JSON.stringify(values.roles))
               dispatch(addUser(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -330,7 +333,7 @@ const UsersAdd = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

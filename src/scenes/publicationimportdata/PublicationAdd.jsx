@@ -48,6 +48,7 @@ const PublicationAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
    const handleSubmitButton = (values) => {
     setOpen(true)
@@ -71,6 +72,7 @@ const PublicationAdd = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('title', values.title)
               formData.append('journal_name', values.journal_name)
@@ -79,6 +81,7 @@ const PublicationAdd = () => {
               formData.append('database_source', values.database_source)
               console.log('values',values)
               dispatch(addPublication(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -202,7 +205,7 @@ const PublicationAdd = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

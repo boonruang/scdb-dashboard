@@ -10,7 +10,7 @@ import SpellcheckIcon from '@mui/icons-material/Spellcheck'
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
-import { bulkImportBudgetActivity } from '../../actions/budgetActivity.action'
+import { bulkImportBudgetActivity, validateBudgetCodes } from '../../actions/budgetActivity.action'
 
 const excelSerialToDate = (serial) => {
   if (!serial || isNaN(serial)) return null
@@ -46,18 +46,14 @@ const BudgetActivityImportData = () => {
       const allRows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' })
       const dataRows = allRows.slice(2).filter(r => r[0] !== '')
 
-      // auto-generate activity_code: budget_code + running number (001, 002...)
-      const countPerBudget = {}
       const mapped = dataRows
         .filter(r => str(r[2]) !== '') // col[2] = activity_name ต้องมีค่า
         .map((r, i) => {
           const bc = str(r[0]) // col[0] = budget_code
-          countPerBudget[bc] = (countPerBudget[bc] || 0) + 1
-          const actCode = bc + String(countPerBudget[bc]).padStart(3, '0')
           return {
             id: i + 1,
             budget_code:          bc,
-            activity_code:        actCode,
+            activity_code:        str(r[1]),  // เก็บตามไฟล์ — อาจว่าง
             activity_name:        str(r[2]),
             budget_requested:     num(r[3]),
             start_date:           excelSerialToDate(r[18]),
@@ -94,11 +90,63 @@ const BudgetActivityImportData = () => {
 
   const handleImport = async () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
-    const toImport = data.map(({ id, ...rest }) => rest)
-    if (!window.confirm(`นำเข้าข้อมูลกิจกรรม ${toImport.length} รายการ?`)) return
-    const res = await dispatch(bulkImportBudgetActivity(toImport))
-    if (res?.success) { alert('นำเข้าข้อมูลสำเร็จ'); setData([]) }
-    else alert('เกิดข้อผิดพลาด: ' + (res?.error || ''))
+
+    const uniqueBudgetCodes = [...new Set(data.map(r => r.budget_code))]
+    const validateRes = await dispatch(validateBudgetCodes(uniqueBudgetCodes))
+    const missingCodes = (validateRes && validateRes.missing) || []
+    const maxCodes     = (validateRes && validateRes.maxCodes) || {}
+
+    // แจ้งเตือน rows ที่ activity_code ว่าง
+    const emptyCodeRows = data.filter(r => r.activity_code === '')
+    if (emptyCodeRows.length > 0) {
+      const confirmMsg = 'พบ ' + emptyCodeRows.length + ' รายการที่ไม่ระบุรหัสกิจกรรม\nระบบจะสร้างรหัสกิจกรรมให้อัตโนมัติ (ต่อจากรหัสล่าสุดใน DB)\nต้องการดำเนินการต่อหรือไม่?'
+      if (!window.confirm(confirmMsg)) return
+    }
+
+    // auto-generate activity_code สำหรับ row ที่ว่าง ต่อจาก max ใน DB
+    const autoCounters = {}
+    const withCodes = data.map(r => {
+      if (r.activity_code !== '') return r
+      const bc = r.budget_code
+      if (!autoCounters[bc]) {
+        const maxInDb = maxCodes[bc] || ''
+        const suffix = maxInDb ? parseInt(maxInDb.slice(-3), 10) : 0
+        autoCounters[bc] = suffix
+      }
+      autoCounters[bc] += 1
+      const newCode = bc + String(autoCounters[bc]).padStart(3, '0')
+      return Object.assign({}, r, { activity_code: newCode })
+    })
+
+    const toImport = withCodes.map(({ id, ...rest }) => rest)
+
+    const dupCodes = withCodes
+      .filter((r, i, arr) => arr.findIndex(x => x.activity_code === r.activity_code) !== i)
+      .map(r => r.activity_code)
+
+    let msg = 'จะนำเข้า ' + toImport.length + ' รายการ\n'
+    msg += '• รหัสกิจกรรมซ้ำในไฟล์: ' + (dupCodes.length > 0 ? dupCodes.join(', ') : 'ไม่มี') + '\n'
+
+    if (missingCodes.length > 0) {
+      const validImport = toImport.filter(r => !missingCodes.includes(r.budget_code))
+      msg += '\n⚠️ รหัสงบประมาณต่อไปนี้ไม่มีในระบบ:\n  ' + missingCodes.join(', ') + '\n'
+      msg += '\nต้องการ import เฉพาะ ' + validImport.length + ' รายการที่ถูกต้อง หรือยกเลิก?'
+      if (!window.confirm(msg)) return
+      if (!validImport.length) { alert('ไม่มีรายการที่สามารถนำเข้าได้'); return }
+      const res = await dispatch(bulkImportBudgetActivity(validImport))
+      if (res && res.success) {
+        alert('นำเข้าสำเร็จ\n• เพิ่มใหม่: ' + res.data.inserted + ' รายการ\n• อัปเดต: ' + res.data.updated + ' รายการ\n• ข้าม: ' + (toImport.length - validImport.length) + ' รายการ')
+        setData([])
+      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.error) || ''))
+    } else {
+      msg += '\n(รหัสกิจกรรมซ้ำใน DB จะถูก update อัตโนมัติ)\n\nยืนยันการนำเข้า?'
+      if (!window.confirm(msg)) return
+      const res = await dispatch(bulkImportBudgetActivity(toImport))
+      if (res && res.success) {
+        alert('นำเข้าสำเร็จ\n• เพิ่มใหม่: ' + res.data.inserted + ' รายการ\n• อัปเดต: ' + res.data.updated + ' รายการ')
+        setData([])
+      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.error) || ''))
+    }
   }
 
   const handleClear = () => {

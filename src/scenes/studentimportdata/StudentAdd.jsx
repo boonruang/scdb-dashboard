@@ -69,6 +69,7 @@ const StudentAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [staffData, setStaffData] = useState([])
   const [academicProgramData, setAcademicProgramData] = useState([])
   
@@ -115,6 +116,7 @@ const StudentAdd = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('studentOfficial_id', values.studentOfficial_id)
               formData.append('firstname', values.firstname)
@@ -123,6 +125,7 @@ const StudentAdd = () => {
               formData.append('advisor_staff_id', values.advisor_staff_id)
               console.log('values',values)
               dispatch(addStudent(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -264,7 +267,7 @@ const StudentAdd = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

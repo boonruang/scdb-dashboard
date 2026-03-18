@@ -10,7 +10,7 @@ import SpellcheckIcon from '@mui/icons-material/Spellcheck'
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
-import { bulkImportBudgetDisbursement } from '../../actions/budgetDisbursement.action'
+import { bulkImportBudgetDisbursement, validateActivityCodes } from '../../actions/budgetDisbursement.action'
 
 const excelSerialToDate = (serial) => {
   if (!serial || isNaN(serial)) return null
@@ -70,11 +70,30 @@ const BudgetDisbursementImportData = () => {
 
   const handleImport = async () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
+
+    const uniqueActivityCodes = [...new Set(data.map(r => r.activity_code).filter(Boolean))]
+    const validateRes = await dispatch(validateActivityCodes(uniqueActivityCodes))
+    const missingCodes = (validateRes && validateRes.missing) || []
+
     const toImport = data.map(({ id, ...rest }) => rest)
-    if (!window.confirm(`นำเข้าข้อมูลเบิกจ่าย ${toImport.length} รายการ?`)) return
-    const res = await dispatch(bulkImportBudgetDisbursement(toImport))
-    if (res?.success) { alert('นำเข้าข้อมูลสำเร็จ'); setData([]) }
-    else alert('เกิดข้อผิดพลาด: ' + (res?.error || ''))
+
+    if (missingCodes.length > 0) {
+      const validImport = toImport.filter(r => !missingCodes.includes(r.activity_code))
+      const msg = 'ไม่พบรหัสกิจกรรมต่อไปนี้ในระบบ:\n  ' + missingCodes.join(', ') +
+        '\n\nต้องการ import เฉพาะ ' + validImport.length + ' รายการที่ถูกต้อง หรือยกเลิก?'
+      if (!window.confirm(msg)) return
+      if (!validImport.length) { alert('ไม่มีรายการที่สามารถนำเข้าได้'); return }
+      const res = await dispatch(bulkImportBudgetDisbursement(validImport))
+      if (res && res.success) {
+        alert('นำเข้าสำเร็จ\n• นำเข้า: ' + validImport.length + ' รายการ\n• ข้าม: ' + (toImport.length - validImport.length) + ' รายการ')
+        setData([])
+      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.data && res.data.result) || (res && res.error) || ''))
+    } else {
+      if (!window.confirm('นำเข้าข้อมูลเบิกจ่าย ' + toImport.length + ' รายการ?')) return
+      const res = await dispatch(bulkImportBudgetDisbursement(toImport))
+      if (res && res.success) { alert('นำเข้าข้อมูลสำเร็จ'); setData([]) }
+      else alert('เกิดข้อผิดพลาด: ' + ((res && res.data && res.data.result) || (res && res.error) || ''))
+    }
   }
 
   const handleClear = () => { setData([]); setShowProgress(false); setProgress(0); if (fileInputRef.current) fileInputRef.current.value = null }

@@ -3,7 +3,7 @@ import {
     Box, Typography, useTheme, useMediaQuery, CircularProgress,
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
     TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
-    Pagination, Chip
+    Pagination, Chip, IconButton, Collapse
 } from '@mui/material'
 import { tokens } from "../../theme"
 import Header from '../../components/Header'
@@ -12,8 +12,10 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import PaymentsIcon from '@mui/icons-material/Payments'
 import HandshakeIcon from '@mui/icons-material/Handshake'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBudgetSummary, getBudgetProjects } from '../../actions/dashboardBudget.action'
+import { getBudgetSummary, getBudgetProjects, getBudgetActivities } from '../../actions/dashboardBudget.action'
 
 // ── ปีงบประมาณ options ───────────────────────────────────────────────
 const currentBE = new Date().getFullYear() + 543
@@ -95,7 +97,7 @@ const DashboardBudget = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
-    const { summary, isFetchingSummary, projects, isFetchingProjects } =
+    const { summary, isFetchingSummary, projects, isFetchingProjects, activities, isFetchingActivities } =
         useSelector((state) => state.app.dashboardBudgetReducer)
 
     const isTablet = useMediaQuery(theme.breakpoints.down('lg'))  // < 1200px
@@ -106,8 +108,17 @@ const DashboardBudget = () => {
     const [search, setSearch]               = useState('')
     const [budgetType, setBudgetType]       = useState('')
     const [page, setPage]                   = useState(1)
-    const [hoveredIdx, setHoveredIdx]       = useState(null)
+    const [expandedRow, setExpandedRow]     = useState(null)
     const limit = 10
+
+    const handleExpand = (budgetCode) => {
+        if (expandedRow === budgetCode) {
+            setExpandedRow(null)
+        } else {
+            setExpandedRow(budgetCode)
+            dispatch(getBudgetActivities(budgetCode))
+        }
+    }
 
     useEffect(() => {
         dispatch(getBudgetSummary(fiscalYear))
@@ -134,6 +145,10 @@ const DashboardBudget = () => {
         '1.หมวดงบแผ่นดิน': '#1976d2',
         '2.หมวดงบรายได้':   '#7b1fa2',
     }
+
+    const tdBg = () => ({
+        backgroundColor: colors.primary[400]
+    })
 
     const headerCell = (label, align = 'left') => (
         <TableCell align={align} sx={{
@@ -224,6 +239,7 @@ const DashboardBudget = () => {
                                 <Table size="small" sx={{ minWidth: 900 }}>
                                     <TableHead>
                                         <TableRow>
+                                            <TableCell sx={{ backgroundColor: colors.blueAccent[700], borderBottom: `2px solid ${colors.blueAccent[500]}`, width: 40, padding: '6px' }} />
                                             {headerCell('#', 'center')}
                                             {headerCell('รหัสงบประมาณ')}
                                             {headerCell('โครงการ/กิจกรรม')}
@@ -239,33 +255,32 @@ const DashboardBudget = () => {
                                     <TableBody>
                                         {projectList.length === 0 ? (
                                             <TableRow>
-                                                <TableCell colSpan={10} align="center" sx={{ color: colors.grey[400], py: 4 }}>
+                                                <TableCell colSpan={11} align="center" sx={{ color: colors.grey[400], py: 4 }}>
                                                     ไม่พบข้อมูล
                                                 </TableCell>
                                             </TableRow>
                                         ) : projectList.map((row, idx) => (
+                                            <React.Fragment key={row.id}>
                                             <TableRow
-                                                key={row.id}
-                                                onMouseEnter={() => setHoveredIdx(idx)}
-                                                onMouseLeave={() => setHoveredIdx(null)}
-                                                sx={{
-                                                    borderTop: idx > 0 ? `1px solid ${colors.primary[300]}` : 'none',
-                                                    '& td': {
-                                                        backgroundColor: hoveredIdx === idx ? 'rgba(255,255,255,0.05)' : 'transparent',
-                                                        transition: 'background-color 0.15s'
-                                                    }
-                                                }}
+                                                sx={{ borderTop: idx > 0 ? `1px solid ${colors.primary[300]}` : 'none' }}
                                             >
-                                                <TableCell align="center" sx={{ color: colors.grey[400], fontSize: '14px', py: '12px' }}>
+                                                <TableCell style={{ ...tdBg(), padding: '4px', width: 40 }}>
+                                                    <IconButton size="small" onClick={() => handleExpand(row.budgetCode)}>
+                                                        {expandedRow === row.budgetCode
+                                                            ? <KeyboardArrowUpIcon fontSize="small" />
+                                                            : <KeyboardArrowDownIcon fontSize="small" />}
+                                                    </IconButton>
+                                                </TableCell>
+                                                <TableCell align="center" style={{ ...tdBg(), color: colors.grey[400], fontSize: '14px', padding: '12px 16px' }}>
                                                     {(page - 1) * limit + idx + 1}
                                                 </TableCell>
-                                                <TableCell sx={{ color: colors.grey[200], fontWeight: '600', whiteSpace: 'nowrap', fontSize: '16px', py: '12px' }}>
+                                                <TableCell style={{ ...tdBg(), color: colors.grey[200], fontWeight: '600', whiteSpace: 'nowrap', fontSize: '16px', padding: '12px 16px' }}>
                                                     {row.budgetCode}
                                                 </TableCell>
-                                                <TableCell sx={{ color: colors.grey[100], maxWidth: 320, fontSize: '16px', py: '12px' }}>
+                                                <TableCell style={{ ...tdBg(), color: colors.grey[100], maxWidth: 320, fontSize: '16px', padding: '12px 16px' }}>
                                                     {row.name}
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ py: '12px' }}>
+                                                <TableCell align="center" style={{ ...tdBg(), padding: '12px 16px' }}>
                                                     <Chip
                                                         label={row.budgetType === '1.หมวดงบแผ่นดิน' ? 'งบแผ่นดิน' : 'งบรายได้'}
                                                         size="small"
@@ -276,15 +291,15 @@ const DashboardBudget = () => {
                                                         }}
                                                     />
                                                 </TableCell>
-                                                <TableCell align="right" sx={{ color: colors.grey[100], fontWeight: '600', fontSize: '14px', py: '12px', whiteSpace: 'nowrap' }}>
+                                                <TableCell align="right" style={{ ...tdBg(), color: colors.grey[100], fontWeight: '600', fontSize: '14px', padding: '12px 16px', whiteSpace: 'nowrap' }}>
                                                     {fmt(row.budget)}
                                                 </TableCell>
-                                                                {[1,2,3,4].map(q => {
+                                                {[1,2,3,4].map(q => {
                                                     const disb = row[`q${q}Disbursed`] || 0
                                                     const comm = row[`q${q}Committed`] || 0
                                                     const total = disb + comm
                                                     return (
-                                                    <TableCell key={q} align="right" sx={{ whiteSpace: 'nowrap', py: '12px', minWidth: 160 }}>
+                                                    <TableCell key={q} align="right" style={{ ...tdBg(), whiteSpace: 'nowrap', padding: '12px 16px', minWidth: 160 }}>
                                                         <Box>
                                                             <Typography display="block" sx={{ color: colors.grey[400], fontSize: '14px' }}>
                                                                 แผน {row[`q${q}Budget`] > 0 ? fmt(row[`q${q}Budget`]) : '-'}
@@ -302,10 +317,82 @@ const DashboardBudget = () => {
                                                     </TableCell>
                                                     )
                                                 })}
-                                                <TableCell align="center">
+                                                <TableCell align="center" style={tdBg()}>
                                                     <BudgetBar budget={row.budget} disbursed={row.disbursed} committed={row.committed} />
                                                 </TableCell>
                                             </TableRow>
+                                            <TableRow>
+                                                <TableCell colSpan={11} style={{ padding: 0, borderBottom: 'none', backgroundColor: colors.primary[400] }}>
+                                                    <Collapse in={expandedRow === row.budgetCode} timeout="auto" unmountOnExit>
+                                                        <Box style={{ padding: '8px 24px', backgroundColor: colors.primary[400] }}>
+                                                            {isFetchingActivities ? (
+                                                                <Box display="flex" justifyContent="center" py={2}>
+                                                                    <CircularProgress size={20} />
+                                                                </Box>
+                                                            ) : (
+                                                                <Table size="small">
+                                                                    <TableHead>
+                                                                        <TableRow>
+                                                                            <TableCell style={{ backgroundColor: colors.primary[400], color: colors.greenAccent[400], fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>รหัสกิจกรรม</TableCell>
+                                                                            <TableCell style={{ backgroundColor: colors.primary[400], color: colors.greenAccent[400], fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>ชื่อกิจกรรม</TableCell>
+                                                                            <TableCell align="right" style={{ backgroundColor: colors.primary[400], color: colors.greenAccent[400], fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>งบที่ขอ</TableCell>
+                                                                            <TableCell align="right" style={{ backgroundColor: colors.primary[400], color: '#4caf50', fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>จ่ายจริง</TableCell>
+                                                                            <TableCell align="right" style={{ backgroundColor: colors.primary[400], color: '#ff9800', fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>ผูกพัน</TableCell>
+                                                                            <TableCell align="right" style={{ backgroundColor: colors.primary[400], color: colors.grey[100], fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>รวม</TableCell>
+                                                                            <TableCell style={{ backgroundColor: colors.primary[400], color: colors.greenAccent[400], fontSize: '13px', fontWeight: 'bold', borderColor: colors.primary[300] }}>% เบิกจ่าย</TableCell>
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        {activities?.data?.length > 0 ? activities.data.map(act => (
+                                                                            <React.Fragment key={act.id}>
+                                                                            <TableRow>
+                                                                                <TableCell style={{ backgroundColor: colors.primary[400], color: colors.greenAccent[300], fontSize: '13px', borderColor: colors.primary[300] }}>{act.activityCode}</TableCell>
+                                                                                <TableCell style={{ backgroundColor: colors.primary[400], color: colors.grey[100], fontSize: '13px', borderColor: colors.primary[300] }}>{act.name}</TableCell>
+                                                                                <TableCell align="right" style={{ backgroundColor: colors.primary[400], color: colors.grey[300], fontSize: '13px', whiteSpace: 'nowrap', borderColor: colors.primary[300] }}>{fmt(act.budgetRequested)}</TableCell>
+                                                                                <TableCell align="right" style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300] }}>
+                                                                                    {act.disbursed > 0 && <Typography display="block" sx={{ color: colors.grey[400], fontSize: '13px' }}>{new Date(act.lastDisburseDate).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' })}</Typography>}
+                                                                                    <Typography display="block" sx={{ color: '#4caf50', fontSize: '13px', whiteSpace: 'nowrap' }}>{act.disbursed > 0 ? fmt(act.disbursed) : '-'}</Typography>
+                                                                                </TableCell>
+                                                                                <TableCell align="right" style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300] }}>
+                                                                                    {act.committed > 0 && <Typography display="block" sx={{ color: colors.grey[400], fontSize: '13px' }}>{new Date(act.lastCommitDate).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' })}</Typography>}
+                                                                                    <Typography display="block" sx={{ color: '#ff9800', fontSize: '13px', whiteSpace: 'nowrap' }}>{act.committed > 0 ? fmt(act.committed) : '-'}</Typography>
+                                                                                </TableCell>
+                                                                                <TableCell align="right" style={{ backgroundColor: colors.primary[400], color: colors.grey[100], fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap', borderColor: colors.primary[300] }}>{fmt((act.disbursed || 0) + (act.committed || 0))}</TableCell>
+                                                                                <TableCell style={{ backgroundColor: colors.primary[400], minWidth: 160, borderColor: colors.primary[300] }}><BudgetBar budget={act.budgetRequested} disbursed={act.disbursed} committed={act.committed} /></TableCell>
+                                                                            </TableRow>
+                                                                            {(act.disbursements || []).map(d => (
+                                                                                <TableRow key={d.id}>
+                                                                                    <TableCell style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300], color: colors.grey[500], fontSize: '12px', paddingLeft: 32 }}>{'#'}{d.id}</TableCell>
+                                                                                    <TableCell style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300], color: colors.grey[400], fontSize: '12px', paddingLeft: 32 }}>
+                                                                                        {d.note || '-'}
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300] }} />
+                                                                                    <TableCell align="right" style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300], color: '#4caf50', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                                                                                        {d.type && d.type.startsWith('2') ? fmt(d.amount) : ''}
+                                                                                    </TableCell>
+                                                                                    <TableCell align="right" style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300], color: '#ff9800', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                                                                                        {d.type && d.type.startsWith('1') ? fmt(d.amount) : ''}
+                                                                                    </TableCell>
+                                                                                    <TableCell align="right" style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300], color: colors.grey[400], fontSize: '12px', whiteSpace: 'nowrap' }}>
+                                                                                        {new Date(d.date).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ backgroundColor: colors.primary[400], borderColor: colors.primary[300] }} />
+                                                                                </TableRow>
+                                                                            ))}
+                                                                            </React.Fragment>
+                                                                        )) : (
+                                                                            <TableRow>
+                                                                                <TableCell colSpan={7} align="center" style={{ backgroundColor: colors.primary[400], color: colors.grey[400], padding: '16px', borderColor: colors.primary[300] }}>ไม่พบกิจกรรม</TableCell>
+                                                                            </TableRow>
+                                                                        )}
+                                                                    </TableBody>
+                                                                </Table>
+                                                            )}
+                                                        </Box>
+                                                    </Collapse>
+                                                </TableCell>
+                                            </TableRow>
+                                            </React.Fragment>
                                         ))}
                                     </TableBody>
                                 </Table>

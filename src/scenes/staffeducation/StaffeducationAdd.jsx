@@ -67,6 +67,7 @@ const StaffeducationAdd = () => {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
    const handleSubmitButton = (values) => {
     setOpen(true)
@@ -90,10 +91,12 @@ const StaffeducationAdd = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('name', values.title)
               console.log('values',values)
               dispatch(addStaffeducation(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={initialValues}
@@ -217,7 +220,7 @@ const StaffeducationAdd = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

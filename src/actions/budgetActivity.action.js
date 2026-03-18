@@ -43,6 +43,15 @@ export const updateBudgetActivity = (navigate, formData) => async () => {
   }
 }
 
+export const validateBudgetCodes = (budgetCodes) => async () => {
+  try {
+    const result = await httpClient.post(`${server.BUDGET_ACTIVITY_URL}/validate-codes`, { budgetCodes })
+    return result.data
+  } catch (error) {
+    return { missing: [], maxCodes: {} }
+  }
+}
+
 export const bulkImportBudgetActivity = (dataArray) => async () => {
   try {
     let result = await httpClient.post(`${server.BUDGET_ACTIVITY_URL}/bulk`, dataArray)

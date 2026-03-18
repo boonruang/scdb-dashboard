@@ -56,6 +56,7 @@ const ProjectEdit = () => {
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [departmentData, setDepartmentData] = useState([])
 
   const departmentReducer = useSelector((state) => state.app.departmentReducer)
@@ -89,6 +90,7 @@ const ProjectEdit = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('project_id', values.project_id)
               formData.append('project_name', values.project_name)
@@ -101,6 +103,7 @@ const ProjectEdit = () => {
               formData.append('status', values.status)
               console.log('values',values)
               dispatch(updateProject(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={location?.state?.row}
@@ -279,7 +282,7 @@ const ProjectEdit = () => {
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

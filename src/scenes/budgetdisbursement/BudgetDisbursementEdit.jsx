@@ -29,6 +29,7 @@ const BudgetDisbursementEdit = () => {
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const row = location.state?.row || {}
   const initialValues = {
@@ -41,13 +42,14 @@ const BudgetDisbursementEdit = () => {
   }
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
+    if (submitted) return
     const formData = new FormData()
     Object.entries(values).forEach(([k, v]) => {
       if (v !== null && v !== undefined) formData.append(k, v instanceof Date ? v.toISOString().split('T')[0] : v)
     })
     const res = await dispatch(updateBudgetDisbursement(navigate, formData))
-    if (res?.success) { setMsg('บันทึกข้อมูลเรียบร้อยแล้ว'); setIsSuccess(true) }
-    else { setMsg('เกิดข้อผิดพลาด: ' + (res?.error || '')); setIsSuccess(false) }
+    if (res?.success) { setMsg('บันทึกข้อมูลเรียบร้อยแล้ว'); setIsSuccess(true); setSubmitted(true) }
+    else { setMsg('เกิดข้อผิดพลาด: ' + (res?.data?.result || res?.error || '')); setIsSuccess(false) }
     setOpen(true); setSubmitting(false)
   }
 
@@ -86,7 +88,7 @@ const BudgetDisbursementEdit = () => {
                   sx={{ gridColumn: 'span 2' }} />
               </Box>
               <Box display="flex" mt="20px">
-                <Button type="submit" disabled={!isValid || isSubmitting} sx={btnStyle}>บันทึก</Button>
+                <Button type="submit" disabled={!isValid || isSubmitting || submitted} sx={btnStyle}>บันทึก</Button>
                 <Button type="button" onClick={() => navigate(-1)} sx={btnStyle}>ยกเลิก</Button>
               </Box>
             </form>

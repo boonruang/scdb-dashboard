@@ -59,6 +59,7 @@ const StaffAdd = () => {
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState("ดำเนินการเรียบร้อยแล้ว")
   const [isSuccess, setIsSuccess] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const [stafftypeData, setStafftypeData] = useState([])
   const [departmentData, setDepartmentData] = useState([])
@@ -106,6 +107,7 @@ const StaffAdd = () => {
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('firstname', values.firstname)
               formData.append('lastname', values.lastname)
@@ -123,6 +125,7 @@ const StaffAdd = () => {
               if (res && res.success) {
                   setMsg("บันทึกข้อมูลเรียบร้อยแล้ว")
                   setIsSuccess(true)
+                  setSubmitted(true)
                   setOpen(true)
               } else {
                   setMsg("เกิดข้อผิดพลาด: " + (res?.error || "ไม่สามารถบันทึกข้อมูลได้"))
@@ -346,10 +349,10 @@ const StaffAdd = () => {
                           gridColumn: "span 2"
                       }}                    
                     >
-                        <Button  
+                        <Button
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],

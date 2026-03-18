@@ -53,6 +53,7 @@ const userSchema = yup.object().shape({
   const location = useLocation()
 
   const [open, setOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
    const handleSubmitButton = (values) => {
     setOpen(true)
@@ -71,11 +72,13 @@ const userSchema = yup.object().shape({
         <Formik
             // onSubmit={handleFormSubmit}
             onSubmit={async (values, { setSubmitting }) => {
+              if (submitted) return
               let formData = new FormData()
               formData.append('staffeducation_id', values.id)
               formData.append('title', values.title)
               console.log('values',values)
               dispatch(updateStaffeducation(navigate, formData))
+              setSubmitted(true)
               setSubmitting(false)
             }}
             initialValues={location?.state?.row}
@@ -206,7 +209,7 @@ const userSchema = yup.object().shape({
                         <Button  onClick={handleSubmitButton}
                             type='submit'
                             // disabled={isSubmitting}
-                            disabled={!(dirty && isValid)}
+                            disabled={!(dirty && isValid) || submitted}
                             sx={{
                                 backgroundColor: colors.greenAccent[600],
                                 color: colors.grey[100],
