@@ -397,7 +397,7 @@ const Sidebar = () => {
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
                            ? <SubMenu title="5.ด้านแผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
-                            <Item
+                            {/* <Item
                                 title="ข้อมูลโครงการ"
                                 to="/project"
                                 icon={<MenuBookIcon />}
@@ -410,7 +410,7 @@ const Sidebar = () => {
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                             <Item
                                 title="แผนโครงการ/งบประมาณ"
                                 to="/budgetplan"
