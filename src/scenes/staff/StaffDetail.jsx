@@ -64,7 +64,37 @@ const StaffDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อ"
+                        label="ตำแหน่งวิชาการ"
+                        value={location.state.row.title_th || ''}
+                        name="title_th"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อ (TH)"
+                        value={location.state.row.firstname_th || ''}
+                        name="firstname_th"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="นามสกุล (TH)"
+                        value={location.state.row.lastname_th || ''}
+                        name="lastname_th"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อ (EN)"
                         value={location.state.row.firstname}
                         name="firstname"
                         sx={{ gridColumn: "span 1" }}
@@ -74,19 +104,9 @@ const StaffDetail = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="นามสกุล"
+                        label="นามสกุล (EN)"
                         value={location.state.row.lastname}
                         name="lastname"
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                    
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="ตำแหน่ง"
-                        value={location.state.row.position}
-                        name="id"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
@@ -159,7 +179,17 @@ const StaffDetail = () => {
                         name="email"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
-                    />                    
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="โทรศัพท์"
+                        value={location.state.row.phone_no || ''}
+                        name="phone_no"
+                        sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
+                    />
                     <TextField
                         fullWidth
                         variant="filled"

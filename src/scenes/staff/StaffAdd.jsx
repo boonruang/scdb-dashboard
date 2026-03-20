@@ -109,9 +109,13 @@ const StaffAdd = () => {
             onSubmit={async (values, { setSubmitting }) => {
               if (submitted) return
               let formData = new FormData()
+              formData.append('title_th', values.title_th || '')
+              formData.append('firstname_th', values.firstname_th || '')
+              formData.append('lastname_th', values.lastname_th || '')
               formData.append('firstname', values.firstname)
               formData.append('lastname', values.lastname)
               formData.append('position', values.position)
+              formData.append('phone_no', values.phone_no || '')
               formData.append('position_no', values.position_no)
               formData.append('education', values.education)
               formData.append('startdate', values.startdate)
@@ -153,11 +157,44 @@ const StaffAdd = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ชื่อ"
+                        label="ตำแหน่งวิชาการ"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.title_th || ''}
+                        name="title_th"
+                        sx={{ gridColumn: "span 1" }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อ (TH)"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.firstname_th || ''}
+                        name="firstname_th"
+                        sx={{ gridColumn: "span 1" }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="นามสกุล (TH)"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.lastname_th || ''}
+                        name="lastname_th"
+                        sx={{ gridColumn: "span 1" }}
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="ชื่อ (EN)"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.firstname}
-                        name="firstname"                        
+                        name="firstname"
                         error={!!touched.firstname && !!errors.firstname}
                         helperText={touched.firstname && errors.firstname}
                         sx={{ gridColumn: "span 1" }}
@@ -166,11 +203,11 @@ const StaffAdd = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="นามสกุล"
+                        label="นามสกุล (EN)"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.lastname}
-                        name="lastname"                         
+                        name="lastname"
                         error={!!touched.lastname && !!errors.lastname}
                         helperText={touched.lastname && errors.lastname}
                         sx={{ gridColumn: "span 1" }}
@@ -272,11 +309,22 @@ const StaffAdd = () => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values?.email}
-                        name="email"                         
+                        name="email"
                         error={!!touched.email && !!errors.email}
                         helperText={touched.email && errors.email}
                         sx={{ gridColumn: "span 1" }}
-                    />                                         
+                    />
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        type="text"
+                        label="โทรศัพท์"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values?.phone_no || ''}
+                        name="phone_no"
+                        sx={{ gridColumn: "span 1" }}
+                    />
                     <TextField
                         fullWidth
                         variant="filled"

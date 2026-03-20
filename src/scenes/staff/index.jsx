@@ -83,17 +83,35 @@ const Staffs = () => {
       cellClassName: "name-column--cell"
     },
     {
+      field: 'title_th',
+      headerName: 'ตำแหน่งวิชาการ',
+      flex: 0.7,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'firstname_th',
+      headerName: 'ชื่อ (TH)',
+      flex: 0.7,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'lastname_th',
+      headerName: 'นามสกุล (TH)',
+      flex: 0.7,
+      cellClassName: "name-column--cell"
+    },
+    {
       field: 'firstname',
-      headerName: 'ชื่อ',
+      headerName: 'ชื่อ (EN)',
       flex: 0.6,
       cellClassName: "name-column--cell"
     },
     {
       field: 'lastname',
-      headerName: 'สกุล',
+      headerName: 'สกุล (EN)',
       flex: 0.6,
       cellClassName: "name-column--cell"
-    },    
+    },
     {
       field: 'position',
       headerName: 'ตำแหน่ง',
@@ -137,6 +155,12 @@ const Staffs = () => {
     {
       field: 'office_location',
       headerName: 'ออฟฟิศ',
+      flex: 0.6,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'phone_no',
+      headerName: 'โทรศัพท์',
       flex: 0.6,
       cellClassName: "name-column--cell"
     },

@@ -51,14 +51,35 @@ const AuthorProfileList = () => {
   const columns = [
     { field: 'staff_id', headerName: 'ID', flex: 0.3, headerAlign: 'center', align: 'center' },
     { field: 'spreadsheet_id', headerName: 'ID(A)', flex: 0.4, cellClassName: 'name-column--cell' },
+    { field: 'position_no', headerName: 'เลขประจำตำแหน่ง', flex: 0.7 },
+    { field: 'position', headerName: 'ตำแหน่งวิชาการ', flex: 0.8 },
     { field: 'firstname_th', headerName: 'ชื่อ (TH)', flex: 0.8, cellClassName: 'name-column--cell' },
     { field: 'lastname_th', headerName: 'นามสกุล (TH)', flex: 0.8 },
-    { field: 'firstname', headerName: 'First Name', flex: 0.8 },
-    { field: 'lastname', headerName: 'Last Name', flex: 0.8 },
-    { field: 'position', headerName: 'ตำแหน่ง', flex: 0.8 },
-    { field: 'citations_total', headerName: 'Citations', flex: 0.5, type: 'number' },
+    { field: 'firstname', headerName: 'First Name', flex: 0.7 },
+    { field: 'lastname', headerName: 'Last Name', flex: 0.7 },
+    {
+      field: 'department_name',
+      headerName: 'ภาควิชา',
+      flex: 0.8,
+      valueGetter: function(value, row) {
+        var dept = row ? row.Department : null
+        return dept ? (dept.department_name || dept.dept_name || '') : ''
+      }
+    },
+    { field: 'citations_total', headerName: 'Citations Total', flex: 0.6, type: 'number' },
+    { field: 'publications_count', headerName: 'Publications', flex: 0.6, type: 'number' },
     { field: 'h_index', headerName: 'H-Index', flex: 0.5, type: 'number' },
-    { field: 'email', headerName: 'Email', flex: 1 },
+    { field: 'docs_current_year', headerName: 'Documents 2025', flex: 0.6, type: 'number' },
+    { field: 'citations_current_year', headerName: 'Citations 2025', flex: 0.6, type: 'number' },
+    { field: 'scopus_url', headerName: 'Scopus URL', flex: 1 },
+    { field: 'scholar_url', headerName: 'Scholar URL', flex: 1 },
+    { field: 'photo_url', headerName: 'URL รูป', flex: 0.8 },
+    { field: 'expertise', headerName: 'ความเชี่ยวชาญ', flex: 1 },
+    { field: 'interests', headerName: 'ความสนใจ', flex: 1 },
+    { field: 'email', headerName: 'E-mail', flex: 1 },
+    { field: 'phone_no', headerName: 'โทรศัพท์', flex: 0.7 },
+    { field: 'research_fund', headerName: 'แหล่งทุนวิจัย', flex: 1 },
+    { field: 'ethics_license', headerName: 'จริยธรรมวิจัย', flex: 0.8 },
     {
       field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5,
       renderCell: (params) => (

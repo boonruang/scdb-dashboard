@@ -20,6 +20,7 @@ const PublicationImportData2 = () => {
   const loginReducer = useSelector((state) => state.app.loginReducer)
 
   const [data, setData] = useState([])
+  const [authorLinks, setAuthorLinks] = useState([])
   const [showProgress, setShowProgress] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -36,30 +37,42 @@ const PublicationImportData2 = () => {
       // SheetNames: [0]=dashboard design, [1]=Author profile, [2]=Author profile สายสนับสนุน, [3]=Paper
       const ws = wb.Sheets[wb.SheetNames[3]] // Sheet "Paper"
       const raw = XLSX.utils.sheet_to_json(ws, { defval: '' })
-      // Paper sheet columns: คอลัมน์ 1=paper ID (P1,P2..), ID(A)=author ID, ชื่อเรื่อง, ค.ศ., ฯลฯ
-      // unique papers only (deduplicate by คอลัมน์ 1)
-      const seenPapers = new Set()
-      const mapped = raw
-        .filter((r) => r['ชื่อเรื่อง'] && !seenPapers.has(r['คอลัมน์ 1']) && seenPapers.add(r['คอลัมน์ 1']))
-        .map((r, i) => ({
-          id: i + 1,
-          spreadsheet_id: String(r['คอลัมน์ 1'] || ''),
-          title: String(r['ชื่อเรื่อง'] || '').trim(),
-          journal_name: String(r['ชื่อวารสาร'] || ''),
-          publication_year: Number(r['ค.ศ.'] || 0),
-          issn: String(r['ISSN'] || ''),
-          doi: String(r['DOI '] || r['DOI'] || '').trim(),
-          quartile: String(r['Q (Scopus)'] || ''),
-          q_scie: String(r['Q (SCIE)'] || ''),
-          impact_factor: Number(r['IF'] || 0) || null,
-          is_scopus: r['Scopus'] === 1 || r['Scopus'] === '1',
-          is_isi: r['ISI'] === 1 || r['ISI'] === '1',
-          collab_type: String(r['ร่วมกับ'] || 'ไทย'),
-          is_international: r['ต่างปนะเทศ'] === 1 || r['ต่างปนะเทศ'] === '1',
-          database_source: r['Scopus'] ? 'Scopus' : r['ISI'] ? 'ISI' : 'Other',
-          photo_url: String(r['URL รูป (ตีพิมพ์)'] || ''),
-        }))
+      // Paper sheet: 1 แถว = 1 author-paper link (long format)
+      // คอลัมน์ 1 = paper ID (P1,P2..), ID(A) = author ID (A1,A2..)
+      var papersMap = {}
+      var links = []
+      raw.forEach(function(r) {
+        var paperId = String(r['คอลัมน์ 1'] || '')
+        var authorId = String(r['ID(A)'] || '')
+        if (!r['ชื่อเรื่อง'] || !paperId) return
+        if (!papersMap[paperId]) {
+          papersMap[paperId] = {
+            spreadsheet_id: paperId,
+            title: String(r['ชื่อเรื่อง'] || '').trim(),
+            journal_name: String(r['ชื่อวารสาร'] || ''),
+            publication_year: Number(r['ค.ศ.'] || 0),
+            issn: String(r['ISSN'] || ''),
+            doi: String(r['DOI '] || r['DOI'] || '').trim(),
+            quartile: String(r['Q (Scopus)'] || ''),
+            q_scie: String(r['Q (SCIE)'] || ''),
+            impact_factor: Number(r['IF'] || 0) || null,
+            is_scopus: r['Scopus'] === 1 || r['Scopus'] === '1',
+            is_isi: r['ISI'] === 1 || r['ISI'] === '1',
+            collab_type: String(r['ร่วมกับ'] || 'ไทย'),
+            is_international: r['ต่างปนะเทศ'] === 1 || r['ต่างปนะเทศ'] === '1',
+            database_source: r['Scopus'] ? 'Scopus' : r['ISI'] ? 'ISI' : 'Other',
+            photo_url: String(r['URL รูป (ตีพิมพ์)'] || ''),
+          }
+        }
+        if (authorId) {
+          links.push({ pub_spreadsheet_id: paperId, author_spreadsheet_id: authorId })
+        }
+      })
+      var mapped = Object.values(papersMap).map(function(p, i) {
+        return Object.assign({ id: i + 1 }, p)
+      })
       setData(mapped)
+      setAuthorLinks(links)
       clearInterval(interval); setProgress(100)
       setTimeout(() => { setShowProgress(false); setProgress(0) }, 500)
       if (fileInputRef.current) fileInputRef.current.value = null
@@ -70,18 +83,20 @@ const PublicationImportData2 = () => {
   const handleImport = async () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
     const toImport = data.map(({ id, ...rest }) => rest)
-    if (!window.confirm(`นำเข้าผลงานวิจัย ${toImport.length} รายการ?`)) return
-    const res = await dispatch(bulkImportPublication(toImport))
-    if (res?.status === 'ok') {
-      alert(`นำเข้าสำเร็จ ${res.count} รายการ`)
+    if (!window.confirm('นำเข้าผลงานวิจัย ' + toImport.length + ' รายการ (author links: ' + authorLinks.length + ')?')) return
+    const payload = { publications: toImport, author_links: authorLinks }
+    const res = await dispatch(bulkImportPublication(payload))
+    if (res && res.status === 'ok') {
+      alert('นำเข้าสำเร็จ ' + res.count + ' รายการ, author links: ' + res.links_count)
       setData([])
+      setAuthorLinks([])
     } else {
-      alert('เกิดข้อผิดพลาด: ' + (res?.result || ''))
+      alert('เกิดข้อผิดพลาด: ' + ((res && res.result) || ''))
     }
   }
 
   const handleClear = () => {
-    setData([]); setShowProgress(false); setProgress(0)
+    setData([]); setAuthorLinks([]); setShowProgress(false); setProgress(0)
     if (fileInputRef.current) fileInputRef.current.value = null
   }
 
