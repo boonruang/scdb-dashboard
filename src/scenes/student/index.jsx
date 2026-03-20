@@ -78,50 +78,38 @@ const Students = () => {
 
     const columns = [
     {
-      field: 'id', // ใช้ 'id' ที่เราสร้าง alias ไว้
-      headerName: 'ID',
-      flex: 0.3,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'studentOfficial_id', // ใช้ 'id' ที่เราสร้าง alias ไว้
-      headerName: 'รหัส',
-      flex: 0.5,
+      field: 'studentOfficial_id',
+      headerName: 'รหัสนิสิต',
+      flex: 1,
       cellClassName: "name-column--cell"
     },
     {
       field: 'firstname',
       headerName: 'ชื่อ',
-      flex: 0.5,
+      flex: 1,
       cellClassName: "name-column--cell"
     },
     {
       field: 'lastname',
       headerName: 'สกุล',
-      flex: 0.5,
+      flex: 1,
       cellClassName: "name-column--cell"
-    },    
-    {
-      field: 'program_name',
-      headerName: 'หลักสูตร',
-      flex: 1.5,
-      // --- เปลี่ยนมาใช้ renderCell ซึ่งเสถียรกว่า ---
-      renderCell: (params) => {
-        // params.row จะมีข้อมูลของแถวนั้นๆ อยู่เสมอเมื่อ renderCell ทำงาน
-        // ใช้ Optional Chaining (?.) เพื่อความปลอดภัย
-        return params.row.AcademicProgram?.program_name || 'N/A';
-      }
     },
     {
-      field: 'advisor_name',
-      headerName: 'อาจารย์ที่ปรึกษา',
+      field: 'major_name',
+      headerName: 'สาขาวิชา',
+      flex: 1.5,
+    },
+    {
+      field: 'department_name',
+      headerName: 'ภาควิชา',
+      flex: 1.5,
+    },
+    {
+      field: 'entry_year',
+      headerName: 'ปีที่เข้า',
       flex: 1,
-      // --- เปลี่ยนมาใช้ renderCell เช่นกัน ---
-      renderCell: (params) => {
-        return params.row.advisor?.firstname+' '+params.row.advisor?.lastname || 'N/A';
-      }
-    }
-        ,
+    },
         { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
             return (
               <Box>

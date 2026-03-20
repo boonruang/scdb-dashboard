@@ -242,26 +242,19 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="ตำแหน่งทางวิชาการ"
-                                to="/dashboard/dashboard6"
-                                icon={<FmdBadIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="ข้อมูลนิสิตและหลักสูตร"
+                                title="ด้านกิจการนิสิต"
                                 to="/dashboard/dashboard2"
                                 icon={<SchoolIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> 
-                            {/* <Item
-                                title="ด้านหลักสูตร"
+                            />
+                            <Item
+                                title="ด้านวิชาการ"
                                 to="/dashboard/dashboard3"
                                 icon={<FmdBadIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> */}
+                            /> 
                            <Item
                                 title="ด้านวิจัย"
                                 to="/dashboard/dashboard4"
@@ -294,7 +287,7 @@ const Sidebar = () => {
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> 
+                            />
                             {/* <Item
                                 title="ข้อมูลการลาบุคลากร"
                                 to="/leaverecord"
@@ -314,21 +307,35 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            {/* <Item
-                                title="ทุนการศึกษา"
-                                to="/studentgrant"
-                                icon={<StickyNote2Icon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />                              */}
                             <Item
-                                title="นำเข้าข้อมูลนิสิต"
-                                to="/student/importdata"
+                                title="ข้อมูลรางวัล"
+                                to="/studentaward"
+                                icon={<WbIncandescentIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ข้อมูลทุนการศึกษา"
+                                to="/studentgrant"
+                                icon={<AccountBalanceIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ข้อมูลโครงการ/กิจกรรม"
+                                to="/studentactivity"
+                                icon={<TableRowsIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="นำเข้าข้อมูลกิจการนิสิต"
+                                to="/student/affairsimportdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                             
-                                                        
+                            />
+
                          </SubMenu>   : undefined  } 
 
 

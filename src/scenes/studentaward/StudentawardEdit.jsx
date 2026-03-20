@@ -12,16 +12,16 @@ import * as yup from 'yup'
 import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useDispatch } from 'react-redux'
-import { updateStudentgrant } from '../../actions/studentgrant.action'
+import { updateStudentAward } from '../../actions/studentAward.action'
 import { useNavigate, useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
 const userSchema = yup.object().shape({
     student_id: yup.string().required("ต้องระบุรหัสนิสิต"),
-    grant_name: yup.string().required("ต้องระบุชื่อทุน"),
+    award_name: yup.string().required("ต้องระบุชื่อรางวัล"),
 })
 
-const StudentgrantEdit = () => {
+const StudentawardEdit = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
@@ -44,20 +44,19 @@ const StudentgrantEdit = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)")
 
   return <Box m="20px">
-      <Header title="ปรับปรุงข้อมูลทุนการศึกษา" />
+      <Header title="ปรับปรุงข้อมูลรางวัล" />
       <Formik
           onSubmit={async (values, { setSubmitting }) => {
             if (submitted) return
-            var grantId = values.grant_id
+            var awardId = values.award_id
             let formData = new FormData()
             formData.append('student_id', values.student_id)
-            formData.append('grant_name', values.grant_name)
-            formData.append('amount', values.amount)
-            formData.append('grant_type', values.grant_type)
-            formData.append('grant_source', values.grant_source)
-            formData.append('loan_status', values.loan_status)
+            formData.append('award_name', values.award_name)
+            formData.append('award_level', values.award_level)
+            formData.append('venue', values.venue)
+            formData.append('award_date', values.award_date)
             console.log('values', values)
-            const res = await dispatch(updateStudentgrant(navigate, formData, grantId))
+            const res = await dispatch(updateStudentAward(navigate, formData, awardId))
             if (res && res.success) {
                 setMsg("ปรับปรุงข้อมูลเรียบร้อยแล้ว")
                 setIsSuccess(true)
@@ -91,8 +90,8 @@ const StudentgrantEdit = () => {
                       type="text"
                       label="ลำดับ"
                       disabled
-                      value={values.grant_id || ''}
-                      name="grant_id"
+                      value={values.award_id || ''}
+                      name="award_id"
                       InputLabelProps={{ shrink: true }}
                       sx={{ gridColumn: "span 1" }}
                   />
@@ -114,27 +113,27 @@ const StudentgrantEdit = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ชื่อทุน"
+                      label="ชื่อรางวัล"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.grant_name || ''}
-                      name="grant_name"
-                      error={!!touched.grant_name && !!errors.grant_name}
-                      helperText={touched.grant_name && errors.grant_name}
+                      value={values.award_name || ''}
+                      name="award_name"
+                      error={!!touched.award_name && !!errors.award_name}
+                      helperText={touched.award_name && errors.award_name}
                       InputLabelProps={{ shrink: true }}
                       sx={{ gridColumn: "span 2" }}
                   />
                   <TextField
                       fullWidth
                       variant="filled"
-                      type="number"
-                      label="จำนวนเงิน (บาท)"
+                      type="text"
+                      label="ระดับรางวัล"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.amount || ''}
-                      name="amount"
-                      error={!!touched.amount && !!errors.amount}
-                      helperText={touched.amount && errors.amount}
+                      value={values.award_level || ''}
+                      name="award_level"
+                      error={!!touched.award_level && !!errors.award_level}
+                      helperText={touched.award_level && errors.award_level}
                       InputLabelProps={{ shrink: true }}
                       sx={{ gridColumn: "span 1" }}
                   />
@@ -142,41 +141,27 @@ const StudentgrantEdit = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ประเภททุน"
+                      label="สถานที่/งาน"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.grant_type || ''}
-                      name="grant_type"
-                      error={!!touched.grant_type && !!errors.grant_type}
-                      helperText={touched.grant_type && errors.grant_type}
+                      value={values.venue || ''}
+                      name="venue"
+                      error={!!touched.venue && !!errors.venue}
+                      helperText={touched.venue && errors.venue}
                       InputLabelProps={{ shrink: true }}
-                      sx={{ gridColumn: "span 1" }}
+                      sx={{ gridColumn: "span 2" }}
                   />
                   <TextField
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="แหล่งทุน"
+                      label="วันที่ได้รับรางวัล"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.grant_source || ''}
-                      name="grant_source"
-                      error={!!touched.grant_source && !!errors.grant_source}
-                      helperText={touched.grant_source && errors.grant_source}
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ gridColumn: "span 1" }}
-                  />
-                  <TextField
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="สถานะการกู้ยืม"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.loan_status || ''}
-                      name="loan_status"
-                      error={!!touched.loan_status && !!errors.loan_status}
-                      helperText={touched.loan_status && errors.loan_status}
+                      value={values.award_date || ''}
+                      name="award_date"
+                      error={!!touched.award_date && !!errors.award_date}
+                      helperText={touched.award_date && errors.award_date}
                       InputLabelProps={{ shrink: true }}
                       sx={{ gridColumn: "span 1" }}
                   />
@@ -250,7 +235,7 @@ const StudentgrantEdit = () => {
       closeDialog={() => setOpen(false)}
       submitFunction={() => {
           setOpen(false)
-          if (isSuccess) navigate('/studentgrant')
+          if (isSuccess) navigate('/studentaward')
       }}
       message={msg}
       />
@@ -258,4 +243,4 @@ const StudentgrantEdit = () => {
 
 }
 
-export default StudentgrantEdit
+export default StudentawardEdit

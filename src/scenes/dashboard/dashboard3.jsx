@@ -1,535 +1,279 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, IconButton, Typography, useTheme } from '@mui/material'
-import { tokens } from "../../theme"
+import React, { useState, useEffect } from 'react'
+import {
+    Box, Typography, useTheme, useMediaQuery,
+    Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, TableSortLabel, Paper,
+    MenuItem, Select, FormControl, InputLabel,
+    Chip, Button, CircularProgress
+} from '@mui/material'
+import RefreshIcon from '@mui/icons-material/Refresh'
+import { tokens } from '../../theme'
 import Header from '../../components/Header'
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined"
-import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
-import ParkIcon from '@mui/icons-material/Park';
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined"
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
-import PersonAddIcon from "@mui/icons-material/PersonAdd"
-import TrafficIcon from "@mui/icons-material/Traffic"
-import BarChartAcademic from "../../components/BarChartAcademic"
-import BarChartPublicationScopus from "../../components/BarChartPublicationScopus"
-import BarChartPublicationIsi from "../../components/BarChartPublicationIsi"
-import BarChartPublishedDomestic from "../../components/BarChartPublishedDomestic"
-import BarChartPublishedInter from "../../components/BarChartPublishedInter"
-import BarChartStudent from "../../components/BarChartStudent"
-import BarChartStaff from "../../components/BarChartStaff"
-import BarChartTeacher from "../../components/BarChartTeacher"
-import StatBox from "../../components/StatBox"
-import StatBoxStudent from "../../components/StatBoxStudent"
-import ProgressCircle from "../../components/ProgressCircle"
+import BarChartAcademicPosition from '../../components/BarChartAcademicPosition'
+import BarChartTecherDept from '../../components/BarChartTecherDept'
 import { useDispatch, useSelector } from 'react-redux'
-import { getDashboard } from 'actions/dashboard3.action'
-import ProgressCircleCal from 'components/ProgressCircleCal'
+import { getAcademicPositionList } from '../../actions/dashboardAcademicPosition.action'
 
-let newDate = new Date()
-let date = newDate.getDate();
-let month = newDate.getMonth()+1;
-let year = newDate.getFullYear();
+// ── position chip color (ชื่อเต็มจากฐานข้อมูล) ──────────────────────
+const positionColor = {
+    'ศาสตราจารย์':         '#c62828',
+    'รองศาสตราจารย์':      '#7b1fa2',
+    'ผู้ช่วยศาสตราจารย์':  '#1976d2',
+    'อาจารย์':             '#388e3c',
+}
 
-const Dashbaord = () => {
+const POSITION_OPTIONS = ['ศาสตราจารย์', 'รองศาสตราจารย์', 'ผู้ช่วยศาสตราจารย์', 'อาจารย์']
 
+const ROW_PER_PAGE = 10
+
+const DashboardAcademicPosition = () => {
+    const theme  = useTheme()
+    const colors = tokens(theme.palette.mode)
     const dispatch = useDispatch()
 
-    const theme = useTheme()
-    const colors = tokens(theme.palette.mode)
+    const isTablet  = useMediaQuery(theme.breakpoints.down('lg'))
+    const isMobile  = useMediaQuery(theme.breakpoints.down('sm'))
+    const chartSpan = isMobile ? 12 : isTablet ? 12 : null
+
+    const [deptFilter, setDeptFilter] = useState('')
+    const [posFilter,  setPosFilter]  = useState('')
+    const [page, setPage] = useState(1)
+
+    const { result, isFetching } = useSelector((state) => state.app.dashboardAcademicPositionReducer)
 
     useEffect(() => {
-        dispatch(getDashboard())
-    },[dispatch])
+        dispatch(getAcademicPositionList({ position: posFilter, dept: deptFilter, page, limit: ROW_PER_PAGE }))
+    }, [posFilter, deptFilter, page])
 
-    const dashboard3Reducer = useSelector((state) => state.app.dashboard3Reducer)
+    const handleRefresh = () => {
+        dispatch(getAcademicPositionList({ position: posFilter, dept: deptFilter, page, limit: ROW_PER_PAGE }))
+    }
+
+    // ── ดึงข้อมูลจาก redux ──────────────────────────────────────────
+    const listResult   = result?.list    || {}
+    const summary      = result?.summary || {}
+    const staffList    = listResult.staff        || []
+    const total        = listResult.total        || 0
+    const totalPages   = Math.ceil(total / ROW_PER_PAGE)
+
+    const positionData = summary.byPosition     || []   // [{position, count}]
+    const deptData     = summary.byPositionDept || []   // [{department, [pos]: count}]
+
+    // แปลง byPosition → format สำหรับ BarChartAcademicPosition (ต้องการ {position, amount})
+    const chartPositionData = positionData.map(d => ({ position: d.position, amount: d.count }))
+
+    // byPositionDept มี field department อยู่แล้ว ใช้ได้เลย
+    const chartDeptData = deptData
+    const positionKeys  = listResult.positionKeys || []
+
+    // departments สำหรับ dropdown
+    const departments = [...new Set(deptData.map(d => d.department).filter(Boolean))]
+
+    // คำนวณ % ผู้มีตำแหน่ง (ไม่รวม อาจารย์)
+    const totalCount   = positionData.reduce((s, d) => s + d.count, 0)
+    const withPosCount = positionData
+        .filter(d => d.position !== 'อาจารย์')
+        .reduce((s, d) => s + d.count, 0)
+    const pct = totalCount > 0 ? ((withPosCount / totalCount) * 100).toFixed(2) : '-'
 
     return (
         <Box m="20px">
-            <Box
-                display="flex" justifyContent="space-between"
-                alignItems="center"
-            >
-                <Header title="แดชบอร์ดข้อมูลด้านนิสิต" subtitle=""/>
-
+            {/* Header */}
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb="4px">
+                <Header
+                    title="ตำแหน่งทางวิชาการ"
+                    subtitle="ข้อมูลบุคลากรสายวิชาการ คณะวิทยาศาสตร์ มหาวิทยาลัยมหาสารคาม"
+                />
+                <Button
+                    variant="contained"
+                    color="success"
+                    startIcon={<RefreshIcon />}
+                    onClick={handleRefresh}
+                    disabled={isFetching}
+                >
+                    Refresh
+                </Button>
             </Box>
 
-            {/* GRID & CHARTS */}
+            {/* % KPI */}
+            <Box mb="8px">
+                <Typography variant="h5" sx={{ color: colors.grey[300] }}>
+                    บุคลากรที่มีตำแหน่งทางวิชาการ
+                </Typography>
+                <Typography variant="h2" fontWeight="bold" sx={{ color: colors.greenAccent[400] }}>
+                    ร้อยละ {pct}
+                    <Typography component="span" variant="h5" sx={{ color: colors.grey[400], ml: 1 }}>
+                        ({withPosCount} / {totalCount} คน)
+                    </Typography>
+                </Typography>
+            </Box>
+
+            {/* GRID */}
             <Box
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="140px"
                 gap="20px"
             >
-                {/* ROW 1 */}
+                {/* ROW 1-2 : BAR charts */}
                 <Box
-                    gridColumn="span 3"
+                    gridColumn={`span ${chartSpan || 4}`}
+                    gridRow="span 2"
                     backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    p="20px"
                 >
-                    <StatBoxStudent
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountDept}
-                        subtitle="ภาควิชา"
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
+                    <Typography variant="h5" fontWeight="600" mb="10px">
+                        ตำแหน่งทางวิชาการ
+                    </Typography>
+                    <Box height="230px" mt="-10px">
+                        <BarChartAcademicPosition isDashboard={true} data={chartPositionData} />
+                    </Box>
                 </Box>
 
                 <Box
-                    gridColumn="span 3"
+                    gridColumn={`span ${chartSpan || 8}`}
+                    gridRow="span 2"
                     backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    p="20px"
                 >
-                    <StatBoxStudent
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountBachelor}
-                        subtitle="หลักสูตร ป.ตรี"
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
+                    <Typography variant="h5" fontWeight="600" mb="10px">
+                        ตำแหน่งทางวิชาการตามสาขา
+                    </Typography>
+                    <Box height="230px" mt="-10px">
+                        <BarChartTecherDept isDashboard={true} data={chartDeptData} keys={positionKeys} />
+                    </Box>
                 </Box>
 
+                {/* ROW 3+ : ตารางรายชื่ออาจารย์ */}
                 <Box
-                    gridColumn="span 3"
+                    gridColumn="span 12"
+                    gridRow="span 6"
                     backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    p="20px"
                 >
-                    <StatBoxStudent
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountMaster}
-                        subtitle="หลักสูตร ป.โท"
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
+                    {/* Filter bar */}
+                    <Box display="flex" gap="12px" mb="12px" alignItems="center" flexWrap="wrap">
+                        <Typography variant="h5" fontWeight="600" sx={{ flexGrow: 1 }}>
+                            รายชื่ออาจารย์ ({total} คน)
+                        </Typography>
+                        <FormControl size="small" sx={{ minWidth: 160 }}>
+                            <InputLabel sx={{ color: colors.grey[300] }}>ตำแหน่งทางวิชาการ</InputLabel>
+                            <Select
+                                value={posFilter}
+                                label="ตำแหน่งทางวิชาการ"
+                                onChange={(e) => { setPosFilter(e.target.value); setPage(1) }}
+                                sx={{ color: colors.grey[100] }}
+                            >
+                                <MenuItem value="">ทั้งหมด</MenuItem>
+                                {POSITION_OPTIONS.map(p => (
+                                    <MenuItem key={p} value={p}>{p}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl size="small" sx={{ minWidth: 160 }}>
+                            <InputLabel sx={{ color: colors.grey[300] }}>ภาควิชา</InputLabel>
+                            <Select
+                                value={deptFilter}
+                                label="ภาควิชา"
+                                onChange={(e) => { setDeptFilter(e.target.value); setPage(1) }}
+                                sx={{ color: colors.grey[100] }}
+                            >
+                                <MenuItem value="">ทั้งหมด</MenuItem>
+                                {departments.map(d => (
+                                    <MenuItem key={d} value={d}>{d}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+
+                    {/* Table */}
+                    {isFetching ? (
+                        <Box display="flex" justifyContent="center" py={4}>
+                            <CircularProgress color="success" />
+                        </Box>
+                    ) : (
+                    <TableContainer component={Paper} sx={{ backgroundColor: colors.primary[400] }}>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="center" sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '5%' }}>#</TableCell>
+                                    <TableCell align="center" sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '15%' }}>ตำแหน่งทางวิชาการ</TableCell>
+                                    <TableCell align="left"   sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '22%' }}>ชื่อ-นามสกุล (ไทย)</TableCell>
+                                    <TableCell align="left"   sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '20%' }}>ชื่อ-นามสกุล (อังกฤษ)</TableCell>
+                                    <TableCell align="center" sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '10%' }}>วุฒิการศึกษา</TableCell>
+                                    <TableCell align="center" sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '16%' }}>ภาควิชา</TableCell>
+                                    <TableCell align="center" sx={{ color: colors.greenAccent[400], fontWeight: 'bold', width: '12%' }}>Email</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {staffList.map((row, idx) => (
+                                    <TableRow key={row.staffId || idx} hover>
+                                        <TableCell align="center" sx={{ color: colors.grey[400] }}>
+                                            {(page - 1) * ROW_PER_PAGE + idx + 1}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Chip
+                                                label={row.position}
+                                                size="small"
+                                                sx={{
+                                                    backgroundColor: positionColor[row.position] || colors.primary[300],
+                                                    color: '#fff',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '0.70rem'
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="left" sx={{ color: colors.grey[100] }}>
+                                            {row.name_th || '-'}
+                                        </TableCell>
+                                        <TableCell align="left" sx={{ color: colors.grey[300] }}>
+                                            {row.name_en || '-'}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ color: colors.grey[300] }}>
+                                            {row.education || '-'}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ color: colors.grey[300] }}>
+                                            {row.dept || '-'}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ color: colors.grey[400], fontSize: '0.75rem' }}>
+                                            {row.email || '-'}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {staffList.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={7} align="center" sx={{ color: colors.grey[400], py: 3 }}>
+                                            ไม่พบข้อมูล
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    )}
+
+                    {/* Pagination */}
+                    <Box display="flex" justifyContent="flex-end" alignItems="center" mt="8px" gap="12px">
+                        <Typography variant="body2" sx={{ color: colors.grey[400] }}>
+                            {total === 0 ? '0' : (page - 1) * ROW_PER_PAGE + 1} - {Math.min(page * ROW_PER_PAGE, total)} / {total}
+                        </Typography>
+                        <Button
+                            size="small"
+                            disabled={page <= 1 || isFetching}
+                            onClick={() => setPage(p => p - 1)}
+                            sx={{ color: colors.grey[200], minWidth: 32 }}
+                        >{'<'}</Button>
+                        <Button
+                            size="small"
+                            disabled={page >= totalPages || isFetching}
+                            onClick={() => setPage(p => p + 1)}
+                            sx={{ color: colors.grey[200], minWidth: 32 }}
+                        >{'>'}</Button>
+                    </Box>
                 </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBoxStudent
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.amountPhd}
-                        subtitle="หลักสูตร ป.เอก"
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                {/* END ROW 1 */}
-
-              {/* ROW 2 */}
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentStat }
-                        subtitle="สถิติ"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentStatPercent }
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentStatPercent *100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentMath }
-                        subtitle="คณิตศาสตร์"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentMathPercent }
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentMathPercent *100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentChem}
-                        subtitle="เคมี"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentChemPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentChemPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentBioChemInno}
-                        subtitle="นวัฒกรรมชีวเคมี"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentBioChemInnoPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentBioChemInnoPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                {/* END ROW 2 */}                
-
-                {/* ROW 3 */}
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentBio}
-                        subtitle="ชีววิทยา"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentBioPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentBioPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentMicro}
-                        subtitle="จุลชีววิทยา"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentMicroPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentMicroPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentGen}
-                        subtitle="พันธุศาสตร์โมเลกุล"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentGenPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentGenPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic}
-                        subtitle="ฟิสิกส์"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysicPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysicPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                {/* END ROW 3 */}
-
-              {/* ROW 4 */}
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentApply}
-                        subtitle="ประยุกต์"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentApplyPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyEnergy}
-                        subtitle="ประยุกต์พลังงาน"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyEnergyPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentApplyEnergyPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyElec}
-                        subtitle="ประยุกต์อิเล็กทรอนิกส์"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentApplyElecPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentApplyElecPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentEnergy}
-                        subtitle="พลังงาน"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentEnergyPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentEnergyPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                {/* END ROW 4 */} 
-                
-              {/* ROW 5 */}
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysicEdu}
-                        subtitle="กศ.บ.ฟิสิกส์"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysicEduPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysicEduPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic21}
-                        subtitle="ฟิสิกส์ 2.1"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic21Percent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysic21Percent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic22}
-                        subtitle="ฟิสิกส์ 2.2"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentPhysic22Percent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentPhysic22Percent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                <Box
-                    gridColumn="span 3"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title={dashboard3Reducer.result && dashboard3Reducer.result.studentTotal}
-                        subtitle="รวม"
-                        progress={dashboard3Reducer.result && dashboard3Reducer.result.studentTotalPercent}
-                        increase={dashboard3Reducer.result && (dashboard3Reducer.result.studentTotalPercent*100).toFixed(0) + '%'}
-                        icon={
-                            <PeopleOutlinedIcon
-                                sx={{
-                                    color: colors.greenAccent[600],
-                                    fontSize: "26px"
-                                }}
-                            />
-                        }
-                    />
-                </Box>
-
-                {/* END ROW 5 */} 
-
             </Box>
-        </Box >
+        </Box>
     )
 }
 
-export default Dashbaord
+export default DashboardAcademicPosition

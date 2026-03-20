@@ -5,10 +5,9 @@ import { Routes,Route, useNavigate } from 'react-router-dom';
 import Dashbaord from "./scenes/dashboard";
 import Dashbaord1 from "./scenes/dashboard/dashboard1";
 import Dashbaord2 from "./scenes/dashboard/dashboard2";
-import Dashbaord3 from "./scenes/dashboard/dashboard3";
+import Dashboard3 from "./scenes/dashboard/dashboard3";
 import Dashbaord4 from "./scenes/dashboard/dashboard4";
 import Dashbaord5 from "./scenes/dashboard/dashboard5";
-import Dashboard6 from "./scenes/dashboard/dashboard6";
 import ThankyouReg from 'components/Thankyoupage'
 import Terms from 'components/Terms'
 // import Registration from 'components/Registration'
@@ -23,15 +22,24 @@ import { useEffect } from "react";
 import * as loginActions from 'actions/login.action'
 
 import StudentImportData from "scenes/studentimportdata";
+import StudentAffairsImportData from "scenes/studentaffairsimportdata";
 
 import StudentList from "scenes/student";
 import StudentAdd from "scenes/student/StudentAdd"; 
 import StudentDetail from "scenes/student/StudentDetail"; 
 import StudentEdit from "scenes/student/StudentEdit"; 
 import StudentgrantList from "scenes/studentgrant";
-import StudentgrantAdd from "scenes/studentgrant/StudentgrantAdd"; 
-import StudentgrantDetail from "scenes/studentgrant/StudentgrantDetail"; 
-import StudentgrantEdit from "scenes/studentgrant/StudentgrantEdit"; 
+import StudentgrantAdd from "scenes/studentgrant/StudentgrantAdd";
+import StudentgrantDetail from "scenes/studentgrant/StudentgrantDetail";
+import StudentgrantEdit from "scenes/studentgrant/StudentgrantEdit";
+import StudentawardList from "scenes/studentaward";
+import StudentawardAdd from "scenes/studentaward/StudentawardAdd";
+import StudentawardDetail from "scenes/studentaward/StudentawardDetail";
+import StudentawardEdit from "scenes/studentaward/StudentawardEdit";
+import StudentactivityList from "scenes/studentactivity";
+import StudentactivityAdd from "scenes/studentactivity/StudentactivityAdd";
+import StudentactivityDetail from "scenes/studentactivity/StudentactivityDetail";
+import StudentactivityEdit from "scenes/studentactivity/StudentactivityEdit";
 import StaffList from "scenes/staff";
 import StaffAdd from "scenes/staff/StaffAdd"; 
 import StaffDetail from "scenes/staff/StaffDetail"; 
@@ -132,10 +140,9 @@ function App() {
           <Route path="dashboard" element={<Dashbaord1 />} />
           <Route path="dashboard/dashboard1" element={<Dashbaord1 />} />
           <Route path="dashboard/dashboard2" element={<Dashbaord2 />} />
-          <Route path="dashboard/dashboard3" element={<Dashbaord3 />} />
+          <Route path="dashboard/dashboard3" element={<Dashboard3 />} />
           <Route path="dashboard/dashboard4" element={<Dashbaord4 />} />
           <Route path="dashboard/dashboard5" element={<Dashbaord5 />} />
-          <Route path="dashboard/dashboard6" element={<Dashboard6 />} />
         </Route>
 
         <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>
@@ -150,11 +157,22 @@ function App() {
           <Route path="student" element={<StudentList />} />
 
           <Route path="student/importdata" element={<StudentImportData />} />
+          <Route path="student/affairsimportdata" element={<StudentAffairsImportData />} />
 
           <Route path="studentgrant/add" element={<StudentgrantAdd />} />
           <Route path="studentgrant/detail" element={<StudentgrantDetail />} />
           <Route path="studentgrant/edit" element={<StudentgrantEdit />} />
           <Route path="studentgrant" element={<StudentgrantList />} />
+
+          <Route path="studentaward/add" element={<StudentawardAdd />} />
+          <Route path="studentaward/detail" element={<StudentawardDetail />} />
+          <Route path="studentaward/edit" element={<StudentawardEdit />} />
+          <Route path="studentaward" element={<StudentawardList />} />
+
+          <Route path="studentactivity/add" element={<StudentactivityAdd />} />
+          <Route path="studentactivity/detail" element={<StudentactivityDetail />} />
+          <Route path="studentactivity/edit" element={<StudentactivityEdit />} />
+          <Route path="studentactivity" element={<StudentactivityList />} />
           <Route path="staff/add" element={<StaffAdd />} />
           <Route path="staff/detail" element={<StaffDetail />} />
           <Route path="staff/edit" element={<StaffEdit />} />

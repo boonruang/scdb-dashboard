@@ -10,7 +10,7 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useNavigate, useLocation } from 'react-router-dom'
 
-const StudentgrantDetail = () => {
+const StudentactivityDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
@@ -19,14 +19,14 @@ const StudentgrantDetail = () => {
 
   const location = useLocation()
 
-  console.log('StudentgrantDetail row', location.state.row)
+  console.log('StudentactivityDetail row', location.state.row)
 
   const isNonMobile = useMediaQuery("(min-width:600px)")
 
   var row = location.state.row
 
   return <Box m="20px">
-      <Header title="รายละเอียดข้อมูลทุนการศึกษา" />
+      <Header title="รายละเอียดข้อมูลโครงการ" />
               <Box>
                   <Box mt='40px'>
                   <Box
@@ -42,8 +42,8 @@ const StudentgrantDetail = () => {
                       variant="filled"
                       type="text"
                       label="ลำดับ"
-                      value={row.grant_id || ''}
-                      name="grant_id"
+                      value={row.activity_id || ''}
+                      name="activity_id"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -51,9 +51,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="รหัสนิสิต"
-                      value={(row.Student && row.Student.studentOfficial_id) || row.student_id || ''}
-                      name="student_id"
+                      label="รหัสโครงการ"
+                      value={row.activity_code || ''}
+                      name="activity_code"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -61,9 +61,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ชื่อนิสิต"
-                      value={(row.Student && (row.Student.firstname + ' ' + row.Student.lastname)) || ''}
-                      name="student_name"
+                      label="ชื่อโครงการ"
+                      value={row.activity_name || ''}
+                      name="activity_name"
                       sx={{ gridColumn: "span 2" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -71,19 +71,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ชื่อทุน"
-                      value={row.grant_name || ''}
-                      name="grant_name"
-                      sx={{ gridColumn: "span 2" }}
-                      InputLabelProps={{ shrink: true }}
-                  />
-                  <TextField
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="จำนวนเงิน (บาท)"
-                      value={row.amount || ''}
-                      name="amount"
+                      label="ผู้จัด/หน่วยงาน"
+                      value={row.organizer || ''}
+                      name="organizer"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -91,9 +81,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ประเภททุน"
-                      value={row.grant_type || ''}
-                      name="grant_type"
+                      label="วันที่เริ่ม"
+                      value={row.start_date || ''}
+                      name="start_date"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -101,19 +91,49 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="แหล่งทุน"
-                      value={row.grant_source || ''}
-                      name="grant_source"
-                      sx={{ gridColumn: "span 2" }}
+                      label="วันที่สิ้นสุด"
+                      value={row.end_date || ''}
+                      name="end_date"
+                      sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
                   <TextField
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="สถานะการกู้ยืม"
-                      value={row.loan_status || ''}
-                      name="loan_status"
+                      label="สถานที่"
+                      value={row.venue || ''}
+                      name="venue"
+                      sx={{ gridColumn: "span 1" }}
+                      InputLabelProps={{ shrink: true }}
+                  />
+                  <TextField
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="จำนวนผู้เข้าร่วม"
+                      value={row.participant_count || ''}
+                      name="participant_count"
+                      sx={{ gridColumn: "span 1" }}
+                      InputLabelProps={{ shrink: true }}
+                  />
+                  <TextField
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="จำนวนชั่วโมง"
+                      value={row.hours || ''}
+                      name="hours"
+                      sx={{ gridColumn: "span 1" }}
+                      InputLabelProps={{ shrink: true }}
+                  />
+                  <TextField
+                      fullWidth
+                      variant="filled"
+                      type="text"
+                      label="งบประมาณ (บาท)"
+                      value={row.budget_amount || ''}
+                      name="budget_amount"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -158,4 +178,4 @@ const StudentgrantDetail = () => {
   </Box>
 }
 
-export default StudentgrantDetail
+export default StudentactivityDetail

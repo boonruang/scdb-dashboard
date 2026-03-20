@@ -10,7 +10,7 @@ import Header from "../../components/Header"
 import { tokens } from 'theme';
 import { useNavigate, useLocation } from 'react-router-dom'
 
-const StudentgrantDetail = () => {
+const StudentawardDetail = () => {
 
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
@@ -19,14 +19,14 @@ const StudentgrantDetail = () => {
 
   const location = useLocation()
 
-  console.log('StudentgrantDetail row', location.state.row)
+  console.log('StudentawardDetail row', location.state.row)
 
   const isNonMobile = useMediaQuery("(min-width:600px)")
 
   var row = location.state.row
 
   return <Box m="20px">
-      <Header title="รายละเอียดข้อมูลทุนการศึกษา" />
+      <Header title="รายละเอียดข้อมูลรางวัล" />
               <Box>
                   <Box mt='40px'>
                   <Box
@@ -42,8 +42,8 @@ const StudentgrantDetail = () => {
                       variant="filled"
                       type="text"
                       label="ลำดับ"
-                      value={row.grant_id || ''}
-                      name="grant_id"
+                      value={row.award_id || ''}
+                      name="award_id"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -71,9 +71,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ชื่อทุน"
-                      value={row.grant_name || ''}
-                      name="grant_name"
+                      label="ชื่อรางวัล"
+                      value={row.award_name || ''}
+                      name="award_name"
                       sx={{ gridColumn: "span 2" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -81,9 +81,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="จำนวนเงิน (บาท)"
-                      value={row.amount || ''}
-                      name="amount"
+                      label="ระดับรางวัล"
+                      value={row.award_level || ''}
+                      name="award_level"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -91,19 +91,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="ประเภททุน"
-                      value={row.grant_type || ''}
-                      name="grant_type"
-                      sx={{ gridColumn: "span 1" }}
-                      InputLabelProps={{ shrink: true }}
-                  />
-                  <TextField
-                      fullWidth
-                      variant="filled"
-                      type="text"
-                      label="แหล่งทุน"
-                      value={row.grant_source || ''}
-                      name="grant_source"
+                      label="สถานที่/งาน"
+                      value={row.venue || ''}
+                      name="venue"
                       sx={{ gridColumn: "span 2" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -111,9 +101,9 @@ const StudentgrantDetail = () => {
                       fullWidth
                       variant="filled"
                       type="text"
-                      label="สถานะการกู้ยืม"
-                      value={row.loan_status || ''}
-                      name="loan_status"
+                      label="วันที่ได้รับรางวัล"
+                      value={row.award_date || ''}
+                      name="award_date"
                       sx={{ gridColumn: "span 1" }}
                       InputLabelProps={{ shrink: true }}
                   />
@@ -158,4 +148,4 @@ const StudentgrantDetail = () => {
   </Box>
 }
 
-export default StudentgrantDetail
+export default StudentawardDetail

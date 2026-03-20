@@ -3,7 +3,7 @@ import { Box, useTheme, Button } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
 import AddIcon from '@mui/icons-material/Add';
-import { getStudentgrant, deleteStudentgrant } from '../../actions/studentgrant.action'
+import { getStudentAwards, deleteStudentAward } from '../../actions/studentAward.action'
 
 import Header from "../../components/Header"
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ import * as XLSX from 'xlsx'
 import IosShareIcon from '@mui/icons-material/IosShare';
 import ConfirmBox from 'components/ConfirmBox'
 
-const Studentgrants = () => {
+const StudentAwards = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
@@ -28,32 +28,32 @@ const Studentgrants = () => {
     const message = 'กรุณายืนยันการลบข้อมูล'
 
     useEffect(() => {
-        dispatch(getStudentgrant())
+        dispatch(getStudentAwards())
     }, [dispatch])
 
-    const { result, isFetching } = useSelector((state) => state.app.studentgrantReducer)
+    const { result, isFetching } = useSelector((state) => state.app.studentAwardReducer)
 
     const loginReducer = useSelector((state) => state.app.loginReducer)
 
     const DeleteFunction = () => {
-        dispatch(deleteStudentgrant(rowId))
+        dispatch(deleteStudentAward(rowId))
         setOpen(false)
     }
 
     const handleDeleteClick = ({state}) => {
-        setRowId(state.row.grant_id)
+        setRowId(state.row.award_id)
         setOpen(true)
     }
 
     const handleAddButton = () => {
-        navigate('/studentgrant/add')
+        navigate('/studentaward/add')
     };
 
     const ExportExcelButton = () => {
         var wb = XLSX.utils.book_new(),
         ws = XLSX.utils.json_to_sheet(result)
         XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-        XLSX.writeFile(wb, "studentgrant.xlsx")
+        XLSX.writeFile(wb, "studentaward.xlsx")
     };
 
     const columns = [
@@ -68,32 +68,31 @@ const Studentgrants = () => {
       }
     },
     {
-      field: 'grant_name',
-      headerName: 'ชื่อทุน',
+      field: 'award_name',
+      headerName: 'ชื่อรางวัล',
       flex: 2,
       cellClassName: "name-column--cell"
     },
     {
-      field: 'amount',
-      headerName: 'จำนวนเงิน',
-      flex: 1,
-      type: 'number'
-    },
-    {
-      field: 'grant_type',
-      headerName: 'ประเภททุน',
+      field: 'award_level',
+      headerName: 'ระดับรางวัล',
       flex: 1,
     },
     {
-      field: 'loan_status',
-      headerName: 'สถานะกู้ยืม',
+      field: 'venue',
+      headerName: 'สถานที่/งาน',
+      flex: 1.5,
+    },
+    {
+      field: 'award_date',
+      headerName: 'วันที่ได้รับรางวัล',
       flex: 1,
     },
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
         return (
           <Box>
             <Button
-              onClick={() => (navigate('/studentgrant/detail', { state: { row: params.row } }))}
+              onClick={() => (navigate('/studentaward/detail', { state: { row: params.row } }))}
               variant="outlined"
               color="success"
             >
@@ -102,7 +101,7 @@ const Studentgrants = () => {
 
             { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor].includes(role))
                 ? <Button
-                onClick={() => (navigate('/studentgrant/edit', { state: { row: params.row } }))}
+                onClick={() => (navigate('/studentaward/edit', { state: { row: params.row } }))}
                   variant="outlined"
                   color="info"
                   sx={{ ml: 1 }}
@@ -127,7 +126,7 @@ const Studentgrants = () => {
 
     return (
         <Box m="20px">
-            <Header title="ข้อมูลทุนการศึกษา" subtitle="รายการข้อมูลทุนการศึกษา" />
+            <Header title="ข้อมูลรางวัล" subtitle="รายการข้อมูลรางวัลนิสิต" />
             <Box m="40px 0 0 0" height="75vh" sx={{
                 "& .MuiDataGrid-root": {
                     border: 1,
@@ -206,14 +205,14 @@ const Studentgrants = () => {
                             hideFooter: true,
                             hideToolbar: true,
                             fields: [
-                                'grant_id',
+                                'award_id',
                                 'student_id',
-                                'grant_name',
-                                'amount',
-                                'grant_type',
-                                'loan_status',
+                                'award_name',
+                                'award_level',
+                                'venue',
+                                'award_date',
                             ],
-                            fileName: 'studentgrants',
+                            fileName: 'studentawards',
                             },
                         },
                       }}
@@ -230,4 +229,4 @@ const Studentgrants = () => {
     )
 }
 
-export default Studentgrants
+export default StudentAwards
