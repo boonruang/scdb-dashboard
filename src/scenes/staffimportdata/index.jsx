@@ -1,372 +1,201 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, useTheme, Button, MenuItem, Select, FormControl, InputLabel, Typography } from "@mui/material"
-import { DataGrid, GridToolbar } from "@mui/x-data-grid"
-import { tokens } from "../../theme"
-import AddIcon from '@mui/icons-material/Add';
-import { addStaff, getStaff, deleteStaff } from '../../actions/staff.action'
-
-import Header from "../../components/Header"
-import { useDispatch, useSelector } from "react-redux";
+import React, { useRef, useState } from 'react'
+import { Box, useTheme, Button, Typography } from '@mui/material'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { tokens } from '../../theme'
+import Header from '../../components/Header'
+import { useSelector } from 'react-redux'
 import { ROLES } from '../../constants'
-import { Link, useNavigate } from "react-router-dom";
-import CircularProgress from '@mui/material/CircularProgress';
 import * as XLSX from 'xlsx'
-import IosShareIcon from '@mui/icons-material/IosShare';
-import ConfirmBox from 'components/ConfirmBox'
-import Avatar from '@mui/material/Avatar'; 
-import SpellcheckIcon from '@mui/icons-material/Spellcheck';
+import SpellcheckIcon from '@mui/icons-material/Spellcheck'
+import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
-import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { httpClient } from '../../utils/HttpClient'
+import { excelDateToISO } from '../../utils/dateUtils'
 
+var TABS = ['บุคลากร', 'สถิติการลา']
 
-const StaffImportData = () => {
-    const theme = useTheme()
-    const colors = tokens(theme.palette.mode)
+var StaffImportData = function() {
+  var theme = useTheme()
+  var colors = tokens(theme.palette.mode)
+  var fileInputRef = useRef(null)
+  var loginReducer = useSelector(function(s) { return s.app.loginReducer })
 
-    const fileInputRef = useRef(null);
+  var [activeTab, setActiveTab] = useState(0)
+  var [dataStaff, setDataStaff] = useState([])
+  var [dataLeave, setDataLeave] = useState([])
+  var [showProgress, setShowProgress] = useState(false)
 
-    const dispatch = useDispatch()
+  var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    : false
 
-    const navigate = useNavigate()
+  var activeData = activeTab === 0 ? dataStaff : dataLeave
 
-    const [open, setOpen] = useState(false)
-    const [rowId, setRowId] = useState(null)
+  var handleFileChange = function(e) {
+    var file = e.target.files[0]
+    if (!file) return
+    setShowProgress(true)
+    var reader = new FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onload = function(event) {
+      var wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' })
 
-    const [rows, setRows] = useState([]);
+      // Sheet index 1: ข้อมูลบุคคลากร (row 0=hints, row 1=headers → range:1)
+      var ws1 = wb.Sheets[wb.SheetNames[1]]
+      var raw1 = ws1 ? XLSX.utils.sheet_to_json(ws1, { defval: '', range: 1 }) : []
+      var mapped1 = raw1
+        .filter(function(r) { return r['เลขประจำตำแหน่ง'] || r['ชื่อภาษาไทย'] })
+        .map(function(r, i) {
+          return {
+            id: i + 1,
+            position_no: r['เลขประจำตำแหน่ง'] ? String(Math.round(r['เลขประจำตำแหน่ง'])) : '',
+            status: String(r['สถานะ'] || ''),
+            title: String(r['คำนำหน้า'] || ''),
+            firstname_th: String(r['ชื่อภาษาไทย'] || ''),
+            lastname_th: String(r['สกุลภาษาไทย'] || ''),
+            firstname: String(r['ชื่อภาษาอังกฤษ'] || ''),
+            lastname: String(r['สกุลภาษาอังกฤษ'] || ''),
+            position: String(r['ตำแหน่ง'] || ''),
+            education: String(r['วุฒิการศึกษาสูงสุด'] || ''),
+            startdate: excelDateToISO(r['ว/ด/ป/ บรรจุ']),
+            birthday: excelDateToISO(r['ว/ด/ป/ เกิด']),
+            dept: String(r['สังกัด'] || ''),
+            email: String(r['E-mail'] || ''),
+            phone_no: String(r['โทรศัพท์'] || ''),
+          }
+        })
+      setDataStaff(mapped1)
 
-    const [progress, setProgress] = useState(0);
-    const [showProgress, setShowProgress] = useState(false)
-    const [sheetNames, setSheetNames] = useState([])
-    const [selectedSheet, setSelectedSheet] = useState('')
-    const [workbookRef, setWorkbookRef] = useState(null)
+      // Sheet index 2: สถิติการลา (row 0=hints, row 1=headers → range:1)
+      var ws2 = wb.Sheets[wb.SheetNames[2]]
+      var raw2 = ws2 ? XLSX.utils.sheet_to_json(ws2, { defval: '', range: 1 }) : []
+      var mapped2 = raw2
+        .filter(function(r) { return r['เลขประจำตำแหน่ง'] || r['ประเภทการลา'] })
+        .map(function(r, i) {
+          return {
+            id: i + 1,
+            position_no: r['เลขประจำตำแหน่ง'] ? String(Math.round(r['เลขประจำตำแหน่ง'])) : '',
+            leave_type: String(r['ประเภทการลา'] || ''),
+            start_date: excelDateToISO(r['วันที่เริ่มต้น']),
+            end_date: excelDateToISO(r['วันที่สิ้นสุด']),
+          }
+        })
+      setDataLeave(mapped2)
 
-
-    const loginReducer = useSelector((state) => state.app.loginReducer)
-
-
-    const handleDeleteClick = ({state}) => {
-        setRowId(state.row.staff_id)
-        setOpen(true)
+      setShowProgress(false)
+      if (fileInputRef.current) fileInputRef.current.value = null
     }
-
-  const [data, setData] = useState([])
-
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
-
-  const handleProcessClick = () => {
-    console.log('processing import data')
-  };
-
-  const handleClearData = () => {
-    setData([]);
-    setShowProgress(false);
-    setProgress(0);
-    setSheetNames([]);
-    setSelectedSheet('');
-    setWorkbookRef(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
-  };
-
-  const handleSheetChange = (e) => {
-    const name = e.target.value;
-    setSelectedSheet(name);
-    if (workbookRef) {
-      const sheet = workbookRef.Sheets[name];
-      const parsedData = XLSX.utils.sheet_to_json(sheet);
-      setData(parsedData.map((row, i) => ({ id: i + 1, ...row })));
-    }
-  };
-
-const handleImportAllData = () => {
-  if (!data || data.length === 0) {
-    alert('ไม่มีข้อมูลให้นำเข้า');
-    return;
+    reader.onerror = function() { setShowProgress(false) }
   }
 
-  // ตัด id ออก (ให้ backend generate เอง)
-  const dataToImport = data.map(({ id, ...rest }) => rest);
-
-  // debug preview ก่อนส่ง
-  const confirmImport = window.confirm(
-    `คุณต้องการนำเข้าข้อมูลจำนวน ${dataToImport.length} รายการหรือไม่?\n\nตัวอย่างข้อมูล:\n${JSON.stringify(dataToImport.slice(0, 3), null, 2)}`
-  );
-  if (!confirmImport) return;
-
-  dataToImport.forEach((row, index) => {
-    const formData = new FormData();
-    Object.entries(row).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    dispatch(addStaff(() => {}, formData));
-
-    // ลบแถวที่นำเข้าแล้วออกจาก dataGrid เพื่อให้เห็นผลแบบเรียลไทม์
-    setData(prev => prev.filter((_, i) => i !== index));
-  });
-};
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // เริ่ม progress
-    setShowProgress(true);
-    setProgress(0);
-
-    // จำลอง progress animation ระหว่างอ่านไฟล์
-    let fakeProgress = 0;
-    const interval = setInterval(() => {
-      fakeProgress += 10;
-      setProgress(prev => (fakeProgress < 90 ? fakeProgress : 90));
-    }, 100);
-
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-
-    reader.onload = (event) => {
-      const arrayBuffer = event.target.result;
-      const dataArray = new Uint8Array(arrayBuffer);
-      const workbook = XLSX.read(dataArray, { type: "array" });
-
-      setWorkbookRef(workbook);
-      setSheetNames(workbook.SheetNames);
-      // auto-select first sheet
-      const firstName = workbook.SheetNames[0];
-      setSelectedSheet(firstName);
-      const sheet = workbook.Sheets[firstName];
-      const parsedData = XLSX.utils.sheet_to_json(sheet);
-      setData(parsedData.map((row, i) => ({ id: i + 1, ...row })));
-
-      // โหลดเสร็จ → progress = 100%
-      clearInterval(interval);
-      setProgress(100);
-
-      // หน่วงเวลานิดหน่อยก่อนซ่อน progress bar
-      setTimeout(() => {
-        setShowProgress(false);
-        setProgress(0);
-      }, 500);
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = null;
+  var handleImport = async function() {
+    var toImport = activeData.map(function(r) { var copy = Object.assign({}, r); delete copy.id; return copy })
+    if (!toImport.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
+    if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?')) return
+    try {
+      var url = activeTab === 0 ? 'staff/bulk' : 'leaverecord/bulk'
+      var res = await httpClient.post(url, toImport)
+      if (res.data && res.data.status === 'ok') {
+        alert('นำเข้าสำเร็จ ' + (res.data.count || toImport.length) + ' รายการ')
+        if (activeTab === 0) setDataStaff([])
+        else setDataLeave([])
+      } else {
+        alert('เกิดข้อผิดพลาด: ' + ((res.data && res.data.result) || ''))
       }
-    };
+    } catch (err) {
+      alert('เกิดข้อผิดพลาด: ' + String(err))
+    }
+  }
 
-    reader.onerror = (error) => {
-      clearInterval(interval);
-      console.error("Error reading file:", error);
-      setShowProgress(false);
-      setProgress(0);
-    };
-  };
+  var handleClear = function() {
+    setDataStaff([]); setDataLeave([]); setShowProgress(false)
+    if (fileInputRef.current) fileInputRef.current.value = null
+  }
 
-    const columns = [
-    {
-      field: 'id', 
-      headerName: 'ID',
-      flex: 0.5,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'firstname',
-      headerName: 'ชื่อ',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'lastname',
-      headerName: 'สกุล',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },    
-    {
-      field: 'position',
-      headerName: 'ตำแหน่ง',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'position_no',
-      headerName: 'เลขประจำตำแหน่ง',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },    
-    {
-      // field: 'stafftype',
-      field: 'stafftype_id',
-      headerName: 'ประเภท',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },  
-    {
-      field: 'education',
-      headerName: 'วุฒิการศึกษา',
-      flex: 0.5,
-      headerAlign: "center",
-      align: "center",      
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'startdate',
-      headerName: 'วันที่บรรจุ',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'birthday',
-      headerName: 'วันเกิด',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: 'office_location',
-      headerName: 'ออฟฟิศ',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },
-    {
-      // field: 'dept_name',
-      field: 'department_id',
-      headerName: 'ภาควิชา',
-      flex: 0.7,
-      cellClassName: "name-column--cell"
-    },
- 
-    ]
+  var dgStyles = {
+    '& .MuiDataGrid-root': { border: 1, borderColor: colors.greenAccent[500] },
+    '& .MuiDataGrid-columnHeader': { borderBottom: 'none', backgroundColor: colors.primary[400] },
+    '& .MuiDataGrid-toolbarContainer .MuiButton-text': { color: colors.grey[100] + ' !important' },
+  }
 
-    return (
-        <Box m="20px">
-            <Header title="นำเข้าข้อมูลบุคลากร" subtitle="รายการนำเข้าข้อมูลบุคลากร" />
-            <Box m="40px 0 0 0" height="75vh" sx={{
-                "& .MuiDataGrid-root": {
-                    border: 1,
-                    borderColor: colors.greenAccent[500]
-                },
-                "& .MuiDataGrid-cell": {
-                    boderBottom: "none"
-                },
-                "& .name-column--cell": {
-                    color: colors.greenAccent[300]
-                },
-                "& .MuiDataGrid-columnHeader": {
-                    borderBottom: "none",
-                    backgroundColor: colors.primary[400]
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                    // backgroundColor: colors.primary[400]
-                },
-                "& .MuiDataGrid-footerContainer": {
-                    borderTop: "none",
-                    // backgroundColor: colors.yellowAccent[700],
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                    color: `${colors.grey[100]} !important`
-                }
-            }}>
-                <Box display="flex" justifyContent="end">
-                  <form>
-                    <input
-                      type="file"
-                      name="file"
-                      accept=".xlsx,.xls"
-                      ref={fileInputRef}
-                      style={{ display: "none" }}
-                      onChange={handleFileChange}
-                    />  
-                  </form>                
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-                    ? <Box display="flex" justifyContent="end" onClick={handleButtonClick}>
-                        <Button  
-                            sx={{
-                                // backgroundColor: colors.blueAccent[600],
-                                backgroundColor: colors.greenAccent[600],
-                                color: colors.grey[100],
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                padding: "10px 20px",
-                                mr: "10px",
-                                mb: "10px",
-                                '&:hover': {backgroundColor: colors.greenAccent[800]}
-                            }}
-                        >
-                            <SpellcheckIcon sx={{ mr: "10px" }} />
-                            เลือกไฟล์
-                        </Button>
-                    </Box> : undefined }
+  var btnStyle = function(bg, hover) {
+    return {
+      backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold',
+      padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover },
+    }
+  }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-                    ? <Box display="flex" justifyContent="end" onClick={handleImportAllData}>
-                        <Button  
-                            sx={{
-                                backgroundColor: colors.blueAccent[700],
-                                color: colors.grey[100],
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                padding: "10px 20px",
-                                mr: "10px",
-                                mb: "10px",
-                                '&:hover': {backgroundColor: colors.blueAccent[800]}
-                            }}
-                        >
-                            <BrowserUpdatedIcon sx={{ mr: "10px" }} />
-                            นำเข้าทั้งหมด
-                        </Button>
-                    </Box> : undefined }     
+  var colsStaff = [
+    { field: 'id', headerName: 'ลำดับ', flex: 0.3 },
+    { field: 'position_no', headerName: 'เลขประจำตำแหน่ง', flex: 0.7 },
+    { field: 'status', headerName: 'สถานะ', flex: 0.6 },
+    { field: 'firstname_th', headerName: 'ชื่อ', flex: 0.7 },
+    { field: 'lastname_th', headerName: 'สกุล', flex: 0.7 },
+    { field: 'position', headerName: 'ตำแหน่ง', flex: 1 },
+    { field: 'education', headerName: 'วุฒิ', flex: 0.6 },
+    { field: 'dept', headerName: 'สังกัด', flex: 0.8 },
+    { field: 'startdate', headerName: 'วันบรรจุ', flex: 0.6 },
+  ]
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
-                    ? <Box display="flex" justifyContent="end" onClick={handleClearData}>
-                        <Button  
-                            sx={{
-                                backgroundColor: colors.redAccent[700],
-                                // backgroundColor: colors.greenAccent[600],
-                                color: colors.grey[100],
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                padding: "10px 20px",
-                                mr: "10px",
-                                mb: "10px",
-                                '&:hover': {backgroundColor: colors.redAccent[800]}
-                            }}
-                        >
-                            <HighlightOffIcon sx={{ mr: "10px" }} />
-                            ล้างข้อมูลทั้งหมด
-                        </Button>
-                    </Box> : undefined } 
-                </Box>
-                {sheetNames.length > 0 && (
-                  <Box display="flex" alignItems="center" gap="12px" mb="10px">
-                    <Typography variant="body2" sx={{ color: colors.grey[300] }}>เลือก Sheet:</Typography>
-                    <FormControl size="small" sx={{ minWidth: 220 }}>
-                      <Select value={selectedSheet} onChange={handleSheetChange} sx={{ color: colors.grey[100] }}>
-                        {sheetNames.map(n => <MenuItem key={n} value={n}>{n}</MenuItem>)}
-                      </Select>
-                    </FormControl>
-                    <Typography variant="body2" sx={{ color: colors.grey[400] }}>{data.length} แถว</Typography>
-                  </Box>
-                )}
-                { showProgress ? <UploadProgresBar /> : undefined }
-                
-                    <DataGrid
-                        // rows={result}
-                        rows={data}
-                        columns={columns}
-                        slots={{ toolbar: GridToolbar }}
-                        slotProps={{
-                            toolbar: {
-                              csvOptions: { disableToolbarButton: true },
-                            },
-                          }}  
-                    /> 
-            </Box>
+  var colsLeave = [
+    { field: 'id', headerName: 'ลำดับ', flex: 0.3 },
+    { field: 'position_no', headerName: 'เลขประจำตำแหน่ง', flex: 0.7 },
+    { field: 'leave_type', headerName: 'ประเภทการลา', flex: 0.8 },
+    { field: 'start_date', headerName: 'วันที่เริ่มต้น', flex: 0.7 },
+    { field: 'end_date', headerName: 'วันที่สิ้นสุด', flex: 0.7 },
+  ]
+
+  var activeCols = activeTab === 0 ? colsStaff : colsLeave
+
+  return (
+    <Box m="20px">
+      <Header title="นำเข้าข้อมูลบุคลากร" subtitle="นำเข้าจากไฟล์ Excel (ข้อมูลฝ่ายบุคลากรและวิเทศสัมพันธ์)" />
+      <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
+
+        <Box display="flex" justifyContent="space-between" mb="10px" flexWrap="wrap">
+          <Box display="flex" flexWrap="wrap">
+            {TABS.map(function(tab, idx) {
+              return (
+                <Button key={idx}
+                  sx={btnStyle(
+                    activeTab === idx ? colors.greenAccent[600] : colors.primary[400],
+                    colors.greenAccent[800]
+                  )}
+                  onClick={function() { setActiveTab(idx) }}
+                >
+                  {tab} {activeTab === idx && activeData.length > 0 ? '(' + activeData.length + ')' : ''}
+                </Button>
+              )
+            })}
+          </Box>
+          <Box display="flex" flexWrap="wrap">
+            <form>
+              <input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
+            </form>
+            {canEdit && (
+              <Button sx={btnStyle(colors.blueAccent[700], colors.blueAccent[800])} onClick={function() { return fileInputRef.current.click() }}>
+                <SpellcheckIcon sx={{ mr: '10px' }} />เลือกไฟล์
+              </Button>
+            )}
+            {canEdit && activeData.length > 0 && (
+              <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])} onClick={handleImport}>
+                <BrowserUpdatedIcon sx={{ mr: '10px' }} />นำเข้า{TABS[activeTab]}
+              </Button>
+            )}
+            {canEdit && (
+              <Button sx={btnStyle(colors.redAccent[700], colors.redAccent[800])} onClick={handleClear}>
+                <HighlightOffIcon sx={{ mr: '10px' }} />ล้างข้อมูล
+              </Button>
+            )}
+          </Box>
         </Box>
-    )
+
+        {showProgress && <UploadProgresBar />}
+        <DataGrid rows={activeData} columns={activeCols} slots={{ toolbar: GridToolbar }} />
+      </Box>
+    </Box>
+  )
 }
 
 export default StaffImportData

@@ -1,5 +1,9 @@
 import React, { useRef, useState } from 'react'
-import { Box, useTheme, Button, Typography } from '@mui/material'
+import {
+  Box, useTheme, Button, Typography, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, TextField, Chip, Paper,
+  Select, MenuItem, FormControl
+} from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
 import Header from '../../components/Header'
@@ -9,45 +13,31 @@ import * as XLSX from 'xlsx'
 import SpellcheckIcon from '@mui/icons-material/Spellcheck'
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { bulkImportStudentAward } from '../../actions/studentAward.action'
 import { bulkImportStudentActivity } from '../../actions/studentActivity.action'
 import { httpClient } from '../../utils/HttpClient'
 import { server } from '../../constants'
-
-// แปลงวันที่จาก Excel — รองรับทั้ง serial number และ string พ.ศ. "DD/MM/YYYY"
-function excelDateToISO(val) {
-  if (!val && val !== 0) return null
-  // กรณีเป็น string เช่น "12/01/2569" หรือ "2569-01-12"
-  if (typeof val === 'string' && val.trim()) {
-    var s = val.trim()
-    // format DD/MM/YYYY (พ.ศ.)
-    var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-    if (m) {
-      var day = m[1].padStart(2, '0')
-      var mon = m[2].padStart(2, '0')
-      var yearBE = parseInt(m[3])
-      var yearCE = yearBE > 2400 ? yearBE - 543 : yearBE  // ถ้า > 2400 ถือว่าเป็นพ.ศ.
-      return yearCE + '-' + mon + '-' + day
-    }
-    // format YYYY-MM-DD ที่อาจเป็นพ.ศ. อยู่แล้ว
-    var m2 = s.match(/^(\d{4})-(\d{2})-(\d{2})$/)
-    if (m2) {
-      var y = parseInt(m2[1])
-      if (y > 2400) return (y - 543) + '-' + m2[2] + '-' + m2[3]
-      return s
-    }
-    return null
-  }
-  // กรณีเป็น serial number (ตัวเลข)
-  if (typeof val === 'number') {
-    var d = new Date(Math.round((val - 25569) * 86400 * 1000))
-    return d.toISOString().split('T')[0]
-  }
-  return null
-}
+import { excelDateToISO } from '../../utils/dateUtils'
 
 const TABS = ['นิสิต', 'รางวัล', 'ทุน', 'โครงการ']
+
+// auto-generate department_code จากชื่อภาษาไทย → ใช้ตัวย่อ 4 ตัว
+var deptCodeMap = {
+  'คณิตศาสตร์': 'MATH', 'เคมี': 'CHEM', 'ฟิสิกส์': 'PHYS', 'ชีววิทยา': 'BIO',
+  'จุลชีววิทยา': 'MICRO', 'ชีวเคมี': 'BIOC', 'สถิติ': 'STAT', 'คอมพิวเตอร์': 'CS',
+  'วิทยาการคอมพิวเตอร์': 'CS', 'เทคโนโลยีสารสนเทศ': 'IT', 'สิ่งแวดล้อม': 'ENV',
+}
+function autoCode(name) {
+  var s = (name || '').replace('ภาควิชา', '').replace('สาขาวิชา', '').replace('คณะ', '').replace('ฝ่าย', '').trim()
+  // ค้นหาจาก map ก่อน
+  for (var key in deptCodeMap) {
+    if (name.indexOf(key) !== -1) return deptCodeMap[key]
+  }
+  // fallback: ใช้ชื่อย่อภาษาไทยเต็มคำ (ไม่ตัด)
+  return s || 'DEPT'
+}
 
 const StudentAffairsImportData = () => {
   const theme = useTheme()
@@ -63,6 +53,13 @@ const StudentAffairsImportData = () => {
   const [dataActivity, setDataActivity] = useState([])
   const [showProgress, setShowProgress] = useState(false)
 
+  // mapping preview state (tab นิสิต เท่านั้น)
+  const [showMapping, setShowMapping] = useState(false)
+  const [deptMapping, setDeptMapping] = useState([])   // [{ excel_name, mapped_to, department_code, status, department_id }]
+  const [majorMapping, setMajorMapping] = useState([]) // [{ major_name, department_name, status, major_id }]
+  const [mappingLoading, setMappingLoading] = useState(false)
+  const [masterDepts, setMasterDepts] = useState([])   // master list จาก DB
+
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
     ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
     : false
@@ -73,12 +70,11 @@ const StudentAffairsImportData = () => {
     var file = e.target.files[0]
     if (!file) return
     setShowProgress(true)
+    setShowMapping(false)
     var reader = new FileReader()
     reader.readAsArrayBuffer(file)
     reader.onload = function(event) {
       var wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' })
-      // SheetNames: [0]=dashboard design, [1]=ข้อมูลนิสิต, [2]=นิสิตได้รับรางวัล, [3]=ทุนการศึกษา, [4]=โครงการ
-      // Row 0 = notes/hints, Row 1 = real headers → use range: 1
 
       // Sheet 1: นิสิต
       var ws1 = wb.Sheets[wb.SheetNames[1]]
@@ -161,40 +157,144 @@ const StudentAffairsImportData = () => {
     reader.onerror = function() { setShowProgress(false) }
   }
 
-  const handleImport = async function() {
+  // ขั้นตอนที่ 1: กด "ตรวจสอบการ Mapping" → ดึง master + distinct จาก Excel
+  const handlePreviewMapping = async function() {
+    if (!dataStudent.length) { alert('กรุณาเลือกไฟล์ก่อน'); return }
+    setMappingLoading(true)
+    try {
+      // ดึง master departments จาก DB
+      var masterRes = await httpClient.get('department/list')
+      var master = (masterRes.data && masterRes.data.result) ? masterRes.data.result : []
+      setMasterDepts(master)
+
+      // distinct department_name จาก Excel
+      var excelDeptNames = []
+      dataStudent.forEach(function(r) {
+        var dn = (r.department_name || '').trim()
+        if (dn && excelDeptNames.indexOf(dn) === -1) excelDeptNames.push(dn)
+      })
+
+      // distinct major pairs จาก Excel
+      var excelMajorPairs = []
+      dataStudent.forEach(function(r) {
+        var dn = (r.department_name || '').trim()
+        var mn = (r.major_name || '').trim()
+        if (mn && !excelMajorPairs.find(function(x) { return x.major_name === mn && x.department_name === dn })) {
+          excelMajorPairs.push({ major_name: mn, department_name: dn })
+        }
+      })
+
+      // auto-match: ถ้าชื่อใน Excel ตรงกับ master → mapped_to = master นั้น
+      var deptRows = excelDeptNames.map(function(excelName) {
+        var exact = master.find(function(m) { return (m.department_name || m.dept_name) === excelName })
+        var partial = !exact ? master.find(function(m) {
+          var mn = m.department_name || m.dept_name || ''
+          return mn.indexOf(excelName) !== -1 || excelName.indexOf(mn) !== -1
+        }) : null
+        var matched = exact || partial
+        return {
+          excel_name: excelName,
+          mapped_to: matched ? (matched.department_name || matched.dept_name) : '__NEW__',
+          department_id: matched ? matched.department_id : null,
+          department_code: matched ? (matched.department_code || autoCode(excelName)) : autoCode(excelName),
+          status: matched ? 'exists' : 'new',
+        }
+      })
+      setDeptMapping(deptRows)
+
+      // major rows — mapped_to ภาควิชาจาก deptRows
+      var majorRows = excelMajorPairs.map(function(p) {
+        return { major_name: p.major_name, department_name: p.department_name }
+      })
+      setMajorMapping(majorRows)
+      setShowMapping(true)
+    } catch (err) {
+      alert('เกิดข้อผิดพลาด: ' + String(err))
+    }
+    setMappingLoading(false)
+  }
+
+  // ขั้นตอนที่ 2: user แก้ mapping แล้วกด "ยืนยัน Mapping และนำเข้า"
+  const handleConfirmAndImport = async function() {
+    setMappingLoading(true)
+    try {
+      // สร้าง excel_name → resolved_name map (skip แถวที่ user mark ข้าม)
+      var deptResolveMap = {}
+      deptMapping.forEach(function(d) {
+        if (!d.skip) {
+          deptResolveMap[d.excel_name] = d.excel_name
+        }
+        // skip → ไม่ใส่ใน map (students ที่มี dept นี้จะถูก import โดยไม่มี dept mapping)
+      })
+
+      // ส่งเฉพาะ departments ที่ไม่ skip
+      var deptPayload = deptMapping.filter(function(d) { return !d.skip }).map(function(d) {
+        return {
+          department_name: d.excel_name,
+          department_code: d.department_code,
+          department_id: d.department_id || null,
+        }
+      })
+
+      // majors — ข้าม major ที่ dept ถูก skip ด้วย
+      var majorPayload = majorMapping.filter(function(m) {
+        return !deptMapping.find(function(d) { return d.excel_name === m.department_name && d.skip })
+      }).map(function(m) {
+        return { major_name: m.major_name, department_name: m.department_name }
+      })
+
+      var confirmRes = await httpClient.post('major/confirm-mapping', {
+        departments: deptPayload,
+        majors: majorPayload,
+      })
+      if (!confirmRes.data || confirmRes.data.status !== 'ok') {
+        alert('mapping ล้มเหลว: ' + ((confirmRes.data && confirmRes.data.result) || ''))
+        setMappingLoading(false)
+        return
+      }
+
+      // import นิสิต — แปลง department_name ให้ใช้ resolved name
+      var toImport = dataStudent.map(function(r) {
+        var copy = Object.assign({}, r)
+        delete copy.id
+        copy.department_name = deptResolveMap[copy.department_name] || copy.department_name
+        return copy
+      })
+      var r = await httpClient.post(server.STUDENT_URL + '/bulk', toImport)
+      if (r.data && r.data.status === 'ok') {
+        alert('นำเข้าสำเร็จ ' + (r.data.count || toImport.length) + ' รายการ\nภาควิชา/สาขาวิชาถูก mapping แล้ว')
+        setDataStudent([])
+        setShowMapping(false)
+      } else {
+        alert('เกิดข้อผิดพลาด: ' + ((r.data && r.data.result) || ''))
+      }
+    } catch (err) {
+      alert('เกิดข้อผิดพลาด: ' + String(err))
+    }
+    setMappingLoading(false)
+  }
+
+  // import tabs อื่น (รางวัล, ทุน, โครงการ) — ไม่ต้อง mapping
+  const handleImportOther = async function() {
     var toImport = activeData.map(function(r) { var copy = Object.assign({}, r); delete copy.id; return copy })
     if (!toImport.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
     if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?')) return
 
     var res
-    if (activeTab === 0) {
-      // นิสิต → POST /student/bulk
-      try {
-        var r = await httpClient.post(server.STUDENT_URL + '/bulk', toImport)
-        res = r.data
-      } catch (err) {
-        res = { status: 'nok', result: String(err) }
-      }
-    } else if (activeTab === 1) {
-      // รางวัล → studentaward/bulk
+    if (activeTab === 1) {
       res = await dispatch(bulkImportStudentAward(toImport))
     } else if (activeTab === 2) {
-      // ทุน → studentgrant/bulk (resolve studentOfficial_id on backend via direct POST)
       try {
         var r2 = await httpClient.post(server.STUDENTGRANT_URL + '/bulk', { records: toImport })
         res = r2.data
-      } catch (err2) {
-        res = { status: 'nok', result: String(err2) }
-      }
+      } catch (err2) { res = { status: 'nok', result: String(err2) } }
     } else if (activeTab === 3) {
-      // โครงการ → studentactivity/bulk
       res = await dispatch(bulkImportStudentActivity(toImport))
     }
 
     if (res && res.status === 'ok') {
       alert('นำเข้าสำเร็จ ' + (res.count || '') + ' รายการ')
-      if (activeTab === 0) setDataStudent([])
-      else if (activeTab === 1) setDataAward([])
+      if (activeTab === 1) setDataAward([])
       else if (activeTab === 2) setDataGrant([])
       else setDataActivity([])
     } else {
@@ -204,7 +304,7 @@ const StudentAffairsImportData = () => {
 
   const handleClear = function() {
     setDataStudent([]); setDataAward([]); setDataGrant([]); setDataActivity([])
-    setShowProgress(false)
+    setShowProgress(false); setShowMapping(false)
     if (fileInputRef.current) fileInputRef.current.value = null
   }
 
@@ -212,6 +312,13 @@ const StudentAffairsImportData = () => {
     '& .MuiDataGrid-root': { border: 1, borderColor: colors.greenAccent[500] },
     '& .MuiDataGrid-columnHeader': { borderBottom: 'none', backgroundColor: colors.primary[400] },
     '& .MuiDataGrid-toolbarContainer .MuiButton-text': { color: colors.grey[100] + ' !important' },
+  }
+
+  var btnStyle = function(bg, hover) {
+    return {
+      backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold',
+      padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover },
+    }
   }
 
   const colsStudent = [
@@ -250,28 +357,22 @@ const StudentAffairsImportData = () => {
   ]
   var activeCols = [colsStudent, colsAward, colsGrant, colsActivity][activeTab]
 
-  var btnStyle = function(bg, hover) {
-    return {
-      backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold',
-      padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover },
-    }
-  }
-
   return (
     <Box m="20px">
       <Header title="นำเข้าข้อมูลกิจการนิสิต" subtitle="นำเข้าจากไฟล์ Excel (4 sheets)" />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
+
+        {/* Tab + Action Buttons */}
         <Box display="flex" justifyContent="space-between" mb="10px" flexWrap="wrap">
           <Box display="flex" flexWrap="wrap">
             {TABS.map(function(tab, idx) {
               return (
-                <Button
-                  key={idx}
+                <Button key={idx}
                   sx={btnStyle(
                     activeTab === idx ? colors.greenAccent[600] : colors.primary[400],
                     colors.greenAccent[800]
                   )}
-                  onClick={function() { return setActiveTab(idx) }}
+                  onClick={function() { setActiveTab(idx); setShowMapping(false) }}
                 >
                   {tab} {activeTab === idx && activeData.length > 0 ? '(' + activeData.length + ')' : ''}
                 </Button>
@@ -287,8 +388,20 @@ const StudentAffairsImportData = () => {
                 <SpellcheckIcon sx={{ mr: '10px' }} />เลือกไฟล์
               </Button>
             )}
-            {canEdit && (
-              <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])} onClick={handleImport}>
+            {/* tab นิสิต: ต้องผ่าน mapping ก่อน */}
+            {canEdit && activeTab === 0 && !showMapping && dataStudent.length > 0 && (
+              <Button sx={btnStyle(colors.blueAccent[500], colors.blueAccent[700])} onClick={handlePreviewMapping} disabled={mappingLoading}>
+                <CheckCircleOutlineIcon sx={{ mr: '10px' }} />ตรวจสอบ Mapping ภาควิชา/สาขา
+              </Button>
+            )}
+            {canEdit && activeTab === 0 && showMapping && (
+              <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])} onClick={handleConfirmAndImport} disabled={mappingLoading}>
+                <BrowserUpdatedIcon sx={{ mr: '10px' }} />ยืนยัน Mapping และนำเข้านิสิต
+              </Button>
+            )}
+            {/* tab อื่น: import ตรงได้เลย */}
+            {canEdit && activeTab > 0 && (
+              <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])} onClick={handleImportOther}>
                 <BrowserUpdatedIcon sx={{ mr: '10px' }} />นำเข้า{TABS[activeTab]}
               </Button>
             )}
@@ -299,8 +412,128 @@ const StudentAffairsImportData = () => {
             )}
           </Box>
         </Box>
+
         {showProgress && <UploadProgresBar />}
-        <DataGrid rows={activeData} columns={activeCols} slots={{ toolbar: GridToolbar }} />
+
+        {/* Mapping Preview (เฉพาะ tab นิสิต) */}
+        {activeTab === 0 && showMapping && (
+          <Box mb="16px">
+            <Typography variant="h5" fontWeight="bold" sx={{ color: colors.greenAccent[400], mb: '8px' }}>
+              ตรวจสอบ Mapping ภาควิชา/สาขาวิชา — กด "ยืนยัน" เพื่อนำเข้า
+            </Typography>
+            <Box display="grid" gridTemplateColumns="1fr 1fr" gap="16px">
+              {/* Departments */}
+              <Box>
+                <Typography variant="h6" sx={{ color: colors.grey[300], mb: '6px' }}>ภาควิชา ({deptMapping.length} รายการ)</Typography>
+                <TableContainer component={Paper} sx={{ backgroundColor: colors.primary[400], maxHeight: 300 }}>
+                  <Table size="small" stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold', backgroundColor: colors.primary[400] }}>ชื่อภาควิชา (จาก Excel)</TableCell>
+                        <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold', backgroundColor: colors.primary[400] }}>Code (แก้ได้)</TableCell>
+                        <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold', backgroundColor: colors.primary[400] }}>สถานะ</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {deptMapping.map(function(d, i) {
+                        var isNew = d.status === 'new'
+                        var isSkip = d.skip === true
+                        return (
+                          <TableRow key={i} sx={{ opacity: isSkip ? 0.4 : 1 }}>
+                            <TableCell sx={{ color: colors.grey[100], fontSize: 13 }}>
+                              <span style={{ textDecoration: isSkip ? 'line-through' : 'none' }}>{d.excel_name}</span>
+                            </TableCell>
+                            <TableCell>
+                              <TextField
+                                size="small" variant="outlined"
+                                value={d.department_code || ''}
+                                disabled={isSkip}
+                                onChange={function(e) {
+                                  var updated = deptMapping.map(function(x, xi) {
+                                    return xi === i ? Object.assign({}, x, { department_code: e.target.value }) : x
+                                  })
+                                  setDeptMapping(updated)
+                                }}
+                                inputProps={{ style: { color: colors.grey[100], fontSize: 13, padding: '4px 8px' } }}
+                                sx={{ width: 90 }}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Chip
+                                label={isSkip ? 'ข้าม' : isNew ? 'สร้างใหม่' : 'มีอยู่แล้ว'}
+                                size="small"
+                                onClick={function() {
+                                  var updated = deptMapping.map(function(x, xi) {
+                                    return xi === i ? Object.assign({}, x, { skip: !x.skip }) : x
+                                  })
+                                  setDeptMapping(updated)
+                                }}
+                                sx={{
+                                  cursor: 'pointer',
+                                  backgroundColor: isSkip ? colors.redAccent[700] : isNew ? colors.blueAccent[700] : colors.greenAccent[700],
+                                  color: colors.grey[100],
+                                  '&:hover': { opacity: 0.8 }
+                                }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+
+              {/* Majors */}
+              <Box>
+                <Typography variant="h6" sx={{ color: colors.grey[300], mb: '6px' }}>สาขาวิชา ({majorMapping.length} รายการ)</Typography>
+                <TableContainer component={Paper} sx={{ backgroundColor: colors.primary[400], maxHeight: 240 }}>
+                  <Table size="small" stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold' }}>สาขาวิชา</TableCell>
+                        <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold' }}>ภาควิชา</TableCell>
+                        <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold' }}>สถานะ</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {majorMapping.map(function(m, i) {
+                        return (
+                          <TableRow key={i}>
+                            <TableCell sx={{ color: colors.grey[100] }}>{m.major_name}</TableCell>
+                            <TableCell sx={{ color: colors.grey[300], fontSize: 12 }}>{m.department_name}</TableCell>
+                            <TableCell>
+                              <Chip
+                                label={m.status === 'exists' ? 'มีอยู่แล้ว' : 'สร้างใหม่'}
+                                size="small"
+                                sx={{
+                                  backgroundColor: m.status === 'exists' ? colors.greenAccent[700] : colors.blueAccent[700],
+                                  color: colors.grey[100]
+                                }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* Data Preview Grid */}
+        {(!showMapping || activeTab !== 0) && (
+          <DataGrid rows={activeData} columns={activeCols} slots={{ toolbar: GridToolbar }} />
+        )}
+        {activeTab === 0 && showMapping && (
+          <Box mt="8px">
+            <Typography variant="caption" sx={{ color: colors.grey[400] }}>
+              Preview ข้อมูลนิสิต {dataStudent.length} รายการ — กด "ยืนยัน Mapping และนำเข้า" ด้านบนเพื่อดำเนินการ
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   )

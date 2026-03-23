@@ -11,22 +11,7 @@ import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { httpClient } from '../../utils/HttpClient'
-
-const excelSerialToDate = (val) => {
-  if (!val) return null
-  if (typeof val === 'string' && val.includes('/')) {
-    // format ว/ด/ป (พ.ศ.) เช่น 1/10/2567
-    const parts = val.split('/')
-    if (parts.length === 3) {
-      const year = Number(parts[2]) > 2400 ? Number(parts[2]) - 543 : Number(parts[2])
-      return `${year}-${String(parts[1]).padStart(2,'0')}-${String(parts[0]).padStart(2,'0')}`
-    }
-  }
-  if (typeof val === 'number') {
-    return new Date((val - 25569) * 86400 * 1000).toISOString().split('T')[0]
-  }
-  return String(val)
-}
+import { excelDateToISO as excelSerialToDate } from '../../utils/dateUtils'
 
 const ProjectImportData = () => {
   const theme = useTheme()

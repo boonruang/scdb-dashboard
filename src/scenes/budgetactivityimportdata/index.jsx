@@ -11,11 +11,7 @@ import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { bulkImportBudgetActivity, validateBudgetCodes } from '../../actions/budgetActivity.action'
-
-const excelSerialToDate = (serial) => {
-  if (!serial || isNaN(serial)) return null
-  return new Date((serial - 25569) * 86400 * 1000).toISOString().split('T')[0]
-}
+import { excelDateToISO as excelSerialToDate } from '../../utils/dateUtils'
 
 const num = (v) => Number(v) || 0
 const str = (v) => String(v || '').trim()

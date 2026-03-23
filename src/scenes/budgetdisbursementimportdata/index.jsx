@@ -11,12 +11,7 @@ import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { bulkImportBudgetDisbursement, validateActivityCodes } from '../../actions/budgetDisbursement.action'
-
-const excelSerialToDate = (serial) => {
-  if (!serial || isNaN(serial)) return null
-  const date = new Date((serial - 25569) * 86400 * 1000)
-  return date.toISOString().split('T')[0]
-}
+import { excelDateToISO as excelSerialToDate } from '../../utils/dateUtils'
 
 const BudgetDisbursementImportData = () => {
   const theme = useTheme()

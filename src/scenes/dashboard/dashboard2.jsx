@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, useTheme, Select, MenuItem, FormControl, InputLabel, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, TextField, TableContainer, Paper } from '@mui/material'
+import { Box, Typography, useTheme, Select, MenuItem, FormControl, InputLabel, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, TextField, TableContainer, Paper, Collapse, IconButton } from '@mui/material'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { tokens } from '../../theme'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
@@ -57,6 +59,93 @@ var KpiCard = function(props) {
         </Typography>
       </Box>
     </Box>
+  )
+}
+
+// ── Top Student Row (expandable) ──────────────────────────────────────
+var TopStudentRow = function(props) {
+  var s = props.s
+  var i = props.i
+  var colors = props.colors
+  var [open, setOpen] = useState(false)
+  var awardList = s.awardList || []
+  var grantList = s.grantList || []
+  var borderColor = colors.primary[300]
+  var bg = colors.primary[400]
+  var bgSub = colors.primary[400]
+  return (
+    <>
+      <TableRow onClick={function() { setOpen(!open) }} style={{ cursor: 'pointer', backgroundColor: bg }}>
+        <TableCell style={{ width: 40, borderBottom: '1px solid ' + borderColor, padding: '4px', backgroundColor: bg }}>
+          <IconButton size="small" style={{ color: colors.grey[300] }}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell style={{ color: colors.grey[400], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, width: 40, backgroundColor: bg }}>{i + 1}</TableCell>
+        <TableCell style={{ color: colors.grey[100], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.name}</TableCell>
+        <TableCell style={{ color: colors.grey[300], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.major}</TableCell>
+        <TableCell style={{ color: colors.greenAccent[400], fontWeight: 'bold', fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.awards} รางวัล</TableCell>
+        <TableCell style={{ color: colors.blueAccent[400], fontWeight: 'bold', fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.grants} ทุน</TableCell>
+      </TableRow>
+      <TableRow style={{ backgroundColor: bgSub }}>
+        <TableCell colSpan={6} style={{ padding: 0, borderBottom: '1px solid ' + borderColor, backgroundColor: bgSub }}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box style={{ padding: '8px 32px', backgroundColor: bgSub }}>
+              {awardList.length > 0 && (
+                <Box mb="8px">
+                  <Typography variant="caption" style={{ color: colors.greenAccent[400], fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>รางวัล</Typography>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        {['ชื่อรางวัล', 'ระดับ', 'วันที่'].map(function(h) {
+                          return <TableCell key={h} style={{ color: colors.grey[400], fontSize: '0.8rem', padding: '2px 8px', borderBottom: 'none', backgroundColor: bgSub }}>{h}</TableCell>
+                        })}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {awardList.map(function(a, ai) {
+                        return (
+                          <TableRow key={ai} style={{ backgroundColor: bgSub }}>
+                            <TableCell style={{ color: colors.grey[100], fontSize: '0.85rem', borderBottom: 'none', padding: '3px 8px', backgroundColor: bgSub }}>{a.award_name}</TableCell>
+                            <TableCell style={{ color: colors.greenAccent[300], fontSize: '0.85rem', borderBottom: 'none', padding: '3px 8px', backgroundColor: bgSub }}>{a.award_level}</TableCell>
+                            <TableCell style={{ color: colors.grey[400], fontSize: '0.85rem', borderBottom: 'none', padding: '3px 8px', backgroundColor: bgSub }}>{a.award_date || '-'}</TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </Box>
+              )}
+              {grantList.length > 0 && (
+                <Box mb="8px">
+                  <Typography variant="caption" style={{ color: colors.blueAccent[400], fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>ทุนการศึกษา</Typography>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        {['ชื่อทุน', 'ประเภท', 'มูลค่า (บาท)'].map(function(h) {
+                          return <TableCell key={h} style={{ color: colors.grey[400], fontSize: '0.8rem', padding: '2px 8px', borderBottom: 'none', backgroundColor: bgSub }}>{h}</TableCell>
+                        })}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {grantList.map(function(g, gi) {
+                        return (
+                          <TableRow key={gi} style={{ backgroundColor: bgSub }}>
+                            <TableCell style={{ color: colors.grey[100], fontSize: '0.85rem', borderBottom: 'none', padding: '3px 8px', backgroundColor: bgSub }}>{g.grant_name}</TableCell>
+                            <TableCell style={{ color: colors.blueAccent[300], fontSize: '0.85rem', borderBottom: 'none', padding: '3px 8px', backgroundColor: bgSub }}>{g.grant_type || '-'}</TableCell>
+                            <TableCell style={{ color: colors.grey[300], fontSize: '0.85rem', borderBottom: 'none', padding: '3px 8px', backgroundColor: bgSub }}>{(g.amount || 0).toLocaleString('th-TH')}</TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </Box>
+              )}
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   )
 }
 
@@ -432,7 +521,7 @@ var Dashboard2 = function() {
             </ChartBox>
           </Box>
 
-          {/* Top Students Table — Styled like Dashboard3 */}
+          {/* Top Students Table — expandable */}
           <Box mt="20px" p="20px">
             <Typography variant="h5" fontWeight="bold" mb="12px" sx={{ color: colors.grey[100] }}>
               Top นิสิต (รางวัล + ทุน)
@@ -446,18 +535,10 @@ var Dashboard2 = function() {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      {['#', 'ชื่อ-สกุล', 'สาขา', 'รางวัล', 'ทุน'].map(function(h) {
+                      <TableCell sx={{ width: 40, borderBottom: '2px solid ' + colors.primary[300] }} />
+                      {['#', 'ชื่อ-สกุล', 'สาขา', 'รางวัล (จำนวน)', 'ทุน (จำนวน)'].map(function(h) {
                         return (
-                          <TableCell 
-                            key={h} 
-                            sx={{ 
-                              color: colors.greenAccent[400], 
-                              fontWeight: 'bold', 
-                              fontSize: '0.95rem',
-                              borderBottom: '2px solid ' + colors.primary[300],
-                              py: '12px'
-                            }}
-                          >
+                          <TableCell key={h} sx={{ color: colors.greenAccent[400], fontWeight: 'bold', fontSize: '0.95rem', borderBottom: '2px solid ' + colors.primary[300], py: '12px' }}>
                             {h}
                           </TableCell>
                         )
@@ -466,23 +547,7 @@ var Dashboard2 = function() {
                   </TableHead>
                   <TableBody>
                     {topStudents.map(function(s, i) {
-                      return (
-                        <TableRow 
-                          key={i} 
-                          hover 
-                          sx={{ 
-                            '&:hover': { 
-                               backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.primary[900] 
-                            } 
-                          }}
-                        >
-                          <TableCell sx={{ color: colors.grey[400], fontSize: '0.9rem', borderBottom: '1px solid ' + colors.primary[300], width: 40 }}>{i + 1}</TableCell>
-                          <TableCell sx={{ color: colors.grey[100], fontSize: '0.9rem', borderBottom: '1px solid ' + colors.primary[300] }}>{s.name}</TableCell>
-                          <TableCell sx={{ color: colors.grey[300], fontSize: '0.9rem', borderBottom: '1px solid ' + colors.primary[300] }}>{s.major}</TableCell>
-                          <TableCell sx={{ color: colors.greenAccent[400], fontWeight: 'bold', fontSize: '0.9rem', borderBottom: '1px solid ' + colors.primary[300] }}>{s.awards}</TableCell>
-                          <TableCell sx={{ color: colors.blueAccent[400], fontWeight: 'bold', fontSize: '0.9rem', borderBottom: '1px solid ' + colors.primary[300] }}>{s.grants}</TableCell>
-                        </TableRow>
-                      )
+                      return <TopStudentRow key={i} s={s} i={i} colors={colors} />
                     })}
                   </TableBody>
                 </Table>
