@@ -90,14 +90,30 @@ var StaffImportData = function() {
   }
 
   var handleImport = async function() {
-    var toImport = activeData.map(function(r) { var copy = Object.assign({}, r); delete copy.id; return copy })
+    var toImport = activeData
+      .filter(function(r) {
+        if (activeTab === 0) return r.status && r.firstname_th  // บุคลากร: ต้องมีสถานะและชื่อ
+        return r.position_no && r.leave_type                    // การลา: ต้องมีเลขตำแหน่งและประเภทการลา
+      })
+      .map(function(r) { var copy = Object.assign({}, r); delete copy.id; return copy })
+
     if (!toImport.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
-    if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?')) return
+
+    // สรุปจำนวนแยกตามสถานะ (tab บุคลากร)
+    var summary = ''
+    if (activeTab === 0) {
+      var statusCount = {}
+      toImport.forEach(function(r) { statusCount[r.status] = (statusCount[r.status] || 0) + 1 })
+      summary = Object.keys(statusCount).map(function(k) { return k + ' ' + statusCount[k] + ' คน' }).join(', ')
+      summary = '\n(' + summary + ')'
+    }
+
+    if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?' + summary)) return
     try {
       var url = activeTab === 0 ? 'staff/bulk' : 'leaverecord/bulk'
       var res = await httpClient.post(url, toImport)
       if (res.data && res.data.status === 'ok') {
-        alert('นำเข้าสำเร็จ ' + (res.data.count || toImport.length) + ' รายการ')
+        alert('นำเข้าสำเร็จ ' + (res.data.count || toImport.length) + ' รายการ' + summary)
         if (activeTab === 0) setDataStaff([])
         else setDataLeave([])
       } else {

@@ -10,7 +10,7 @@ import SpellcheckIcon from '@mui/icons-material/Spellcheck'
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
-import { bulkUpdateAuthorProfile } from '../../actions/authorProfile.action'
+import { bulkImportAuthorProfile } from '../../actions/authorProfile.action'
 
 // Map department name → department_id (รองรับทั้งภาษาไทยและอังกฤษ)
 const DEPT_MAP = {
@@ -85,7 +85,7 @@ const AuthorProfileImportData = () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
     const toImport = data.map(({ id, ...rest }) => rest)
     if (!window.confirm(`อัปเดต Author Profile ${toImport.length} รายการ?`)) return
-    const res = await dispatch(bulkUpdateAuthorProfile(toImport))
+    const res = await dispatch(bulkImportAuthorProfile(toImport))
     if (res?.status === 'ok') {
       alert(`อัปเดตสำเร็จ: ${res.updated} รายการ, เพิ่มใหม่: ${res.inserted} รายการ`)
       setData([])

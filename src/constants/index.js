@@ -261,7 +261,7 @@ export const server = {
   LEAVERECORD_URL: `leaverecord`,
   STAFFEDUCATION_URL: `staffeducation`,
   PUBLICATION_URL: `publication`,
-  AUTHORPROFILE_URL: `staff`,
+  AUTHORPROFILE_URL: `authorprofile`,
   PROJECT_URL: `project`,
   BUDGET_PLAN_URL: `budgetPlan`,
   BUDGET_ACTIVITY_URL: `budgetActivity`,

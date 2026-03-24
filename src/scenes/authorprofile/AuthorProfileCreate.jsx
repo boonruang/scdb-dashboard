@@ -3,56 +3,34 @@ import { Box, useTheme, Button, TextField, useMediaQuery } from '@mui/material'
 import Header from '../../components/Header'
 import { tokens } from 'theme'
 import { useDispatch } from 'react-redux'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { updateAuthorProfile } from '../../actions/authorProfile.action'
+import { createAuthorProfile } from '../../actions/authorProfile.action'
 
 var schema = yup.object().shape({
   firstname_th: yup.string().required('ต้องระบุชื่อ (TH)'),
   lastname_th: yup.string().required('ต้องระบุนามสกุล (TH)'),
 })
 
-var AuthorProfileEdit = function() {
+var initialValues = {
+  spreadsheet_id: '', title_th: '', firstname_th: '', lastname_th: '',
+  firstname: '', lastname: '', position: '', position_no: '', dept_name: '',
+  email: '', phone_no: '', citations_total: '', publications_count: '',
+  h_index: '', docs_current_year: '', citations_current_year: '',
+  scopus_url: '', scholar_url: '', expertise: '', interests: '',
+  research_fund: '', ethics_license: '',
+}
+
+var AuthorProfileCreate = function() {
   var theme = useTheme()
   var colors = tokens(theme.palette.mode)
   var dispatch = useDispatch()
   var navigate = useNavigate()
-  var location = useLocation()
-  var row = (location.state || {}).row || {}
   var isNonMobile = useMediaQuery('(min-width:600px)')
 
-  var initialValues = {
-    author_id:              row.author_id || '',
-    spreadsheet_id:         row.spreadsheet_id || '',
-    title_th:               row.title_th || '',
-    firstname_th:           row.firstname_th || '',
-    lastname_th:            row.lastname_th || '',
-    firstname:              row.firstname || '',
-    lastname:               row.lastname || '',
-    position:               row.position || '',
-    position_no:            row.position_no || '',
-    dept_name:              row.dept_name || '',
-    email:                  row.email || '',
-    phone_no:               row.phone_no || '',
-    citations_total:        row.citations_total || '',
-    publications_count:     row.publications_count || '',
-    h_index:                row.h_index || '',
-    docs_current_year:      row.docs_current_year || '',
-    citations_current_year: row.citations_current_year || '',
-    scopus_url:             row.scopus_url || '',
-    scholar_url:            row.scholar_url || '',
-    expertise:              row.expertise || '',
-    interests:              row.interests || '',
-    research_fund:          row.research_fund || '',
-    ethics_license:         row.ethics_license || '',
-  }
-
   var handleSubmit = async function(values) {
-    var id = values.author_id
-    var payload = Object.assign({}, values)
-    delete payload.author_id
-    var res = await dispatch(updateAuthorProfile(id, payload))
+    var res = await dispatch(createAuthorProfile(values))
     if (res && res.status === 'ok') navigate('/authorprofile')
     else alert('เกิดข้อผิดพลาด: ' + ((res && res.result) || ''))
   }
@@ -73,7 +51,7 @@ var AuthorProfileEdit = function() {
 
   return (
     <Box m="20px">
-      <Header title="แก้ไข Author Profile" subtitle={(row.firstname_th || '') + ' ' + (row.lastname_th || '')} />
+      <Header title="เพิ่ม Author Profile" subtitle="เพิ่มนักวิจัยใหม่" />
       <Formik initialValues={initialValues} validationSchema={schema} onSubmit={handleSubmit}>
         {function(formik) {
           return (
@@ -121,4 +99,4 @@ var AuthorProfileEdit = function() {
   )
 }
 
-export default AuthorProfileEdit
+export default AuthorProfileCreate

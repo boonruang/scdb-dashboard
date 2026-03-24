@@ -6,34 +6,64 @@ import {
 } from '../constants'
 import { httpClient } from '../utils/HttpClient'
 
-const setFetching = () => ({ type: HTTP_AUTHORPROFILE_FETCHING })
-const setSuccess = (payload) => ({ type: HTTP_AUTHORPROFILE_SUCCESS, payload })
-const setFailed = () => ({ type: HTTP_AUTHORPROFILE_FAILED })
+var setFetching = function() { return { type: HTTP_AUTHORPROFILE_FETCHING } }
+var setSuccess = function(payload) { return { type: HTTP_AUTHORPROFILE_SUCCESS, payload: payload } }
+var setFailed = function() { return { type: HTTP_AUTHORPROFILE_FAILED } }
 
-export const getAuthorProfiles = () => async (dispatch) => {
-  dispatch(setFetching())
-  try {
-    const res = await httpClient.get(`${server.STAFF_URL}/list`)
-    dispatch(setSuccess(res.data))
-  } catch {
-    dispatch(setFailed())
+export var getAuthorProfiles = function() {
+  return async function(dispatch) {
+    dispatch(setFetching())
+    try {
+      var res = await httpClient.get(server.AUTHORPROFILE_URL + '/list')
+      dispatch(setSuccess(res.data))
+    } catch (e) { dispatch(setFailed()) }
   }
 }
 
-export const bulkUpdateAuthorProfile = (records) => async () => {
-  try {
-    const res = await httpClient.post(`${server.STAFF_URL}/bulkupdateprofile`, records)
-    return res.data
-  } catch (error) {
-    return { status: 'nok', result: String(error) }
+export var createAuthorProfile = function(data) {
+  return async function() {
+    try {
+      var res = await httpClient.post(server.AUTHORPROFILE_URL, data)
+      return res.data
+    } catch (e) { return { status: 'nok', result: String(e) } }
   }
 }
 
-export const bulkImportPublication = (records) => async () => {
-  try {
-    const res = await httpClient.post(`${server.PUBLICATION_URL}/bulk`, records)
-    return res.data
-  } catch (error) {
-    return { status: 'nok', result: String(error) }
+export var updateAuthorProfile = function(id, data) {
+  return async function() {
+    try {
+      var res = await httpClient.put(server.AUTHORPROFILE_URL + '/' + id, data)
+      return res.data
+    } catch (e) { return { status: 'nok', result: String(e) } }
+  }
+}
+
+export var deleteAuthorProfile = function(id) {
+  return async function(dispatch) {
+    try {
+      await httpClient.delete(server.AUTHORPROFILE_URL + '/' + id)
+      dispatch(setFetching())
+      var res = await httpClient.get(server.AUTHORPROFILE_URL + '/list')
+      dispatch(setSuccess(res.data))
+    } catch (e) { dispatch(setFailed()) }
+  }
+}
+
+export var bulkImportAuthorProfile = function(records) {
+  return async function() {
+    try {
+      var res = await httpClient.post(server.AUTHORPROFILE_URL + '/bulk', records)
+      return res.data
+    } catch (e) { return { status: 'nok', result: String(e) } }
+  }
+}
+
+// ยังคงไว้สำหรับ publication import (ใช้จาก publicationimportdata)
+export var bulkImportPublication = function(records) {
+  return async function() {
+    try {
+      var res = await httpClient.post(server.PUBLICATION_URL + '/bulk', records)
+      return res.data
+    } catch (e) { return { status: 'nok', result: String(e) } }
   }
 }

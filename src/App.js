@@ -68,6 +68,7 @@ import PublicationImportData2 from "scenes/publicationimportdata2";
 import AuthorProfileList from "scenes/authorprofile";
 import AuthorProfileDetail from "scenes/authorprofile/AuthorProfileDetail";
 import AuthorProfileEdit from "scenes/authorprofile/AuthorProfileEdit";
+import AuthorProfileCreate from "scenes/authorprofile/AuthorProfileCreate";
 import AuthorProfileImportData from "scenes/authorprofileimportdata";
 
 import PublicationList from "scenes/publication";
@@ -207,6 +208,7 @@ function App() {
           <Route path="authorprofile" element={<AuthorProfileList />} />
           <Route path="authorprofile/detail" element={<AuthorProfileDetail />} />
           <Route path="authorprofile/edit" element={<AuthorProfileEdit />} />
+          <Route path="authorprofile/create" element={<AuthorProfileCreate />} />
           <Route path="authorprofile/importdata" element={<AuthorProfileImportData />} />
 
           <Route path="project/add" element={<ProjectAdd />} />
