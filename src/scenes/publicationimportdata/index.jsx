@@ -12,7 +12,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { bulkImportPublication } from '../../actions/authorProfile.action'
 
-var BATCH = 20
+var BATCH = 5
 
 var PublicationImportData = function() {
   var theme = useTheme()

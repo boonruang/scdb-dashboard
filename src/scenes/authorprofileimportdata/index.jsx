@@ -85,7 +85,7 @@ const AuthorProfileImportData = () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
     const toImport = data.map(({ id, ...rest }) => rest)
     if (!window.confirm(`อัปเดต Author Profile ${toImport.length} รายการ?`)) return
-    const BATCH = 20
+    const BATCH = 5
     var totalInserted = 0, totalUpdated = 0
     for (var i = 0; i < toImport.length; i += BATCH) {
       var chunk = toImport.slice(i, i + BATCH)
