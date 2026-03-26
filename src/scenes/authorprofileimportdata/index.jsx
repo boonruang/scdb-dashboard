@@ -85,13 +85,20 @@ const AuthorProfileImportData = () => {
     if (!data.length) { alert('ไม่มีข้อมูลให้นำเข้า'); return }
     const toImport = data.map(({ id, ...rest }) => rest)
     if (!window.confirm(`อัปเดต Author Profile ${toImport.length} รายการ?`)) return
-    const res = await dispatch(bulkImportAuthorProfile(toImport))
-    if (res?.status === 'ok') {
-      alert(`อัปเดตสำเร็จ: ${res.updated} รายการ, เพิ่มใหม่: ${res.inserted} รายการ`)
-      setData([])
-    } else {
-      alert('เกิดข้อผิดพลาด: ' + (res?.result || ''))
+    const BATCH = 20
+    var totalInserted = 0, totalUpdated = 0
+    for (var i = 0; i < toImport.length; i += BATCH) {
+      var chunk = toImport.slice(i, i + BATCH)
+      var res = await dispatch(bulkImportAuthorProfile(chunk))
+      if (!res || res.status !== 'ok') {
+        alert('เกิดข้อผิดพลาด batch ' + (i / BATCH + 1) + ': ' + (res && res.result || ''))
+        return
+      }
+      totalInserted += res.inserted || 0
+      totalUpdated += res.updated || 0
     }
+    alert(`อัปเดตสำเร็จ: ${totalUpdated} รายการ, เพิ่มใหม่: ${totalInserted} รายการ`)
+    setData([])
   }
 
   const handleClear = () => {
