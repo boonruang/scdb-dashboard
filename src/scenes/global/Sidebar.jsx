@@ -340,7 +340,7 @@ const Sidebar = () => {
 
 
                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
-                           ? <SubMenu title="3.ด้านหลักสูตร" icon={<FmdBadIcon />}>
+                           ? <SubMenu title="3.ด้านวิชาการ" icon={<FmdBadIcon />}>
                             <Item
                                 title="ข้อมูลหลักสูตร"
                                 to="/academicprogram"
@@ -349,21 +349,19 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="นำเข้าข้อมูลหลักสูตร"
-                                to="/academicprogram/importdata"
-                                icon={<StickyNote2Icon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />                             
-                           
-                            {/* <Item
-                                title="แผนการรับนิสิต"
+                                title="ข้อมูลแผนการรับนิสิต"
                                 to="/admissionplan"
+                                icon={<DehazeIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="นำเข้าข้อมูลวิชาการ"
+                                to="/academic/importdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />  */}
-                                                        
+                            />
                          </SubMenu>   : undefined  }                                               
 
 

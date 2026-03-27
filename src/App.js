@@ -52,6 +52,7 @@ import StaffeducationDetail from "scenes/staffeducation/StaffeducationDetail";
 import StaffeducationEdit from "scenes/staffeducation/StaffeducationEdit"; 
 
 import AcademicProgramImportData from "scenes/academicprogramimportdata";
+import AcademicImportData from "scenes/academicimportdata";
 
 import AcademicProgramList from "scenes/academicprogram";
 import AcademicProgramAdd from "scenes/academicprogram/AcademicProgramAdd"; 
@@ -191,7 +192,8 @@ function App() {
           <Route path="academicprogram/edit" element={<AcademicProgramEdit />} />
           <Route path="academicprogram" element={<AcademicProgramList />} />    
 
-          <Route path="academicprogram/importdata" element={<AcademicProgramImportData />} />    
+          <Route path="academicprogram/importdata" element={<AcademicProgramImportData />} />
+          <Route path="academic/importdata" element={<AcademicImportData />} />    
 
           <Route path="admissionplan/add" element={<AdmissionPlanAdd />} />
           <Route path="admissionplan/detail" element={<AdmissionPlanDetail />} />
