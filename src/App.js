@@ -53,6 +53,18 @@ import StaffeducationEdit from "scenes/staffeducation/StaffeducationEdit";
 
 import AcademicProgramImportData from "scenes/academicprogramimportdata";
 import AcademicImportData from "scenes/academicimportdata";
+import MasterList from "scenes/academicresearch/MasterList";
+import MasterAdd from "scenes/academicresearch/MasterAdd";
+import MasterEdit from "scenes/academicresearch/MasterEdit";
+import MasterDetail from "scenes/academicresearch/MasterDetail";
+import DoctorList from "scenes/academicresearch/DoctorList";
+import DoctorAdd from "scenes/academicresearch/DoctorAdd";
+import DoctorEdit from "scenes/academicresearch/DoctorEdit";
+import DoctorDetail from "scenes/academicresearch/DoctorDetail";
+import AcademicGrantList from "scenes/academicgrant";
+import AcademicGrantAdd from "scenes/academicgrant/AcademicGrantAdd";
+import AcademicGrantEdit from "scenes/academicgrant/AcademicGrantEdit";
+import AcademicGrantDetail from "scenes/academicgrant/AcademicGrantDetail";
 
 import AcademicProgramList from "scenes/academicprogram";
 import AcademicProgramAdd from "scenes/academicprogram/AcademicProgramAdd"; 
@@ -137,7 +149,7 @@ function App() {
       
       <Route path="/" element={<Layout />}>
 
-        <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>
+        <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User,ROLES.HR,ROLES.Student,ROLES.Academic,ROLES.Research,ROLES.Plan]} /> }>
           <Route path="/" element={<Dashbaord1 />} />
           <Route path="dashboard" element={<Dashbaord1 />} />
           <Route path="dashboard/dashboard1" element={<Dashbaord1 />} />
@@ -147,7 +159,7 @@ function App() {
           <Route path="dashboard/dashboard5" element={<Dashbaord5 />} />
         </Route>
 
-        <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User]} /> }>
+        <Route element={<SecureRoute allowedRoles={[ROLES.Admin,ROLES.Editor,ROLES.User,ROLES.HR,ROLES.Student,ROLES.Academic,ROLES.Research,ROLES.Plan]} /> }>
           <Route path="system/log" element={<Log />} />
           <Route path="users/add" element={<UsersAdd />} />
           <Route path="users/detail" element={<UsersDetail />} />
@@ -193,7 +205,21 @@ function App() {
           <Route path="academicprogram" element={<AcademicProgramList />} />    
 
           <Route path="academicprogram/importdata" element={<AcademicProgramImportData />} />
-          <Route path="academic/importdata" element={<AcademicImportData />} />    
+          <Route path="academic/importdata" element={<AcademicImportData />} />
+
+          <Route path="academicresearch/master" element={<MasterList />} />
+          <Route path="academicresearch/master/add" element={<MasterAdd />} />
+          <Route path="academicresearch/master/edit" element={<MasterEdit />} />
+          <Route path="academicresearch/master/detail" element={<MasterDetail />} />
+          <Route path="academicresearch/doctor" element={<DoctorList />} />
+          <Route path="academicresearch/doctor/add" element={<DoctorAdd />} />
+          <Route path="academicresearch/doctor/edit" element={<DoctorEdit />} />
+          <Route path="academicresearch/doctor/detail" element={<DoctorDetail />} />
+
+          <Route path="academicgrant" element={<AcademicGrantList />} />
+          <Route path="academicgrant/add" element={<AcademicGrantAdd />} />
+          <Route path="academicgrant/edit" element={<AcademicGrantEdit />} />
+          <Route path="academicgrant/detail" element={<AcademicGrantDetail />} />    
 
           <Route path="admissionplan/add" element={<AdmissionPlanAdd />} />
           <Route path="admissionplan/detail" element={<AdmissionPlanDetail />} />

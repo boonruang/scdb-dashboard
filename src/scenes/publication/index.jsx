@@ -113,15 +113,19 @@ const Publications = () => {
       cellClassName: "name-column--cell"
     },
     {
-      field: 'Staffs',
+      field: 'AuthorProfiles',
       headerName: 'ผู้แต่ง',
-      flex: 0.8,
+      flex: 1.2,
       renderCell: (params) => {
-        const authors = params.row.Staffs;
+        const authors = params.row.AuthorProfiles;
         if (authors && authors.length > 0) {
-          return authors.map(a => `${a.firstname} ${a.lastname}`).join(', ');
+          return authors.map(function(a) {
+            return (a.firstname_th && a.lastname_th)
+              ? a.firstname_th + ' ' + a.lastname_th
+              : (a.firstname || '') + ' ' + (a.lastname || '')
+          }).join(', ');
         }
-        return 'N/A';
+        return '-';
       }
     },   
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {

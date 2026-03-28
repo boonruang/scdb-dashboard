@@ -33,6 +33,8 @@ import budgetActivityReducer from "./budgetActivity.reducer";
 import budgetDisbursementReducer from "./budgetDisbursement.reducer";
 import studentAwardReducer from "./studentAward.reducer";
 import studentActivityReducer from "./studentActivity.reducer";
+import academicResearchReducer from "./academicResearch.reducer";
+import academicGrantReducer from "./academicGrant.reducer";
 
 export default combineReducers({
   appReducer,
@@ -69,4 +71,6 @@ export default combineReducers({
   budgetDisbursementReducer,
   studentAwardReducer,
   studentActivityReducer,
+  academicResearchReducer,
+  academicGrantReducer,
 })

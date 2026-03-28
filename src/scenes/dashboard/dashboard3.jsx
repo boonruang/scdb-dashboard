@@ -90,14 +90,24 @@ var Dashboard3 = function() {
     return { dept: d.dept.replace('ภาควิชา', ''), แผนรับ: d.plan, รายงานตัว: d.reported }
   })
 
-  // Nivo line data
+  // Nivo line data (mock trend for display)
+  var mockTrend = [
+    { x: '2562', y: 142 },
+    { x: '2563', y: 198 },
+    { x: '2564', y: 265 },
+    { x: '2565', y: 310 },
+    { x: '2566', y: 378 },
+    { x: '2567', y: 450 },
+  ]
   var lineData = [{
-    id: 'รับเข้า',
-    data: admissionTrend.map(function(d) { return { x: String(d.year), y: d.total } })
+    id: 'งานวิจัย',
+    data: admissionTrend.length >= 3
+      ? admissionTrend.map(function(d) { return { x: String(d.year), y: d.total } })
+      : mockTrend
   }]
 
   // Pie colors
-  var pieColors1 = ['#2196f3', '#ff9800', '#4caf50', '#e91e63', '#9c27b0']
+  var pieColors1 = ['#2196f3', '#ff9800']
   var pieColors2 = ['#4caf50', '#ff9800', '#2196f3', '#f44336']
 
   return (
@@ -124,7 +134,7 @@ var Dashboard3 = function() {
             <KpiCard icon={<CheckCircleIcon sx={{ color: '#4ade80', fontSize: 28 }} />} iconBg="#16a34a30"
               value={fmt(kpi.reportPct)} unit="%" label="รายงานตัวแล้ว" />
             <KpiCard icon={<MenuBookIcon sx={{ color: '#f59e0b', fontSize: 28 }} />} iconBg="#d9770630"
-              value={fmt(kpi.totalStudent)} label="นิสิตทั้งหมด" />
+              value={fmt(kpi.totalPublication)} label="ผลงานตีพิมพ์" />
             <KpiCard icon={<SchoolIcon sx={{ color: '#c084fc', fontSize: 28 }} />} iconBg="#7e22ce30"
               value={fmt(kpi.totalGrant)} label="คู่ได้รับทุน" />
           </Box>
@@ -190,23 +200,30 @@ var Dashboard3 = function() {
               </Box>
             </Box>
 
-            {/* Pie: นิสิตแยกภาควิชา */}
+            {/* Pie: ผลงานวิจัย ป.โท/ป.เอก */}
             <Box flex="1" minWidth="220px" backgroundColor={cardBg} borderRadius="12px" p="20px">
               <Typography variant="h5" fontWeight="bold" sx={{ color: colors.grey[100], mb: '4px', textAlign: 'center' }}>
-                นิสิตแยกภาควิชา
+                ผลงานวิจัย
               </Typography>
-              <Box height="280px">
+              <Box height="300px">
                 <ResponsivePie
                   data={studentByDept.length > 0 ? studentByDept : [{ id: 'ไม่มีข้อมูล', label: 'ไม่มีข้อมูล', value: 1 }]}
-                  margin={{ top: 20, right: 20, bottom: 60, left: 20 }}
-                  innerRadius={0.5} padAngle={1} cornerRadius={3}
+                  margin={{ top: 20, right: 20, bottom: 70, left: 20 }}
+                  innerRadius={0.55} padAngle={2} cornerRadius={3}
                   colors={pieColors1}
-                  arcLabel={function(d) { return d.value + '%' }}
+                  arcLabel={function(d) { return d.id + ' ' + d.value + '%' }}
                   arcLabelsTextColor="#fff"
-                  legends={[{ anchor: 'bottom', direction: 'row', translateY: 56,
-                    itemWidth: 80, itemHeight: 18, symbolSize: 12,
-                    itemTextColor: colors.grey[300] }]}
-                  theme={{ legends: { text: { fill: colors.grey[300] } } }}
+                  arcLabelsRadiusOffset={0.6}
+                  arcLabelsSkipAngle={5}
+                  enableArcLinkLabels={false}
+                  legends={[{ anchor: 'bottom', direction: 'row', translateY: 60,
+                    itemWidth: 100, itemHeight: 20, symbolSize: 14,
+                    itemTextColor: colors.grey[200],
+                    effects: [{ on: 'hover', style: { itemTextColor: '#fff' } }] }]}
+                  theme={{
+                    legends: { text: { fill: colors.grey[200], fontSize: 13 } },
+                    labels: { text: { fontSize: 12, fontWeight: 'bold' } }
+                  }}
                 />
               </Box>
             </Box>
@@ -218,7 +235,7 @@ var Dashboard3 = function() {
             {/* Top ภาควิชา */}
             <Box flex="1" minWidth="260px" backgroundColor={cardBg} borderRadius="12px" p="20px">
               <Typography variant="h5" fontWeight="bold" sx={{ color: colors.grey[100], mb: '12px', textAlign: 'center' }}>
-                นิสิตสูงสุดแยกสาขา
+                ผลงานวิจัยสูงสุด
               </Typography>
               <TableContainer>
                 <Table size="small">

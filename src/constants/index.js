@@ -174,6 +174,16 @@ export const HTTP_ACADEMIC_SELECTED_FETCHING = 'HTTP_ACADEMIC_SELECTED_FETCHING'
 export const HTTP_ACADEMIC_SELECTED_SUCCESS = 'HTTP_ACADEMIC_SELECTED_SUCCESS'  
 export const HTTP_ACADEMIC_SELECTED_FAILED = 'HTTP_ACADEMIC_SELECTED_FAILED'  
 
+// Academic Research Page (วิจัย ป.โท / ป.เอก)
+export const HTTP_ACADEMICRESEARCH_FETCHING = 'HTTP_ACADEMICRESEARCH_FETCHING'
+export const HTTP_ACADEMICRESEARCH_SUCCESS = 'HTTP_ACADEMICRESEARCH_SUCCESS'
+export const HTTP_ACADEMICRESEARCH_FAILED = 'HTTP_ACADEMICRESEARCH_FAILED'
+
+// Academic Grant Page (ทุนนำเสนอ)
+export const HTTP_ACADEMICGRANT_FETCHING = 'HTTP_ACADEMICGRANT_FETCHING'
+export const HTTP_ACADEMICGRANT_SUCCESS = 'HTTP_ACADEMICGRANT_SUCCESS'
+export const HTTP_ACADEMICGRANT_FAILED = 'HTTP_ACADEMICGRANT_FAILED'
+
 // Admission Plan Page
 export const HTTP_ADMISSIONPLAN_FETCHING = 'HTTP_ADMISSIONPLAN_FETCHING'
 export const HTTP_ADMISSIONPLAN_SUCCESS = 'HTTP_ADMISSIONPLAN_SUCCESS'
@@ -251,6 +261,8 @@ export const server = {
   LOGIN_PASSED: `yes`,
   ACADEMIC_URL: `academicprogram`,
   ADMISSIONPLAN_URL: `admissionplan`,
+  ACADEMICRESEARCH_URL: `academic/research`,
+  ACADEMICGRANT_URL: `academic/grant`,
   STUDENT_URL: `student`,
   STUDENTGRANT_URL: `studentgrant`,
   STUDENTAWARD_URL: `studentaward`,
@@ -285,7 +297,12 @@ export const server = {
 export const ROLES =   {
   'User' : 2001,
   'Editor': 1976,
-  'Admin': 5150
+  'Admin': 5150,
+  'HR': 4001,
+  'Student': 5001,
+  'Academic': 6001,
+  'Research': 7001,
+  'Plan': 8001,
 }
 
 export const appRoutes = {

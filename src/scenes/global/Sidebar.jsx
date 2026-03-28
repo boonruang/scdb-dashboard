@@ -225,54 +225,31 @@ const Sidebar = () => {
                          }
   */}
  
-                         { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                         { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR, ROLES.Student, ROLES.Academic, ROLES.Research, ROLES.Plan].includes(role))
                            ? <SubMenu title="แดชบอร์ด" icon={<HomeOutlinedIcon />}>
-                            {/* <Item
-                                title="หน้ารวม"
-                                to="/dashboard"
-                                icon={<DehazeIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />                             */}
-                            <Item
-                                title="ด้านบุคลากร"
-                                to="/dashboard/dashboard1"
-                                icon={<PeopleOutlinedIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="ด้านกิจการนิสิต"
-                                to="/dashboard/dashboard2"
-                                icon={<SchoolIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="ด้านวิชาการ"
-                                to="/dashboard/dashboard3"
-                                icon={<FmdBadIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> 
-                           <Item
-                                title="ด้านวิจัย"
-                                to="/dashboard/dashboard4"
-                                icon={<WbIncandescentIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> 
-                             <Item
-                                title="ด้านแผนและงบประมาณ"
-                                to="/dashboard/dashboard5"
-                                icon={<PlaylistAddCheckIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                                                       
+                            { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
+                              ? <Item title="ด้านบุคลากร" to="/dashboard/dashboard1"
+                                  icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                              : undefined }
+                            { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
+                              ? <Item title="ด้านกิจการนิสิต" to="/dashboard/dashboard2"
+                                  icon={<SchoolIcon />} selected={selected} setSelected={setSelected} />
+                              : undefined }
+                            { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role))
+                              ? <Item title="ด้านวิชาการ" to="/dashboard/dashboard3"
+                                  icon={<FmdBadIcon />} selected={selected} setSelected={setSelected} />
+                              : undefined }
+                            { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role))
+                              ? <Item title="ด้านวิจัย" to="/dashboard/dashboard4"
+                                  icon={<WbIncandescentIcon />} selected={selected} setSelected={setSelected} />
+                              : undefined }
+                            { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(role))
+                              ? <Item title="ด้านแผนและงบประมาณ" to="/dashboard/dashboard5"
+                                  icon={<PlaylistAddCheckIcon />} selected={selected} setSelected={setSelected} />
+                              : undefined }
                          </SubMenu>   : undefined  }  
 
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
                            ? <SubMenu title="1.ด้านบุคลากร" icon={<PeopleOutlinedIcon />}>
                             <Item
                                 title="ข้อมูลคลากร"
@@ -298,7 +275,7 @@ const Sidebar = () => {
                                                         
                          </SubMenu>   : undefined  }                          
 
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                            ? <SubMenu title="2.ด้านกิจการนิสิต" icon={<SchoolIcon />}>
                             <Item
                                 title="ข้อมูลนิสิต"
@@ -339,18 +316,32 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  } 
 
 
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role))
                            ? <SubMenu title="3.ด้านวิชาการ" icon={<FmdBadIcon />}>
                             <Item
-                                title="ข้อมูลหลักสูตร"
-                                to="/academicprogram"
+                                title="ข้อมูลแผนการรับนิสิต"
+                                to="/admissionplan"
                                 icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="ข้อมูลแผนการรับนิสิต"
-                                to="/admissionplan"
+                                title="วิจัย ป.โท"
+                                to="/academicresearch/master"
+                                icon={<SchoolIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="วิจัย ป.เอก"
+                                to="/academicresearch/doctor"
+                                icon={<SchoolIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="ทุนนำเสนอ"
+                                to="/academicgrant"
                                 icon={<DehazeIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -366,7 +357,7 @@ const Sidebar = () => {
 
 
 
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role))
                          ? <SubMenu title="4.ด้านการวิจัย" icon={<WbIncandescentIcon />}>
                            <Item
                                 title="ผลงานวิจัยตีพิมพ์"
@@ -400,7 +391,7 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  }                                                 
 
 
-                        { result?.roles?.find((role) => [ROLES.Admin].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(role))
                            ? <SubMenu title="5.ด้านแผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
                             <Item
                                 title="แผนโครงการ/งบประมาณ"
@@ -475,7 +466,7 @@ const Sidebar = () => {
                             />
                          </SubMenu>   : undefined  }   
 
-                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor,ROLES.User,ROLES.HR,ROLES.Student,ROLES.Academic,ROLES.Research,ROLES.Plan].includes(role))
                            ? <MenuItem
                             style={{ color: colors.grey[100] }}
                             onClick={() => handleLogout()}
