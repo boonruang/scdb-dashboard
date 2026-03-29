@@ -267,28 +267,32 @@ var Dashboard3 = function() {
             {/* รายชื่อนิสิตได้รับทุนล่าสุด */}
             <Box flex="2" minWidth="300px" backgroundColor={cardBg} borderRadius="12px" p="20px">
               <Typography variant="h5" fontWeight="bold" sx={{ color: colors.grey[100], mb: '12px', textAlign: 'center' }}>
-                รายชื่อนิสิตที่ได้รับทุนล่าสุด
+                รายชื่อนิสิตที่ได้รับทุนล่าสุด (ทุนนำเสนอ)
               </Typography>
               <TableContainer>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
+                      <TableCell sx={thStyle}>รหัสนิสิต</TableCell>
                       <TableCell sx={thStyle}>ชื่อ-สกุล</TableCell>
+                      <TableCell sx={thStyle}>หลักสูตร</TableCell>
                       <TableCell sx={thStyle}>สาขา</TableCell>
-                      <TableCell sx={thStyle}>ทุน</TableCell>
+                      <TableCell sx={thStyle}>หัวข้อนำเสนอ</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {recentGrantList.length > 0 ? recentGrantList.map(function(r, i) {
                       return (
                         <TableRow key={i}>
+                          <TableCell sx={tdStyle}>{r.student_code}</TableCell>
                           <TableCell sx={tdStyle}>{r.name}</TableCell>
+                          <TableCell sx={tdStyle}>{r.program}</TableCell>
                           <TableCell sx={tdStyle}>{r.major}</TableCell>
                           <TableCell sx={tdStyle}>{r.grant}</TableCell>
                         </TableRow>
                       )
                     }) : (
-                      <TableRow><TableCell colSpan={3} sx={{ ...tdStyle, textAlign: 'center', color: colors.grey[400] }}>ไม่พบข้อมูล</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={5} sx={{ ...tdStyle, textAlign: 'center', color: colors.grey[400] }}>ไม่พบข้อมูล</TableCell></TableRow>
                     )}
                   </TableBody>
                 </Table>
