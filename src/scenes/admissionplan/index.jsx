@@ -63,15 +63,8 @@ const AdmissionPlan = () => {
             flex: 0.3,
             align: 'center'},
         { field: 'group_name', headerName: 'กลุ่ม', flex: 0.5, cellClassName: "name-column--cell" },
-        { field: 'degree_level', headerName: 'สาขา', flex: 0.8, renderCell: function(params) { return params.row.degree_level || 'N/A' } },
-        {
-            field: 'program_name',
-            headerName: 'หลักสูตร',
-            flex: 1.5,
-            renderCell: function(params) {
-                return params.row.program_name || 'N/A'
-            }
-        },
+        { field: 'program_name', headerName: 'สาขาวิชา', flex: 1.2, renderCell: function(params) { return params.row.program_name || 'N/A' } },
+        { field: 'degree_level', headerName: 'หลักสูตร', flex: 0.8, renderCell: function(params) { return params.row.degree_level || 'N/A' } },
         { field: 'academic_year', headerName: 'ปีการศึกษา', flex: 0.5, cellClassName: "name-column--cell" },
         { field: 'planned_seats', headerName: 'แผนรับ', flex: 0.5, cellClassName: "name-column--cell" },
         { field: 'eligible_count', headerName: 'ผู้มีสิทธิ์', flex: 0.5, cellClassName: "name-column--cell" },
