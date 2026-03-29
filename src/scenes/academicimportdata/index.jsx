@@ -137,7 +137,7 @@ var AcademicImportData = function() {
     if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?')) return
     setImporting(true)
 
-    var urlMap = ['academic/admission/bulk', 'academic/research/bulk', 'academic/research/bulk', 'academic/grant/bulk']
+    var urlMap = ['academic/admission/bulk', 'academic/research/bulk', 'academic/research/bulk', 'academicgrant/bulk']
     var url = urlMap[activeTab]
 
     var totalOk = 0

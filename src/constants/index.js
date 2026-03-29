@@ -262,7 +262,7 @@ export const server = {
   ACADEMIC_URL: `academicprogram`,
   ADMISSIONPLAN_URL: `admissionplan`,
   ACADEMICRESEARCH_URL: `academic/research`,
-  ACADEMICGRANT_URL: `academic/grant`,
+  ACADEMICGRANT_URL: `academicgrant`,
   STUDENT_URL: `student`,
   STUDENTGRANT_URL: `studentgrant`,
   STUDENTAWARD_URL: `studentaward`,
