@@ -50,10 +50,23 @@ const StudentActivities = () => {
     };
 
     const ExportExcelButton = () => {
-        var wb = XLSX.utils.book_new(),
-        ws = XLSX.utils.json_to_sheet(result)
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-        XLSX.writeFile(wb, "studentactivity.xlsx")
+      var rows = (result || []).map(function(r) {
+        return {
+          'รหัสโครงการ': r.activity_code,
+          'ชื่อโครงการ': r.activity_name,
+          'ผู้จัด/หน่วยงาน': r.organizer,
+          'วันที่เริ่ม': r.start_date,
+          'วันที่สิ้นสุด': r.end_date,
+          'สถานที่': r.venue,
+          'จำนวนผู้เข้าร่วม': r.participant_count,
+          'ชั่วโมง': r.hours,
+          'งบประมาณ': r.budget_amount,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'StudentActivity')
+      XLSX.writeFile(wb, 'student_activity.xlsx')
     };
 
     const columns = [

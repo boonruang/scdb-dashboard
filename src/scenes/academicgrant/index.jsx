@@ -3,12 +3,14 @@ import { Box, useTheme, Button } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
 import AddIcon from '@mui/icons-material/Add'
+import IosShareIcon from '@mui/icons-material/IosShare'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { ROLES } from '../../constants'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import ConfirmBox from 'components/ConfirmBox'
+import * as XLSX from 'xlsx'
 import { getAcademicGrantList, deleteAcademicGrant } from '../../actions/academicGrant.action'
 
 var AcademicGrantList = function() {
@@ -79,6 +81,29 @@ var AcademicGrantList = function() {
               <AddIcon sx={{ mr: '10px' }} />เพิ่มข้อมูล
             </Button>
           )}
+          <Button onClick={function() {
+            var rows = (result || []).map(function(r) {
+              return {
+                'ID': r.id,
+                'รหัสนิสิต': r.student_code,
+                'ชื่อ': r.firstname,
+                'นามสกุล': r.lastname,
+                'สาขา': r.major_name,
+                'ชื่อทุน/หัวข้อ': r.grant_name,
+                'งานประชุม': r.conference_name,
+                'งบ (บาท)': r.amount,
+                'ประเภท': r.grant_type,
+                'หลักสูตร': r.grant_source,
+              }
+            })
+            var wb = XLSX.utils.book_new()
+            var ws = XLSX.utils.json_to_sheet(rows)
+            XLSX.utils.book_append_sheet(wb, ws, 'AcademicGrant')
+            XLSX.writeFile(wb, 'academic_grant.xlsx')
+          }} sx={{ backgroundColor: colors.blueAccent[700], color: colors.grey[100], fontSize: '14px',
+            fontWeight: 'bold', padding: '10px 20px', mr: '10px', '&:hover': { backgroundColor: colors.blueAccent[800] } }}>
+            <IosShareIcon sx={{ mr: '10px' }} />ส่งออกข้อมูล EXCEL
+          </Button>
         </Box>
         {isFetching && (
           <Box height="65vh" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -53,13 +53,23 @@ const Projects = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "project.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        return {
+          'รหัส': r.project_id,
+          'ชื่อโครงการ': r.project_name,
+          'ประเภทโครงการ': r.project_type,
+          'วันเริ่มต้น': r.start_date,
+          'วันสิ้นสุด': r.end_date,
+          'แหล่งงบประมาณ': r.budget_source,
+          'งบประมาณ': r.budget_amount,
+          'สถานะ': r.status,
+          'ภาควิชา': (r.Department || {}).dept_name || '',
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'Project')
+      XLSX.writeFile(wb, 'project.xlsx')
     };
       
     

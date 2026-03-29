@@ -53,13 +53,22 @@ const Documents = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "document.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        return {
+          'รหัส': r.doc_id,
+          'หมายเลขอ้างอิง': r.doc_reference_no,
+          'วันที่ได้รับ': r.date_received,
+          'เอกสารจาก': r.doc_from,
+          'เอกสารถึง': r.doc_to,
+          'เรื่อง': r.subject,
+          'ภาควิชา': (r.Department || {}).dept_name || '',
+          'โครงการ': (r.Project || {}).project_name || '',
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'Document')
+      XLSX.writeFile(wb, 'document.xlsx')
     };
       
     

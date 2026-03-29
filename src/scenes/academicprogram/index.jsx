@@ -48,12 +48,18 @@ const AcademicProgram = () => {
         };
 
     const ExportExcelButton = () => {
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "academicprogram.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        return {
+          'รหัส': r.program_id,
+          'ชื่อสาขาวิชา': r.program_name,
+          'ระดับหลักสูตร': r.degree_level,
+          'ภาควิชา': (r.Department || {}).dept_name || '',
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'AcademicProgram')
+      XLSX.writeFile(wb, 'academic_program.xlsx')
     };    
 
     const columns = [

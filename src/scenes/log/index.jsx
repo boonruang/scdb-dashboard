@@ -37,13 +37,20 @@ const Log = () => {
 
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "log.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        return {
+          'ลำดับ': r.id,
+          'ผู้ใช้งาน': r.user,
+          'Method': r.method,
+          'Path': r.path,
+          'การส่งกลับ': r.return,
+          'วันที่ใช้งาน': r.date,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'Log')
+      XLSX.writeFile(wb, 'log.xlsx')
     };
       
 

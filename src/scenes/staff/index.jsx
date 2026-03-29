@@ -53,13 +53,31 @@ const Staffs = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "staff.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        return {
+          'รหัส': r.staff_id,
+          'เลขประจำตำแหน่ง': r.position_no,
+          'คำนำหน้า': r.title_th,
+          'ชื่อ (TH)': r.firstname_th,
+          'นามสกุล (TH)': r.lastname_th,
+          'ชื่อ (EN)': r.firstname,
+          'สกุล (EN)': r.lastname,
+          'ตำแหน่ง': r.position,
+          'ตำแหน่งวิชาการ': r.title_th,
+          'ประเภทบุคลากร': (r.Stafftype || {}).name || '',
+          'ภาควิชา': (r.Department || {}).dept_name || '',
+          'วุฒิการศึกษา': r.education,
+          'วันที่บรรจุ': r.startdate,
+          'วันเกิด': r.birthday,
+          'โทรศัพท์': r.phone_no,
+          'ออฟฟิศ': r.office_location,
+          'อีเมล': r.email,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'Staff')
+      XLSX.writeFile(wb, 'staff.xlsx')
     };
       
     

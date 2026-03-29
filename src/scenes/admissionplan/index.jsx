@@ -48,11 +48,23 @@ const AdmissionPlan = () => {
         };
 
     const ExportExcelButton = () => {
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
+      var rows = (result || []).map(function(r) {
+        return {
+          'กลุ่ม': r.group_name,
+          'สาขาวิชา': r.program_name,
+          'หลักสูตร': r.degree_level,
+          'ปีการศึกษา': r.academic_year,
+          'แผนการรับ': r.planned_seats,
+          'ผู้มีสิทธิ์': r.eligible_count,
+          'รายงานตัว': r.actual_admitted,
+          'ร้อยละ': r.admit_pct,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
 
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "admissionplan.xlsx")
+      XLSX.utils.book_append_sheet(wb, ws, 'AdmissionPlan')
+      XLSX.writeFile(wb, 'admission_plan.xlsx')
 
     };    
 

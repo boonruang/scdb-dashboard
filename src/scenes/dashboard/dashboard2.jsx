@@ -82,13 +82,14 @@ var TopStudentRow = function(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ color: colors.grey[400], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, width: 40, backgroundColor: bg }}>{i + 1}</TableCell>
+        <TableCell style={{ color: colors.grey[300], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.student_code}</TableCell>
         <TableCell style={{ color: colors.grey[100], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.name}</TableCell>
         <TableCell style={{ color: colors.grey[300], fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.major}</TableCell>
         <TableCell style={{ color: colors.greenAccent[400], fontWeight: 'bold', fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.awards} รางวัล</TableCell>
         <TableCell style={{ color: colors.blueAccent[400], fontWeight: 'bold', fontSize: '0.9rem', borderBottom: '1px solid ' + borderColor, backgroundColor: bg }}>{s.grants} ทุน</TableCell>
       </TableRow>
       <TableRow style={{ backgroundColor: bgSub }}>
-        <TableCell colSpan={6} style={{ padding: 0, borderBottom: '1px solid ' + borderColor, backgroundColor: bgSub }}>
+        <TableCell colSpan={7} style={{ padding: 0, borderBottom: '1px solid ' + borderColor, backgroundColor: bgSub }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box style={{ padding: '8px 32px', backgroundColor: bgSub }}>
               {awardList.length > 0 && (
@@ -536,7 +537,7 @@ var Dashboard2 = function() {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ width: 40, borderBottom: '2px solid ' + colors.primary[300] }} />
-                      {['#', 'ชื่อ-สกุล', 'สาขา', 'รางวัล (จำนวน)', 'ทุน (จำนวน)'].map(function(h) {
+                      {['#', 'รหัสนิสิต', 'ชื่อ-สกุล', 'สาขา', 'รางวัล (จำนวน)', 'ทุน (จำนวน)'].map(function(h) {
                         return (
                           <TableCell key={h} sx={{ color: colors.greenAccent[400], fontWeight: 'bold', fontSize: '0.95rem', borderBottom: '2px solid ' + colors.primary[300], py: '12px' }}>
                             {h}

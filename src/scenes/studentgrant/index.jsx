@@ -50,10 +50,23 @@ const Studentgrants = () => {
     };
 
     const ExportExcelButton = () => {
-        var wb = XLSX.utils.book_new(),
-        ws = XLSX.utils.json_to_sheet(result)
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-        XLSX.writeFile(wb, "studentgrant.xlsx")
+      var rows = (result || []).map(function(r) {
+        var s = r.Student || {}
+        return {
+          'รหัส': r.grant_id,
+          'รหัสนิสิต': s.studentOfficial_id || '',
+          'ชื่อ-นามสกุล': (s.firstname || '') + ' ' + (s.lastname || ''),
+          'ชื่อทุน': r.grant_name,
+          'จำนวนเงิน': r.amount,
+          'ประเภททุน': r.grant_type,
+          'แหล่งทุน': r.grant_source,
+          'สถานะกู้ยืม': r.loan_status,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'StudentGrant')
+      XLSX.writeFile(wb, 'student_grant.xlsx')
     };
 
     const columns = [

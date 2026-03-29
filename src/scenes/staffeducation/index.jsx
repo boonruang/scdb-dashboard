@@ -53,13 +53,24 @@ const Staffeducations = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "staffeducation.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        var s = r.Staff || {}
+        return {
+          'รหัส': r.education_id,
+          'เลขประจำตำแหน่ง': s.position_no || '',
+          'ชื่อ (TH)': (s.firstname_th || s.firstname || ''),
+          'นามสกุล (TH)': (s.lastname_th || s.lastname || ''),
+          'ตำแหน่ง': s.position || '',
+          'ระดับการศึกษา': r.degree,
+          'สถานศึกษา': r.university,
+          'สาขาวิชา': r.major,
+          'ปีที่จบ': r.year,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'StaffEducation')
+      XLSX.writeFile(wb, 'staff_education.xlsx')
     };
       
     

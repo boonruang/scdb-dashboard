@@ -53,13 +53,21 @@ const Leaverecords = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "leaverecord.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        var s = r.Staff || {}
+        return {
+          'รหัส': r.leave_id,
+          'เลขประจำตำแหน่ง': s.position_no || '',
+          'ชื่อ-นามสกุล': (s.firstname_th || s.firstname || '') + ' ' + (s.lastname_th || s.lastname || ''),
+          'ประเภทการลา': r.leave_type,
+          'วันที่เริ่มต้น': r.start_date,
+          'วันที่สิ้นสุด': r.end_date,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'LeaveRecord')
+      XLSX.writeFile(wb, 'leave_record.xlsx')
     };
       
     

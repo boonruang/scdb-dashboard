@@ -53,13 +53,20 @@ const Students = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "student.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        return {
+          'รหัสนิสิต': r.studentOfficial_id,
+          'ชื่อ': r.firstname,
+          'นามสกุล': r.lastname,
+          'สาขาวิชา': r.major_name,
+          'ภาควิชา': r.department_name,
+          'ปีที่เข้า': r.entry_year,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'Student')
+      XLSX.writeFile(wb, 'student.xlsx')
     };
       
     

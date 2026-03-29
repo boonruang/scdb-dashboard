@@ -3,12 +3,14 @@ import { Box, useTheme, Button } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
 import AddIcon from '@mui/icons-material/Add'
+import IosShareIcon from '@mui/icons-material/IosShare'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { ROLES } from '../../constants'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import ConfirmBox from 'components/ConfirmBox'
+import * as XLSX from 'xlsx'
 import { getAcademicResearchList, deleteAcademicResearch } from '../../actions/academicResearch.action'
 
 var AcademicResearchList = function(props) {
@@ -82,6 +84,31 @@ var AcademicResearchList = function(props) {
               <AddIcon sx={{ mr: '10px' }} />เพิ่มข้อมูล
             </Button>
           )}
+          <Button onClick={function() {
+            var rows = (result || []).map(function(r) {
+              return {
+                'รหัสนิสิต': r.student_code,
+                'คำนำหน้า': r.prefix,
+                'ชื่อ': r.firstname,
+                'นามสกุล': r.lastname,
+                'ระดับ': r.degree_level,
+                'สาขา': r.major_name,
+                'คณะ': r.faculty,
+                'หัวข้อวิทยานิพนธ์ (TH)': r.thesis_th,
+                'หัวข้อวิทยานิพนธ์ (EN)': r.thesis_en,
+                'สถานะตีพิมพ์': r.research_status,
+                'ชื่อวารสาร': r.journal_name,
+                'ประเภท': r.publish_type,
+              }
+            })
+            var wb = XLSX.utils.book_new()
+            var ws = XLSX.utils.json_to_sheet(rows)
+            XLSX.utils.book_append_sheet(wb, ws, 'AcademicResearch')
+            XLSX.writeFile(wb, 'academic_research.xlsx')
+          }} sx={{ backgroundColor: colors.blueAccent[700], color: colors.grey[100], fontSize: '14px',
+            fontWeight: 'bold', padding: '10px 20px', mr: '10px', '&:hover': { backgroundColor: colors.blueAccent[800] } }}>
+            <IosShareIcon sx={{ mr: '10px' }} />ส่งออกข้อมูล EXCEL
+          </Button>
         </Box>
         {isFetching && (
           <Box height="65vh" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -50,10 +50,22 @@ const StudentAwards = () => {
     };
 
     const ExportExcelButton = () => {
-        var wb = XLSX.utils.book_new(),
-        ws = XLSX.utils.json_to_sheet(result)
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-        XLSX.writeFile(wb, "studentaward.xlsx")
+      var rows = (result || []).map(function(r) {
+        var s = r.Student || {}
+        return {
+          'รหัส': r.award_id,
+          'รหัสนิสิต': s.studentOfficial_id || '',
+          'ชื่อ-นามสกุล': (s.firstname || '') + ' ' + (s.lastname || ''),
+          'ชื่อรางวัล': r.award_name,
+          'ระดับรางวัล': r.award_level,
+          'สถานที่/งาน': r.venue,
+          'วันที่ได้รับรางวัล': r.award_date,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'StudentAward')
+      XLSX.writeFile(wb, 'student_award.xlsx')
     };
 
     const columns = [

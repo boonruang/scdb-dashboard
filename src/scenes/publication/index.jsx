@@ -53,13 +53,24 @@ const Publications = () => {
       };
 
     const ExportExcelButton = () => {
-    // console.log('Data to export: ',result)
-    var wb = XLSX.utils.book_new(),
-    ws = XLSX.utils.json_to_sheet(result)
-
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1")
-    XLSX.writeFile(wb, "publication.xlsx")
-
+      var rows = (result || []).map(function(r) {
+        var authors = (r.AuthorProfiles || []).map(function(a) {
+          return (a.firstname_th || a.firstname || '') + ' ' + (a.lastname_th || a.lastname || '')
+        }).join(', ')
+        return {
+          'รหัส': r.pub_id,
+          'ชื่อเรื่อง': r.title,
+          'วารสาร': r.journal_name,
+          'ปีที่ตีพิมพ์': r.publication_year,
+          'Quartile': r.quartile,
+          'ฐานข้อมูล': r.database_source,
+          'ผู้แต่ง': authors,
+        }
+      })
+      var wb = XLSX.utils.book_new()
+      var ws = XLSX.utils.json_to_sheet(rows)
+      XLSX.utils.book_append_sheet(wb, ws, 'Publication')
+      XLSX.writeFile(wb, 'publication.xlsx')
     };
       
     
