@@ -30,7 +30,9 @@ var AcademicGrantEdit = function() {
     student_code: row.student_code || '',
     firstname: row.firstname || '',
     lastname: row.lastname || '',
+    program: row.program || '',
     major_name: row.major_name || '',
+    topic: row.topic || '',
     grant_name: row.grant_name || '',
     conference_name: row.conference_name || '',
     amount: row.amount != null ? String(row.amount) : '',
@@ -83,16 +85,22 @@ var AcademicGrantEdit = function() {
                 <TextField fullWidth variant="filled" label="นามสกุล" name="lastname"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.lastname}
                   sx={{ gridColumn: 'span 1' }} />
+                <TextField fullWidth variant="filled" label="หลักสูตร" name="program"
+                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.program}
+                  sx={{ gridColumn: 'span 1' }} />
                 <TextField fullWidth variant="filled" label="สาขา" name="major_name"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.major_name}
-                  sx={{ gridColumn: 'span 2' }} />
+                  sx={{ gridColumn: 'span 1' }} />
                 <TextField fullWidth variant="filled" label="ประเภท" name="grant_type" select
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.grant_type}
                   sx={{ gridColumn: 'span 1' }}>
                   <MenuItem value="">-- เลือก --</MenuItem>
                   {GRANT_TYPE_OPTIONS.map(function(g) { return <MenuItem key={g} value={g}>{g}</MenuItem> })}
                 </TextField>
-                <TextField fullWidth variant="filled" label="ชื่อทุน/หัวข้อที่นำเสนอ" name="grant_name"
+                <TextField fullWidth variant="filled" label="หัวข้อที่นำเสนอ" name="topic"
+                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.topic}
+                  sx={{ gridColumn: 'span 3' }} />
+                <TextField fullWidth variant="filled" label="ชื่อทุน" name="grant_name"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.grant_name}
                   sx={{ gridColumn: 'span 3' }} />
                 <TextField fullWidth variant="filled" label="งานประชุม" name="conference_name"

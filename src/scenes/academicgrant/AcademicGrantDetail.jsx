@@ -15,11 +15,13 @@ var AcademicGrantDetail = function() {
     { label: 'รหัสนิสิต', key: 'student_code' },
     { label: 'ชื่อ', key: 'firstname' },
     { label: 'นามสกุล', key: 'lastname' },
+    { label: 'หลักสูตร', key: 'program' },
     { label: 'สาขา', key: 'major_name' },
-    { label: 'ชื่อทุน/หัวข้อที่นำเสนอ', key: 'grant_name' },
+    { label: 'ประเภท', key: 'grant_type' },
+    { label: 'หัวข้อที่นำเสนอ', key: 'topic' },
+    { label: 'ชื่อทุน', key: 'grant_name' },
     { label: 'งานประชุม', key: 'conference_name' },
     { label: 'จำนวนเงิน (บาท)', key: 'amount' },
-    { label: 'ประเภท', key: 'grant_type' },
     { label: 'หลักสูตร/แหล่งทุน', key: 'grant_source' },
   ]
 
