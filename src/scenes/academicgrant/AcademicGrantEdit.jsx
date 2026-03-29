@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 
 var GRANT_TYPE_OPTIONS = ['ในประเทศ', 'ต่างประเทศ']
+var DEGREE_LEVEL_OPTIONS = ['ปริญญาโท', 'ปริญญาเอก']
 
 var AcademicGrantEdit = function() {
   var theme = useTheme()
@@ -28,16 +29,18 @@ var AcademicGrantEdit = function() {
 
   var initialValues = {
     student_code: row.student_code || '',
+    prefix: row.prefix || '',
     firstname: row.firstname || '',
     lastname: row.lastname || '',
     program: row.program || '',
     major_name: row.major_name || '',
+    degree_level: row.degree_level || '',
     topic: row.topic || '',
-    grant_name: row.grant_name || '',
     conference_name: row.conference_name || '',
+    present_type: row.present_type || '',
     amount: row.amount != null ? String(row.amount) : '',
     grant_type: row.grant_type || '',
-    grant_source: row.grant_source || '',
+    fiscal_year: row.fiscal_year != null ? String(row.fiscal_year) : '',
   }
 
   var schema = yup.object().shape({
@@ -54,6 +57,7 @@ var AcademicGrantEdit = function() {
           if (submitted) return
           var payload = Object.assign({}, values)
           payload.amount = payload.amount ? parseFloat(payload.amount) || null : null
+          payload.fiscal_year = payload.fiscal_year ? parseInt(payload.fiscal_year) || null : null
           var res = await dispatch(updateAcademicGrant(row.grant_id, payload))
           if (res && res.success) {
             setMsg('บันทึกข้อมูลเรียบร้อยแล้ว')
@@ -79,6 +83,9 @@ var AcademicGrantEdit = function() {
                   error={!!formik.touched.student_code && !!formik.errors.student_code}
                   helperText={formik.touched.student_code && formik.errors.student_code}
                   sx={{ gridColumn: 'span 1' }} />
+                <TextField fullWidth variant="filled" label="คำนำหน้า" name="prefix"
+                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.prefix}
+                  sx={{ gridColumn: 'span 1' }} />
                 <TextField fullWidth variant="filled" label="ชื่อ" name="firstname"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.firstname}
                   sx={{ gridColumn: 'span 1' }} />
@@ -91,27 +98,33 @@ var AcademicGrantEdit = function() {
                 <TextField fullWidth variant="filled" label="สาขา" name="major_name"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.major_name}
                   sx={{ gridColumn: 'span 1' }} />
-                <TextField fullWidth variant="filled" label="ประเภท" name="grant_type" select
+                <TextField fullWidth variant="filled" label="ระดับ" name="degree_level" select
+                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.degree_level}
+                  sx={{ gridColumn: 'span 1' }}>
+                  <MenuItem value="">-- เลือก --</MenuItem>
+                  {DEGREE_LEVEL_OPTIONS.map(function(d) { return <MenuItem key={d} value={d}>{d}</MenuItem> })}
+                </TextField>
+                <TextField fullWidth variant="filled" label="ประเภท (ใน/ต่างประเทศ)" name="grant_type" select
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.grant_type}
                   sx={{ gridColumn: 'span 1' }}>
                   <MenuItem value="">-- เลือก --</MenuItem>
                   {GRANT_TYPE_OPTIONS.map(function(g) { return <MenuItem key={g} value={g}>{g}</MenuItem> })}
                 </TextField>
+                <TextField fullWidth variant="filled" label="ปีงบประมาณ" name="fiscal_year" type="number"
+                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.fiscal_year}
+                  sx={{ gridColumn: 'span 1' }} />
                 <TextField fullWidth variant="filled" label="หัวข้อที่นำเสนอ" name="topic"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.topic}
-                  sx={{ gridColumn: 'span 3' }} />
-                <TextField fullWidth variant="filled" label="ชื่อทุน" name="grant_name"
-                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.grant_name}
                   sx={{ gridColumn: 'span 3' }} />
                 <TextField fullWidth variant="filled" label="งานประชุม" name="conference_name"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.conference_name}
                   sx={{ gridColumn: 'span 2' }} />
-                <TextField fullWidth variant="filled" label="จำนวนเงิน (บาท)" name="amount" type="number"
+                <TextField fullWidth variant="filled" label="รูปแบบการนำเสนอ" name="present_type"
+                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.present_type}
+                  sx={{ gridColumn: 'span 1' }} />
+                <TextField fullWidth variant="filled" label="งบประมาณ (บาท)" name="amount" type="number"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.amount}
                   sx={{ gridColumn: 'span 1' }} />
-                <TextField fullWidth variant="filled" label="หลักสูตร/แหล่งทุน" name="grant_source"
-                  onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.grant_source}
-                  sx={{ gridColumn: 'span 3' }} />
               </Box>
               <Box mt="20px" display="flex" gap="10px">
                 <Button type="submit" disabled={!(formik.dirty && formik.isValid) || submitted}

@@ -38,13 +38,14 @@ var AcademicGrantList = function() {
     { field: 'student_code', headerName: 'รหัสนิสิต', flex: 0.7, cellClassName: 'name-column--cell' },
     { field: 'firstname', headerName: 'ชื่อ', flex: 0.7, cellClassName: 'name-column--cell' },
     { field: 'lastname', headerName: 'นามสกุล', flex: 0.8 },
+    { field: 'program', headerName: 'หลักสูตร', flex: 0.6 },
     { field: 'major_name', headerName: 'สาขา', flex: 0.8 },
+    { field: 'degree_level', headerName: 'ระดับ', flex: 0.6 },
     { field: 'topic', headerName: 'หัวข้อที่นำเสนอ', flex: 1.5 },
-    { field: 'grant_name', headerName: 'ชื่อทุน', flex: 1 },
     { field: 'conference_name', headerName: 'งานประชุม', flex: 1.2 },
     { field: 'amount', headerName: 'งบ (บาท)', flex: 0.6 },
     { field: 'grant_type', headerName: 'ประเภท', flex: 0.7 },
-    { field: 'grant_source', headerName: 'หลักสูตร', flex: 0.8 },
+    { field: 'fiscal_year', headerName: 'ปีงบประมาณ', flex: 0.6 },
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5,
       renderCell: function(params) {
         return (
@@ -91,11 +92,13 @@ var AcademicGrantList = function() {
                 'นามสกุล': r.lastname,
                 'สาขา': r.major_name,
                 'หัวข้อที่นำเสนอ': r.topic,
-                'ชื่อทุน': r.grant_name,
+                'หัวข้อที่นำเสนอ': r.topic,
                 'งานประชุม': r.conference_name,
+                'รูปแบบการนำเสนอ': r.present_type,
                 'งบ (บาท)': r.amount,
                 'ประเภท': r.grant_type,
-                'หลักสูตร': r.grant_source,
+                'ระดับ': r.degree_level,
+                'ปีงบประมาณ': r.fiscal_year,
               }
             })
             var wb = XLSX.utils.book_new()

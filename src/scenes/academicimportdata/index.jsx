@@ -108,7 +108,9 @@ var AcademicImportData = function() {
       var ws4 = wb.Sheets[wb.SheetNames[4]]
       var raw4 = ws4 ? XLSX.utils.sheet_to_json(ws4, { defval: '' }) : []
       setDataGrant(raw4.filter(function(r) { return r['รหัส'] }).map(function(r, i) {
-        var loc = String(r['ใน/ต่า'] || r['ใน/ต่างประเทศ'] || '')
+        var loc = String(r['ใน/ต่างประเทศ'] || r['ใน/ต่า'] || '')
+        var amtStr = String(r['งบประมาณที่ได้รับการอนุมัติ'] || '')
+        var amtNum = parseFloat(amtStr.replace(/[^0-9.]/g, '')) || null
         return {
           id: i + 1,
           student_code: String(r['รหัส'] || ''),
@@ -120,8 +122,10 @@ var AcademicImportData = function() {
           topic: String(r['หัวข้อที่นำเสนอ'] || ''),
           conference_name: String(r['ชื่องานประชุม /วันที่จัดประชุม'] || ''),
           present_type: String(r['รูปแบบการนำเสนอ'] || ''),
-          amount: r['งบประมาณที่ได้รับการอนุมัติ'] ? parseFloat(r['งบประมาณที่ได้รับการอนุมัติ']) : null,
+          amount: amtNum,
           grant_type: loc.includes('ต่าง') ? 'ต่างประเทศ' : 'ในประเทศ',
+          degree_level: String(r['ระดับ'] || ''),
+          fiscal_year: r['ปีงบประมาณ'] ? parseInt(r['ปีงบประมาณ']) : null,
         }
       }))
 
