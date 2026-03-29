@@ -1,48 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { 
-    Box, 
-    useTheme,
-    Button,
-    TextField,
-    Typography,
-    RadioGroup,
-    FormControlLabel,
-    FormControl,
-    useMediaQuery,
-  } from '@mui/material'
-
+import React from 'react'
+import { Box, useTheme, Button, TextField, Typography, useMediaQuery } from '@mui/material'
 import Header from "../../components/Header"
-import { Formik, Field } from 'formik'
-import { tokens } from 'theme';
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate,useParams,useLocation } from 'react-router-dom'
+import { tokens } from 'theme'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 
 const AdmissionPlanDetail = () => {
 
   const theme = useTheme()
-  const colors = tokens(theme.palette.mode)     
-      
-  const dispatch = useDispatch()    
-
+  const colors = tokens(theme.palette.mode)
   const navigate = useNavigate()
-
   const location = useLocation()
 
-  console.log('Outsource add row', location.state.row)
-
-    const INITIAL_CENTER = { lat: 16.1850896, lng: 103.3026461}
-    const INITIAL_ZOOM = 12
-    const [center, setCenter] = useState(INITIAL_CENTER);
-
-    const isNonMobile = useMediaQuery("(min-width:600px)")  
-
-
-    useEffect(() => {
-        if (location.state.row.latitude && location.state.row.latitude) {
-            setCenter({ lat: location.state.row.latitude, lng: location.state.row.longitude})
-        }
-    },[location.state.row])
+    const isNonMobile = useMediaQuery("(min-width:600px)")
   // const [snackBarOpen, setSnackBarOpen] = useState(false)
 
   // const [roleSelected, setRoleSelected] = useState('1')
@@ -94,23 +64,69 @@ const AdmissionPlanDetail = () => {
                          fullWidth
                          variant="filled"
                          type="text"
-                         label="ปริญญา"
-                         value={location.state.row.degree_level}
+                         label="ระดับปริญญา"
+                         value={location.state.row.degree_level || ''}
                          name="degree_level"
-                         multiline={true}
-                         minRows="2"                         
                          sx={{ gridColumn: "span 2" }}
                          InputLabelProps={{ shrink: true }}
-                     />       
+                     />
                     <TextField
                          fullWidth
                          variant="filled"
                          type="text"
-                         label="ภาควิชา"
-                         value={location.state.row.Department?.dept_name}
-                         name="dept_name"
-                         multiline={true}
-                         minRows="2"                         
+                         label="กลุ่ม"
+                         value={location.state.row.group_name || ''}
+                         name="group_name"
+                         sx={{ gridColumn: "span 2" }}
+                         InputLabelProps={{ shrink: true }}
+                     />
+                    <TextField
+                         fullWidth
+                         variant="filled"
+                         type="text"
+                         label="ปีการศึกษา"
+                         value={location.state.row.academic_year || ''}
+                         name="academic_year"
+                         sx={{ gridColumn: "span 1" }}
+                         InputLabelProps={{ shrink: true }}
+                     />
+                    <TextField
+                         fullWidth
+                         variant="filled"
+                         type="text"
+                         label="แผนการรับ"
+                         value={location.state.row.planned_seats || ''}
+                         name="planned_seats"
+                         sx={{ gridColumn: "span 1" }}
+                         InputLabelProps={{ shrink: true }}
+                     />
+                    <TextField
+                         fullWidth
+                         variant="filled"
+                         type="text"
+                         label="ผู้มีสิทธิ์"
+                         value={location.state.row.eligible_count || ''}
+                         name="eligible_count"
+                         sx={{ gridColumn: "span 1" }}
+                         InputLabelProps={{ shrink: true }}
+                     />
+                    <TextField
+                         fullWidth
+                         variant="filled"
+                         type="text"
+                         label="รายงานตัว"
+                         value={location.state.row.actual_admitted || ''}
+                         name="actual_admitted"
+                         sx={{ gridColumn: "span 1" }}
+                         InputLabelProps={{ shrink: true }}
+                     />
+                    <TextField
+                         fullWidth
+                         variant="filled"
+                         type="text"
+                         label="ร้อยละ"
+                         value={location.state.row.admit_pct || ''}
+                         name="admit_pct"
                          sx={{ gridColumn: "span 2" }}
                          InputLabelProps={{ shrink: true }}
                      />       

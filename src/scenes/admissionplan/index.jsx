@@ -62,36 +62,28 @@ const AdmissionPlan = () => {
             headerAlign: 'center', 
             flex: 0.3,
             align: 'center'},
+        { field: 'group_name', headerName: 'กลุ่ม', flex: 0.5, cellClassName: "name-column--cell" },
         {
             field: 'program_name',
             headerName: 'หลักสูตร',
             flex: 1.5,
-            renderCell: (params) => {
-                return params.row.AcademicProgram?.program_name || 'N/A';
+            renderCell: function(params) {
+                return params.row.program_name || 'N/A'
             }
-        },            
+        },
         {
             field: 'degree_level',
             headerName: 'ระดับ',
             flex: 0.8,
-            renderCell: (params) => {
-                return params.row.AcademicProgram?.degree_level || 'N/A';
+            renderCell: function(params) {
+                return params.row.degree_level || 'N/A'
             }
-        },            
-        {
-            field: 'academic_year',
-            headerName: 'ปีการศึกษา',
-            flex: 0.5,
-            cellClassName: "name-column--cell"
         },
-        { field: 'planned_seats', 
-            headerName: 'จำนวนรับ', 
-            flex: 0.5, 
-            cellClassName: "name-column--cell" },
-        { field: 'actual_admitted', 
-            headerName: 'รับจริง', 
-            flex: 0.5, 
-            cellClassName: "name-column--cell" },
+        { field: 'academic_year', headerName: 'ปีการศึกษา', flex: 0.5, cellClassName: "name-column--cell" },
+        { field: 'planned_seats', headerName: 'แผนรับ', flex: 0.5, cellClassName: "name-column--cell" },
+        { field: 'eligible_count', headerName: 'ผู้มีสิทธิ์', flex: 0.5, cellClassName: "name-column--cell" },
+        { field: 'actual_admitted', headerName: 'รับจริง', flex: 0.5, cellClassName: "name-column--cell" },
+        { field: 'admit_pct', headerName: 'ร้อยละ', flex: 0.5, cellClassName: "name-column--cell" },
 
         { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1, renderCell: (params) => {
             return (
