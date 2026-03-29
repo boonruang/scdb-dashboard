@@ -173,7 +173,7 @@ var Dashboard3 = function() {
               </Box>
             </Box>
 
-            {/* Line: แนวโน้มรับนิสิต */}
+            {/* Line: แนวโน้มการรับนิสิต — ซ่อนไว้ก่อน รอข้อมูลหลายปี
             <Box flex="2" minWidth="280px" backgroundColor={cardBg} borderRadius="12px" p="20px">
               <Typography variant="h5" fontWeight="bold" sx={{ color: colors.grey[100], mb: '4px' }}>
                 แนวโน้มการรับนิสิต
@@ -199,6 +199,7 @@ var Dashboard3 = function() {
                 )}
               </Box>
             </Box>
+            */}
 
             {/* Pie: ผลงานวิจัย ป.โท/ป.เอก */}
             <Box flex="1" minWidth="220px" backgroundColor={cardBg} borderRadius="12px" p="20px">
