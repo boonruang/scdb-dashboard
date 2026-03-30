@@ -85,36 +85,22 @@ const doGetLeaverecord = (dispatch) => {
 };
 
 export const addLeaverecord = (navigate, formData) => {
-  console.log('navigate action',navigate)
-  console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
-      let result = await httpClient.post(server.LEAVERECORD_URL, formData)
-      console.log('addLeaverecord formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/leaverecord')
-      },5000)
+      await httpClient.post(server.LEAVERECORD_URL, formData)
+      navigate('/leaverecord')
     } catch (error) {
-      // failed
       console.log('addLeaverecord formData Error: ', error.toString())
     }
   }
 }
 
-export const updateLeaverecord = (navigate, formData) => {
-  console.log('navigate action',navigate)
-  console.log('formData action',formData)
+export const updateLeaverecord = (navigate, formData, id) => {
   return async (dispatch) => {
     try {
-      // success
-      let result = await httpClient.put(server.LEAVERECORD_URL, formData)
-      console.log('editLeaverecord formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/leaverecord')
-      },5000)
+      await httpClient.put(server.LEAVERECORD_URL + '/' + id, formData)
+      navigate('/leaverecord')
     } catch (error) {
-      // failed
       console.log('editLeaverecord formData Error: ', error.toString())
     }
   }

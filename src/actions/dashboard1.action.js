@@ -19,16 +19,16 @@ const setStateDashboardToFailed = () => ({
   type: HTTP_DASHBOARD1_FAILED
 });
 
-export const getDashboard = () => {
+export const getDashboard = (fiscalYear) => {
   return (dispatch) => {
     dispatch(setStateDashboardToFetching());
-    doGetDashboard(dispatch);
+    doGetDashboard(dispatch, fiscalYear);
   };
 };
 
-const doGetDashboard = (dispatch) => {
+const doGetDashboard = (dispatch, fiscalYear) => {
   httpClient
-    .get(`${server.DASHBOARD1_URL}/list`)
+    .get(`${server.DASHBOARD1_URL}/list`, { params: { fiscalYear } })
     .then((result) => {
       dispatch(setStateDashboardToSuccess(result.data));
     })

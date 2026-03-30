@@ -248,11 +248,12 @@ const StaffEdit = () => {
                         label="เลขประจำตำแหน่ง"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values?.position_no}
-                        name="position_no"                       
+                        value={values?.position_no || ''}
+                        name="position_no"
                         error={!!touched.position_no && !!errors.position_no}
                         helperText={touched.position_no && errors.position_no}
                         sx={{ gridColumn: "span 1" }}
+                        InputLabelProps={{ shrink: true }}
                     />                      
                      <TextField
                         fullWidth

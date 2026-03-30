@@ -1,284 +1,144 @@
 import React, { useState, useEffect } from 'react'
-import { 
-    Box, 
-    useTheme,
-    Button,
-    TextField,
-    Typography,
-    RadioGroup,
-    FormControlLabel,
-    FormControl,
-    useMediaQuery,
-    CardActionArea,
-    Grid,
-    styled,
-    Card,
-    CardMedia    
-  } from '@mui/material'
-
-  import { Formik, Field } from 'formik'
+import { Box, useTheme, Button, MenuItem, Select, FormControl, InputLabel, FormHelperText, useMediaQuery } from '@mui/material'
+import { Formik } from 'formik'
 import * as yup from 'yup'
-import Header from "../../components/Header"
-import { tokens } from 'theme';
-import { useDispatch, useSelector } from 'react-redux'
+import Header from '../../components/Header'
+import { tokens } from 'theme'
+import { useDispatch } from 'react-redux'
 import { updateLeaverecord } from '../../actions/leaverecord.action'
-import { useNavigate,useLocation } from 'react-router-dom'
-import MessageBox from 'components/MessageBox'
-import CloudQueueIcon from '@mui/icons-material/CloudQueue';
-import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { th } from 'date-fns/locale'
+import { httpClient } from '../../utils/HttpClient'
+import { server } from '../../constants'
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
+const LEAVE_TYPES = ['ลาป่วย', 'ลากิจ', 'ลาพักผ่อน', 'ลาอุปสมบท', 'ลาคลอดบุตร']
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-    fontSize: "14px",
-    fontWeight: "bold",
-    padding: "10px 20px",
-    mr: "20px",
-    mb: "10px",
-  });
-
-const initialValues = {
-    name: "",
-}
-
-const userSchema = yup.object().shape({
-    // name: yup.string().required("ต้องใส่"),
-    // position: yup.string().required("ต้องใส่"),
-    // leaverecord_type: yup.string().required("ต้องใส่"),
-    // email: yup.string().required("ต้องใส่"),
-    // office_location: yup.string().required("ต้องใส่"),
-}) 
-
-
-const Item = ({image}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  return (
-    <Grid item xs={12} sm={4} ms={4} >
-        <Card sx={{ maxWidth: 500 , backgroundColor : colors.primary[400]}}>
-          <CardActionArea >
-            <CardMedia
-              component="img"
-              height="220"
-              // image={imagesUrl+'ฟ้าทะลายโจร.jpg'}
-              image={image ? imagesUrl+image : imagesUrl+'no-image-icon-23485.png'}
-              alt="herbal"
-              style={{borderRadius: '5px'}}
-            />            
-          </CardActionArea>
-        </Card>
-      </Grid>
-    )
-}
+const schema = yup.object().shape({
+  staff_id:   yup.string().required('กรุณาเลือกบุคลากร'),
+  leave_type: yup.string().required('กรุณาเลือกประเภทการลา'),
+  start_date: yup.date().nullable().required('กรุณาเลือกวันเริ่มต้น'),
+  end_date:   yup.date().nullable().required('กรุณาเลือกวันสิ้นสุด'),
+})
 
 const LeaverecordEdit = () => {
-
   const theme = useTheme()
-  const colors = tokens(theme.palette.mode)     
-      
-  const dispatch = useDispatch()    
-
+  const colors = tokens(theme.palette.mode)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-
   const location = useLocation()
+  const isNonMobile = useMediaQuery('(min-width:600px)')
+  const [staffList, setStaffList] = useState([])
+  const row = location?.state?.row || {}
 
-  const [open, setOpen] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  useEffect(function() {
+    httpClient.get(server.STAFF_URL + '/list').then(function(res) {
+      setStaffList((res.data?.result || []).sort(function(a, b) {
+        return (a.position_no || '').localeCompare(b.position_no || '')
+      }))
+    })
+  }, [])
 
-   const handleSubmitButton = (values) => {
-    setOpen(true)
-    // console.log(values)
-   }
+  const initialValues = {
+    staff_id:   row.staff_id   || row.Staff?.staff_id || '',
+    leave_type: row.leave_type || '',
+    start_date: row.start_date ? new Date(row.start_date) : null,
+    end_date:   row.end_date   ? new Date(row.end_date)   : null,
+  }
 
-   const handleCancelButton = () => {
-    navigate(-1)
-   }
+  const btnStyle = {
+    color: colors.grey[100], fontSize: '14px', fontWeight: 'bold',
+    padding: '10px 20px', mr: '10px', mb: '10px',
+  }
 
-
-    const isNonMobile = useMediaQuery("(min-width:600px)")
-
-    return <Box m="20px">
-        <Header title="ปรับปรุงข้อมูล" />
+  return (
+    <Box m="20px">
+      <Header title="แก้ไขข้อมูลการลา" />
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={th}>
         <Formik
-            // onSubmit={handleFormSubmit}
-            onSubmit={async (values, { setSubmitting }) => {
-              if (submitted) return
-              let formData = new FormData()
-              formData.append('leaverecord_id', values.id)
-              formData.append('title', values.title)
-              console.log('values',values)
-              dispatch(updateLeaverecord(navigate, formData))
-              setSubmitted(true)
-              setSubmitting(false)
-            }}
-            initialValues={location?.state?.row}
-            validationSchema={userSchema}
+          initialValues={initialValues}
+          validationSchema={schema}
+          enableReinitialize
+          onSubmit={async function(values, { setSubmitting }) {
+            var formData = new FormData()
+            formData.append('staff_id',   values.staff_id)
+            formData.append('leave_type', values.leave_type)
+            formData.append('start_date', values.start_date ? values.start_date.toISOString() : '')
+            formData.append('end_date',   values.end_date   ? values.end_date.toISOString()   : '')
+            await dispatch(updateLeaverecord(navigate, formData, row.leave_id))
+            setSubmitting(false)
+          }}
         >
-            {({ values, errors, touched, isSubmitting, dirty, isValid, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
-                <form onSubmit={handleSubmit}>
-                    <Box>
-                    <Box mt='20px'>                
-                    <Box 
-                        display="grid"
-                        gap="30px"
-                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        sx={{
-                            "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
-                        }}
-                    >
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="text"
-                        label="รหัส"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.leave_id}
-                        name="leave_id"
-                        error={!!touched.leave_id && !!errors.leave_id}
-                        helperText={touched.leave_id && errors.leave_id}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                        
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="ชื่อ"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.name}
-                        name="name"
-                        error={!!touched.name && !!errors.name}
-                        helperText={touched.name && errors.name}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="ประเภทการลา"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.leave_type}
-                        name="leave_type"
-                        error={!!touched.leave_type && !!errors.leave_type}
-                        helperText={touched.leave_type && errors.leave_type}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />       
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="วันเริ่ม"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.start_date}
-                        name="start_date"
-                        error={!!touched.start_date && !!errors.start_date}
-                        helperText={touched.start_date && errors.start_date}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                       
-                    <TextField
-                        fullWidth
-                        variant="filled"
-                        type="text"
-                        label="วันสิ้นสุด"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values?.end_date}
-                        name="end_date"
-                        error={!!touched.end_date && !!errors.end_date}
-                        helperText={touched.end_date && errors.end_date}
-                        sx={{ gridColumn: "span 1" }}
-                        InputLabelProps={{ shrink: true }}
-                    />                      
-                     </Box>
-                </Box>
+          {({ values, errors, touched, isSubmitting, dirty, isValid, handleSubmit, setFieldValue }) => (
+            <form onSubmit={handleSubmit}>
+              <Box display="grid" gap="24px"
+                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                mt="30px"
+                sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' } }}
+              >
+                {/* บุคลากร */}
+                <FormControl fullWidth variant="outlined" sx={{ gridColumn: 'span 2' }}
+                  error={!!touched.staff_id && !!errors.staff_id}>
+                  <InputLabel>บุคลากร</InputLabel>
+                  <Select value={values.staff_id} label="บุคลากร"
+                    onChange={function(e) { setFieldValue('staff_id', e.target.value) }}>
+                    {staffList.map(function(s) {
+                      return (
+                        <MenuItem key={s.staff_id} value={s.staff_id}>
+                          {s.position_no} — {s.firstname_th} {s.lastname_th}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                  {touched.staff_id && errors.staff_id && <FormHelperText>{errors.staff_id}</FormHelperText>}
+                </FormControl>
 
-                      <Box display="flex" justifyContent="start"
-                          sx={{
-                            mt: "20px", 
-                            gridColumn: "span 4"
-                        }}                    
-                      >
-                      </Box>  
-                    </Box>
-                    
-                    <Box 
-                        display="grid"
-                        gap="30px"
-                        gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        sx={{
-                            "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
-                        }}                    
-                    >
-                      <Box display="flex" justifyContent="start"
-                        sx={{
-                          mt: "20px",
-                          gridColumn: "span 2"
-                      }}                    
-                    >
-                        <Button  onClick={handleSubmitButton}
-                            type='submit'
-                            // disabled={isSubmitting}
-                            disabled={!(dirty && isValid) || submitted}
-                            sx={{
-                                backgroundColor: colors.greenAccent[600],
-                                color: colors.grey[100],
-                                width: '135px',
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                padding: "10px 20px",
-                                mr: "20px",
-                                mb: "10px",
-                                '&:hover': {backgroundColor: colors.blueAccent[700]}
-                            }}
-                        >
-                            บันทึก
-                        </Button>
-                        <Button  
-                            onClick={handleCancelButton}
-                            type='button'
-                            sx={{
-                                backgroundColor: colors.greenAccent[600],
-                                color: colors.grey[100],
-                                width: '135px',
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                padding: "10px 20px",
-                                mr: "10px",
-                                mb: "10px",
-                                '&:hover': {backgroundColor: colors.blueAccent[700]}
-                            }}
-                        >
-                            ยกเลิก
-                        </Button>    
-                        </Box>                
-                  </Box>   
-                </form>
-            )}
+                {/* ประเภทการลา */}
+                <FormControl fullWidth variant="outlined" sx={{ gridColumn: 'span 2' }}
+                  error={!!touched.leave_type && !!errors.leave_type}>
+                  <InputLabel>ประเภทการลา</InputLabel>
+                  <Select value={values.leave_type} label="ประเภทการลา"
+                    onChange={function(e) { setFieldValue('leave_type', e.target.value) }}>
+                    {LEAVE_TYPES.map(function(t) { return <MenuItem key={t} value={t}>{t}</MenuItem> })}
+                  </Select>
+                  {touched.leave_type && errors.leave_type && <FormHelperText>{errors.leave_type}</FormHelperText>}
+                </FormControl>
+
+                {/* วันเริ่มต้น */}
+                <DatePicker label="วันเริ่มต้น" value={values.start_date}
+                  onChange={function(v) { setFieldValue('start_date', v) }}
+                  format="d MMMM yyyy"
+                  slotProps={{ textField: { fullWidth: true, variant: 'outlined', sx: { gridColumn: 'span 2' },
+                    error: !!touched.start_date && !!errors.start_date,
+                    helperText: touched.start_date && errors.start_date } }} />
+
+                {/* วันสิ้นสุด */}
+                <DatePicker label="วันสิ้นสุด" value={values.end_date}
+                  onChange={function(v) { setFieldValue('end_date', v) }}
+                  format="d MMMM yyyy"
+                  slotProps={{ textField: { fullWidth: true, variant: 'outlined', sx: { gridColumn: 'span 2' },
+                    error: !!touched.end_date && !!errors.end_date,
+                    helperText: touched.end_date && errors.end_date } }} />
+              </Box>
+
+              <Box display="flex" mt="24px">
+                <Button type="submit" disabled={!(dirty && isValid) || isSubmitting}
+                  sx={{ ...btnStyle, backgroundColor: colors.greenAccent[600], '&:hover': { backgroundColor: colors.greenAccent[800] } }}>
+                  บันทึก
+                </Button>
+                <Button type="button" onClick={function() { navigate(-1) }}
+                  sx={{ ...btnStyle, backgroundColor: colors.grey[600], '&:hover': { backgroundColor: colors.grey[700] } }}>
+                  ยกเลิก
+                </Button>
+              </Box>
+            </form>
+          )}
         </Formik>
-        <MessageBox
-        open={open}
-        closeDialog={() => setOpen(false)}
-        submitFunction={() => setOpen(false)}
-        message={"ดำเนินการเรียบร้อยแล้ว"}
-        />          
-    </Box >
-    
+      </LocalizationProvider>
+    </Box>
+  )
 }
 
 export default LeaverecordEdit

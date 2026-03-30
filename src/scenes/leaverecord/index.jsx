@@ -44,7 +44,7 @@ const Leaverecords = () => {
     }
 
     const handleDeleteClick = ({state}) => {
-        setRowId(state.row.leaverecord_id)
+        setRowId(state.row.leave_id)
         setOpen(true)
     }
 
@@ -85,19 +85,26 @@ const Leaverecords = () => {
 
     const columns = [
     {
-      field: 'id', // ใช้ 'id' ที่เราสร้าง alias ไว้
+      field: 'id',
       headerName: 'ID',
       flex: 0.5,
       cellClassName: "name-column--cell"
     },
     {
+      field: 'position_no',
+      headerName: 'เลขประจำตำแหน่ง',
+      flex: 0.8,
+      renderCell: (params) => params.row.Staff?.position_no || '-'
+    },
+    {
       field: 'name',
       headerName: 'บุคลากร',
-      flex: 1,
+      flex: 1.2,
       renderCell: (params) => {
-        return params.row.Staff?.name || 'N/A';
+        var s = params.row.Staff || {}
+        return (s.firstname_th || s.firstname || '') + ' ' + (s.lastname_th || s.lastname || '') || 'N/A'
       }
-    },    
+    },
     {
       field: 'leave_type',
       headerName: 'ประเภทการลา',

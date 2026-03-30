@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, useTheme, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
+import { Box, Typography, useTheme, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { tokens } from '../../theme'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
@@ -64,8 +64,11 @@ var Dashboard1 = function() {
   var leaveByType = result.leaveByType || []
 
   var [activeDept, setActiveDept] = useState('')
+  var currentBE = new Date().getFullYear() + 543
+  var fiscalYearOptions = [currentBE, currentBE - 1, currentBE - 2, currentBE - 3]
+  var [fiscalYear, setFiscalYear] = useState('')
 
-  useEffect(function() { dispatch(getDashboard()) }, [])
+  useEffect(function() { dispatch(getDashboard(fiscalYear || null)) }, [fiscalYear])
 
   // distinct dept tabs จาก staffList
   var deptTabs = []
@@ -99,7 +102,16 @@ var Dashboard1 = function() {
 
   return (
     <Box m="20px">
-      <Header title="ด้านบุคลากร" subtitle="ข้อมูลบุคลากรและสถิติการลา" />
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb="4px">
+        <Header title="ด้านบุคลากร" subtitle="ข้อมูลบุคลากรและสถิติการลา" />
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>ปีงบประมาณ</InputLabel>
+          <Select value={fiscalYear} label="ปีงบประมาณ" onChange={function(e) { setFiscalYear(e.target.value) }}>
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {fiscalYearOptions.map(function(y) { return <MenuItem key={y} value={y}>{y}</MenuItem> })}
+          </Select>
+        </FormControl>
+      </Box>
 
       {isFetching ? (
         <Box display="flex" justifyContent="center" mt="60px">

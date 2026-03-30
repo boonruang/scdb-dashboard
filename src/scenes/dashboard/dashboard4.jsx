@@ -136,10 +136,10 @@ const DashboardResearch = () => {
                 gap="20px"
             >
                 {/* ===== ROW 1 : KPI ===== */}
-                <KpiCard icon={<PeopleOutlinedIcon sx={{ fontSize: 28 }} />} value={kpi.totalTeachers != null ? kpi.totalTeachers.toLocaleString() : '-'} label="อาจารย์ทั้งหมด" color={colors.greenAccent[500]} colSpan={kpiSpan} />
+                <KpiCard icon={<PeopleOutlinedIcon sx={{ fontSize: 28 }} />} value={kpi.publishingTeachers != null ? kpi.publishingTeachers.toLocaleString() : '-'} label={`อาจารย์ที่ตีพิมพ์ (${fiscalYear})`} color={colors.greenAccent[500]} colSpan={kpiSpan} />
                 <KpiCard icon={<FormatQuoteIcon sx={{ fontSize: 28 }} />} value={kpi.citations > 0 ? kpi.citations.toLocaleString() : '-'} label={`Citations (${fiscalYear})`} color={colors.blueAccent[400]} colSpan={kpiSpan} />
                 <KpiCard icon={<StarOutlineIcon sx={{ fontSize: 28 }} />} value={kpi.hIndex > 0 ? kpi.hIndex.toLocaleString() : '-'} label="H-index เฉลี่ย" color="#f0b429" colSpan={kpiSpan} />
-                <KpiCard icon={<ArticleOutlinedIcon sx={{ fontSize: 28 }} />} value={kpi.publishingTeachers != null ? kpi.publishingTeachers.toLocaleString() : '-'} label="อาจารย์ที่มีผลงานตีพิมพ์" color={colors.redAccent[400]} colSpan={kpiSpan} />
+                <KpiCard icon={<ArticleOutlinedIcon sx={{ fontSize: 28 }} />} value={kpi.totalPubs != null ? kpi.totalPubs.toLocaleString() : '-'} label="จำนวนผลงานตีพิมพ์" color={colors.redAccent[400]} colSpan={kpiSpan} />
 
                 {/* ===== ROW 2-3 : SCOPUS YEAR BAR + PIE ===== */}
                 <Box gridColumn={`span ${chartSpan || 8}`} gridRow="span 2" backgroundColor={colors.primary[400]} p="20px">
@@ -147,8 +147,10 @@ const DashboardResearch = () => {
                     <Box height="240px">
                         {summary?.scopusByYear ? (
                             <BarChartResearchScopusYear isDashboard={true} data={transformScopusYear(summary.scopusByYear)} />
-                        ) : (
+                        ) : isFetchingSummary ? (
                             <Box display="flex" alignItems="center" justifyContent="center" height="100%"><CircularProgress size={28} /></Box>
+                        ) : (
+                            <Box display="flex" alignItems="center" justifyContent="center" height="100%"><Typography color="grey">ไม่มีข้อมูล</Typography></Box>
                         )}
                     </Box>
                 </Box>
@@ -158,8 +160,10 @@ const DashboardResearch = () => {
                     <Box height="240px">
                         {summary?.byDept ? (
                             <PieChartResearchDept data={summary.byDept} />
-                        ) : (
+                        ) : isFetchingSummary ? (
                             <Box display="flex" alignItems="center" justifyContent="center" height="100%"><CircularProgress size={28} /></Box>
+                        ) : (
+                            <Box display="flex" alignItems="center" justifyContent="center" height="100%"><Typography color="grey">ไม่มีข้อมูล</Typography></Box>
                         )}
                     </Box>
                 </Box>
@@ -170,8 +174,10 @@ const DashboardResearch = () => {
                     <Box height="240px">
                         {summary?.byQuartile ? (
                             <BarChartResearchQuartile isDashboard={true} data={transformQuartile(summary.byQuartile)} />
-                        ) : (
+                        ) : isFetchingSummary ? (
                             <Box display="flex" alignItems="center" justifyContent="center" height="100%"><CircularProgress size={28} /></Box>
+                        ) : (
+                            <Box display="flex" alignItems="center" justifyContent="center" height="100%"><Typography color="grey">ไม่มีข้อมูล</Typography></Box>
                         )}
                     </Box>
                 </Box>
@@ -181,8 +187,10 @@ const DashboardResearch = () => {
                     <Box height="240px">
                         {summary?.byCollabType ? (
                             <BarChartResearchType isDashboard={true} data={transformCollabType(summary.byCollabType)} />
-                        ) : (
+                        ) : isFetchingSummary ? (
                             <Box display="flex" alignItems="center" justifyContent="center" height="100%"><CircularProgress size={28} /></Box>
+                        ) : (
+                            <Box display="flex" alignItems="center" justifyContent="center" height="100%"><Typography color="grey">ไม่มีข้อมูล</Typography></Box>
                         )}
                     </Box>
                 </Box>
@@ -259,10 +267,12 @@ const DashboardResearch = () => {
                             <InputLabel>ภาควิชา</InputLabel>
                             <Select value={dept} label="ภาควิชา" onChange={(e) => setDept(e.target.value)}>
                                 <MenuItem value="">ทั้งหมด</MenuItem>
-                                <MenuItem value="ภาควิชาชีววิทยา">ภาควิชาชีววิทยา</MenuItem>
-                                <MenuItem value="ภาควิชาคณิตศาสตร์">ภาควิชาคณิตศาสตร์</MenuItem>
-                                <MenuItem value="ภาควิชาเคมี">ภาควิชาเคมี</MenuItem>
-                                <MenuItem value="ภาควิชาฟิสิกส์">ภาควิชาฟิสิกส์</MenuItem>
+                                <MenuItem value="Biology">ชีววิทยา</MenuItem>
+                                <MenuItem value="Mathematics">คณิตศาสตร์</MenuItem>
+                                <MenuItem value="Chemistry">เคมี</MenuItem>
+                                <MenuItem value="Physics">ฟิสิกส์</MenuItem>
+                                <MenuItem value="Microbiology">จุลชีววิทยา</MenuItem>
+                                <MenuItem value="Biochemistry">ชีวเคมี</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl size="small" sx={{ minWidth: 100 }}>

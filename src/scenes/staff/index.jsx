@@ -95,14 +95,20 @@ const Staffs = () => {
 
     const columns = [
     {
-      field: 'id', // ใช้ 'id' ที่เราสร้าง alias ไว้
+      field: 'id',
       headerName: 'ID',
       flex: 0.5,
       cellClassName: "name-column--cell"
     },
     {
+      field: 'position_no',
+      headerName: 'เลขประจำตำแหน่ง',
+      flex: 0.8,
+      cellClassName: "name-column--cell"
+    },
+    {
       field: 'title_th',
-      headerName: 'ตำแหน่งวิชาการ',
+      headerName: 'คำนำหน้า',
       flex: 0.7,
       cellClassName: "name-column--cell"
     },
@@ -137,12 +143,6 @@ const Staffs = () => {
       cellClassName: "name-column--cell"
     },
     {
-      field: 'position_no',
-      headerName: 'เลขประจำตำแหน่ง',
-      flex: 0.6,
-      cellClassName: "name-column--cell"
-    },    
-    {
       field: 'name',
       headerName: 'ประเภท',
       flex: 0.6,
@@ -171,9 +171,9 @@ const Staffs = () => {
       cellClassName: "name-column--cell"
     },
     {
-      field: 'office_location',
-      headerName: 'ออฟฟิศ',
-      flex: 0.6,
+      field: 'email',
+      headerName: 'Email',
+      flex: 1,
       cellClassName: "name-column--cell"
     },
     {

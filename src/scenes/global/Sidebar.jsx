@@ -259,19 +259,19 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="นำเข้าข้อมูลบุคลากร"
-                                to="/staff/importdata"
-                                icon={<StickyNote2Icon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            {/* <Item
                                 title="ข้อมูลการลาบุคลากร"
                                 to="/leaverecord"
                                 icon={<PeopleOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                             */}
+                            />
+                            <Item
+                                title="นำเข้าข้อมูลบุคลากรและการลา"
+                                to="/staff/importdata"
+                                icon={<StickyNote2Icon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />                            
                                                         
                          </SubMenu>   : undefined  }                          
 
