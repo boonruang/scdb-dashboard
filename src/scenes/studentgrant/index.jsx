@@ -98,8 +98,13 @@ const Studentgrants = () => {
       flex: 1,
     },
     {
+      field: 'grant_source',
+      headerName: 'แหล่งทุน',
+      flex: 1,
+    },
+    {
       field: 'loan_status',
-      headerName: 'สถานะกู้ยืม',
+      headerName: 'การกู้เงิน (กยศ.)',
       flex: 1,
     },
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
