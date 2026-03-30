@@ -136,7 +136,7 @@ var Dashboard3 = function() {
             <KpiCard icon={<MenuBookIcon sx={{ color: '#f59e0b', fontSize: 28 }} />} iconBg="#d9770630"
               value={fmt(kpi.totalPublication)} label="ผลงานตีพิมพ์" />
             <KpiCard icon={<SchoolIcon sx={{ color: '#c084fc', fontSize: 28 }} />} iconBg="#7e22ce30"
-              value={fmt(kpi.totalGrant)} label="คู่ได้รับทุน" />
+              value={fmt(kpi.totalGrant)} label="ทุนนำเสนอ" />
           </Box>
 
           {/* Row 2: Bar + Line + Pie วิจัย */}

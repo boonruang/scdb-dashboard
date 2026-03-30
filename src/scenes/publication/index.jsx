@@ -54,7 +54,7 @@ const Publications = () => {
 
     const ExportExcelButton = () => {
       var rows = (result || []).map(function(r) {
-        var authors = (r.AuthorProfiles || []).map(function(a) {
+        var authors = (r.ResearchAuthors || []).map(function(a) {
           return (a.firstname_th || a.firstname || '') + ' ' + (a.lastname_th || a.lastname || '')
         }).join(', ')
         return {
@@ -124,11 +124,11 @@ const Publications = () => {
       cellClassName: "name-column--cell"
     },
     {
-      field: 'AuthorProfiles',
+      field: 'ResearchAuthors',
       headerName: 'ผู้แต่ง',
       flex: 1.2,
       renderCell: (params) => {
-        const authors = params.row.AuthorProfiles;
+        const authors = params.row.ResearchAuthors;
         if (authors && authors.length > 0) {
           return authors.map(function(a) {
             return (a.firstname_th && a.lastname_th)

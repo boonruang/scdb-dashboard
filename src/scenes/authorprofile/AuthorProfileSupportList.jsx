@@ -5,7 +5,7 @@ import { tokens } from '../../theme'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { ROLES } from '../../constants'
-import { getAuthorProfiles, deleteAuthorProfile } from '../../actions/authorProfile.action'
+import { getAuthorProfileSupports, deleteAuthorProfileSupport } from '../../actions/authorProfileSupport.action'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as XLSX from 'xlsx'
 import IosShareIcon from '@mui/icons-material/IosShare'
@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add'
 import { useNavigate } from 'react-router-dom'
 import ConfirmBox from 'components/ConfirmBox'
 
-var AuthorProfileList = function() {
+var AuthorProfileSupportList = function() {
   var theme = useTheme()
   var colors = tokens(theme.palette.mode)
   var dispatch = useDispatch()
@@ -22,17 +22,17 @@ var AuthorProfileList = function() {
   var [open, setOpen] = useState(false)
   var [rowId, setRowId] = useState(null)
 
-  useEffect(function() { dispatch(getAuthorProfiles()) }, [dispatch])
+  useEffect(function() { dispatch(getAuthorProfileSupports()) }, [dispatch])
 
-  var result = useSelector(function(s) { return s.app.authorProfileReducer.result })
-  var isFetching = useSelector(function(s) { return s.app.authorProfileReducer.isFetching })
+  var result = useSelector(function(s) { return s.app.authorProfileSupportReducer.result })
+  var isFetching = useSelector(function(s) { return s.app.authorProfileSupportReducer.isFetching })
   var loginReducer = useSelector(function(s) { return s.app.loginReducer })
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
     ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
     : false
 
   var handleDelete = function() {
-    dispatch(deleteAuthorProfile(rowId))
+    dispatch(deleteAuthorProfileSupport(rowId))
     setOpen(false)
   }
 
@@ -40,8 +40,8 @@ var AuthorProfileList = function() {
     if (!result) return
     var wb = XLSX.utils.book_new()
     var ws = XLSX.utils.json_to_sheet(result)
-    XLSX.utils.book_append_sheet(wb, ws, 'AuthorProfile')
-    XLSX.writeFile(wb, 'author_profile.xlsx')
+    XLSX.utils.book_append_sheet(wb, ws, 'AuthorProfileSupport')
+    XLSX.writeFile(wb, 'author_profile_support.xlsx')
   }
 
   var dgStyles = {
@@ -76,7 +76,7 @@ var AuthorProfileList = function() {
             >รายละเอียด</Button>
             {canEdit && (
               <Button variant="outlined" color="info" size="small" sx={{ ml: 1 }}
-                onClick={function() { navigate('/authorprofile/edit', { state: { row: params.row } }) }}
+                onClick={function() { navigate('/authorprofile/support/edit', { state: { row: params.row } }) }}
               >แก้ไข</Button>
             )}
             {canEdit && (
@@ -92,14 +92,14 @@ var AuthorProfileList = function() {
 
   return (
     <Box m="20px">
-      <Header title="Author Profile สายวิชาการ" subtitle="รายการนักวิจัย (citations, h-index)" />
+      <Header title="Author Profile สายสนับสนุน" subtitle="รายการนักวิจัยสายสนับสนุน (citations, h-index)" />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
         <Box display="flex" justifyContent="space-between" mb="10px">
           <Box>
             {canEdit && (
               <Button
                 sx={{ backgroundColor: colors.greenAccent[600], color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', '&:hover': { backgroundColor: colors.greenAccent[800] } }}
-                onClick={function() { navigate('/authorprofile/create') }}
+                onClick={function() { navigate('/authorprofile/support/create') }}
               >
                 <AddIcon sx={{ mr: '10px' }} />เพิ่มนักวิจัย
               </Button>
@@ -132,4 +132,4 @@ var AuthorProfileList = function() {
   )
 }
 
-export default AuthorProfileList
+export default AuthorProfileSupportList

@@ -27,7 +27,7 @@ const BarChartResearchScopusYear = ({ isDashboard = false, data = [] }) => {
                     }
                 }
             }}
-            keys={['ผลงานตีพิมพ์', 'อาจารย์ที่ตีพิมพ์']}
+            keys={['Scopus', 'ISI']}
             indexBy="year"
             groupMode="grouped"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
@@ -35,7 +35,7 @@ const BarChartResearchScopusYear = ({ isDashboard = false, data = [] }) => {
             innerPadding={3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={['#4e9af1', '#f0b429']}
+            colors={['#4e9af1', '#e84855']}
             axisTop={null}
             axisRight={null}
             axisBottom={{

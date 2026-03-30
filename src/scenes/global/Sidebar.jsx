@@ -367,22 +367,22 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="นำเข้าข้อมูลผลงานวิจัย (Paper)"
-                                to="/publication/importdata2"
-                                icon={<StickyNote2Icon />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="ข้อมูล Author Profile"
+                                title="Author Profile สายวิชาการ"
                                 to="/authorprofile"
                                 icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="นำเข้า Author Profile"
-                                to="/authorprofile/importdata"
+                                title="Author Profile สายสนับสนุน"
+                                to="/authorprofile/support"
+                                icon={<MenuBookIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="นำเข้าข้อมูลวิจัย"
+                                to="/research/importdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}

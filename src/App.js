@@ -82,7 +82,11 @@ import AuthorProfileList from "scenes/authorprofile";
 import AuthorProfileDetail from "scenes/authorprofile/AuthorProfileDetail";
 import AuthorProfileEdit from "scenes/authorprofile/AuthorProfileEdit";
 import AuthorProfileCreate from "scenes/authorprofile/AuthorProfileCreate";
-import AuthorProfileImportData from "scenes/authorprofileimportdata";
+import AuthorProfileImportData from "scenes/authorprofileimportdata"
+import AuthorProfileSupportList from "scenes/authorprofile/AuthorProfileSupportList"
+import AuthorProfileSupportEdit from "scenes/authorprofile/AuthorProfileSupportEdit"
+import AuthorProfileSupportCreate from "scenes/authorprofile/AuthorProfileSupportCreate"
+import ResearchImportData from "scenes/researchimportdata";
 
 import PublicationList from "scenes/publication";
 import PublicationAdd from "scenes/publication/PublicationAdd"; 
@@ -238,6 +242,10 @@ function App() {
           <Route path="authorprofile/edit" element={<AuthorProfileEdit />} />
           <Route path="authorprofile/create" element={<AuthorProfileCreate />} />
           <Route path="authorprofile/importdata" element={<AuthorProfileImportData />} />
+          <Route path="authorprofile/support" element={<AuthorProfileSupportList />} />
+          <Route path="authorprofile/support/edit" element={<AuthorProfileSupportEdit />} />
+          <Route path="authorprofile/support/create" element={<AuthorProfileSupportCreate />} />
+          <Route path="research/importdata" element={<ResearchImportData />} />
 
           <Route path="project/add" element={<ProjectAdd />} />
           <Route path="project/detail" element={<ProjectDetail />} />

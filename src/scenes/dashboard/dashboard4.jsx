@@ -25,7 +25,7 @@ const fiscalYearOptions = [currentBE, currentBE - 1, currentBE - 2, currentBE - 
 
 // ── แปลง field EN → TH สำหรับ Nivo chart ───────────────────────────
 const transformScopusYear = (data = []) =>
-    data.map(d => ({ year: d.year, 'ผลงานตีพิมพ์': d.publications, 'อาจารย์ที่ตีพิมพ์': d.teachers }))
+    data.map(d => ({ year: d.year, 'Scopus': d.publications, 'ISI': d.isi }))
 
 const transformQuartile = (data = []) =>
     data.map(d => ({ quartile: d.quartile, 'จำนวน': d.count }))
@@ -143,7 +143,7 @@ const DashboardResearch = () => {
 
                 {/* ===== ROW 2-3 : SCOPUS YEAR BAR + PIE ===== */}
                 <Box gridColumn={`span ${chartSpan || 8}`} gridRow="span 2" backgroundColor={colors.primary[400]} p="20px">
-                    <Typography variant="h5" fontWeight="600" mb="10px">ผลงานตีพิมพ์ Scopus เปรียบเทียบรายปี</Typography>
+                    <Typography variant="h5" fontWeight="600" mb="10px">ผลงานตีพิมพ์ Scopus และ ISI เปรียบเทียบรายปี</Typography>
                     <Box height="240px">
                         {summary?.scopusByYear ? (
                             <BarChartResearchScopusYear isDashboard={true} data={transformScopusYear(summary.scopusByYear)} />
