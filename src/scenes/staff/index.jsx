@@ -97,37 +97,49 @@ const Staffs = () => {
     {
       field: 'position_no',
       headerName: 'เลขประจำตำแหน่ง',
-      flex: 0.7,
+      flex: 0.6,
       cellClassName: "name-column--cell"
     },
     {
       field: 'title_th',
       headerName: 'คำนำหน้า',
-      flex: 0.5,
+      flex: 0.4,
       cellClassName: "name-column--cell"
     },
     {
       field: 'firstname_th',
       headerName: 'ชื่อ (TH)',
-      flex: 0.8,
+      flex: 0.7,
       cellClassName: "name-column--cell"
     },
     {
       field: 'lastname_th',
       headerName: 'นามสกุล (TH)',
-      flex: 0.8,
+      flex: 0.7,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'firstname',
+      headerName: 'ชื่อ (EN)',
+      flex: 0.5,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'lastname',
+      headerName: 'สกุล (EN)',
+      flex: 0.5,
       cellClassName: "name-column--cell"
     },
     {
       field: 'position',
       headerName: 'ตำแหน่ง',
-      flex: 1,
+      flex: 0.7,
       cellClassName: "name-column--cell"
     },
     {
       field: 'name',
       headerName: 'ประเภท',
-      flex: 0.5,
+      flex: 0.4,
       renderCell: (params) => {
         return params.row.Stafftype?.name || 'N/A';
       }
@@ -135,13 +147,37 @@ const Staffs = () => {
     {
       field: 'education',
       headerName: 'วุฒิการศึกษา',
-      flex: 0.6,
+      flex: 0.5,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'startdate',
+      headerName: 'วันที่บรรจุ',
+      flex: 0.5,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'birthday',
+      headerName: 'วันเกิด',
+      flex: 0.5,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      flex: 0.7,
+      cellClassName: "name-column--cell"
+    },
+    {
+      field: 'phone_no',
+      headerName: 'โทรศัพท์',
+      flex: 0.4,
       cellClassName: "name-column--cell"
     },
     {
       field: 'dept_name',
       headerName: 'ภาควิชา',
-      flex: 1,
+      flex: 0.8,
       renderCell: (params) => {
         return params.row.Department?.dept_name || 'N/A';
       }
