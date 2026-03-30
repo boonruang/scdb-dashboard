@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import "react-pro-sidebar/dist/css/styles.css"
 import { tokens } from "../../theme"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined"
+import ApartmentIcon from "@mui/icons-material/Apartment"
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import PersonIcon from '@mui/icons-material/Person';
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined"
@@ -266,13 +267,19 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
+                                title="ข้อมูลสังกัด"
+                                to="/division"
+                                icon={<ApartmentIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="นำเข้าข้อมูลบุคลากรและการลา"
                                 to="/staff/importdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />                            
-                                                        
+                            />
                          </SubMenu>   : undefined  }                          
 
                         { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))

@@ -8,8 +8,16 @@
  */
 export function excelDateToISO(val) {
   if (!val && val !== 0) return null
+  // Date object (XLSX parse บางครั้งคืน Date object ที่ปีเป็น พ.ศ.)
+  if (val instanceof Date) {
+    var y = val.getFullYear()
+    if (y > 2400) y -= 543
+    var mo = String(val.getMonth() + 1).padStart(2, '0')
+    var da = String(val.getDate()).padStart(2, '0')
+    return y + '-' + mo + '-' + da
+  }
   if (typeof val === 'string' && val.trim()) {
-    var s = val.trim()
+    var s = val.trim().split('T')[0]  // ตัด T00:00:00.000Z ออก
     // format DD/MM/YYYY (พ.ศ. หรือ ค.ศ.)
     var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
     if (m) {

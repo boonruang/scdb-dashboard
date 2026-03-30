@@ -65,7 +65,7 @@ const Staffs = () => {
           'ตำแหน่ง': r.position,
           'ตำแหน่งวิชาการ': r.title_th,
           'ประเภทบุคลากร': (r.Stafftype || {}).name || '',
-          'ภาควิชา': (r.Department || {}).dept_name || '',
+          'สังกัด': (r.Division || {}).division_name || '',
           'วุฒิการศึกษา': r.education,
           'วันที่บรรจุ': r.startdate,
           'วันเกิด': r.birthday,
@@ -175,11 +175,11 @@ const Staffs = () => {
       cellClassName: "name-column--cell"
     },
     {
-      field: 'dept_name',
-      headerName: 'ภาควิชา',
+      field: 'division_name',
+      headerName: 'สังกัด',
       flex: 0.8,
-      renderCell: (params) => {
-        return params.row.Department?.dept_name || 'N/A';
+      renderCell: function(params) {
+        return (params.row.Division || {}).division_name || 'N/A'
       }
     },
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {

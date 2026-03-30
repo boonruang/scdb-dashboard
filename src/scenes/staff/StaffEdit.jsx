@@ -24,7 +24,7 @@ import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { updateStaff } from '../../actions/staff.action'
 import { getStafftype } from '../../actions/stafftype.action'
-import { getDepartment } from 'actions/department.action'
+import { getDivision } from 'actions/division.action'
 import { useNavigate,useLocation } from 'react-router-dom'
 import MessageBox from 'components/MessageBox'
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -66,30 +66,15 @@ const StaffEdit = () => {
   const [submitted, setSubmitted] = useState(false)
 
   const [stafftypeData, setStafftypeData] = useState([])
-  const [departmentData, setDepartmentData] = useState([])
+  const [divisionData, setDivisionData] = useState([])
 
   const stafftypeReducer = useSelector((state) => state.app.stafftypeReducer)
-  const departmentReducer = useSelector((state) => state.app.departmentReducer)
+  const divisionReducer = useSelector((state) => state.app.divisionReducer)
 
-
-    useEffect(() => {
-        dispatch(getStafftype())
-    },[dispatch])
-
-
-    useEffect(() => {
-        setStafftypeData(stafftypeReducer.result)
-    },[stafftypeReducer.result])  
-
-  
-    useEffect(() => {
-        dispatch(getDepartment())
-    },[dispatch])
-  
-
-    useEffect(() => {
-      setDepartmentData(departmentReducer.result)
-    },[departmentReducer.result])  
+  useEffect(() => { dispatch(getStafftype()) }, [dispatch])
+  useEffect(() => { setStafftypeData(stafftypeReducer.result) }, [stafftypeReducer.result])
+  useEffect(() => { dispatch(getDivision()) }, [dispatch])
+  useEffect(() => { setDivisionData(divisionReducer.result) }, [divisionReducer.result])
 
 
    const handleSubmitButton = (values) => {
@@ -125,7 +110,7 @@ const StaffEdit = () => {
               formData.append('email', values.email)
               formData.append('office_location', values.office_location)
               formData.append('stafftype_id', values.stafftype_id)
-              formData.append('department_id', values.department_id)
+              formData.append('division_id', values.division_id)
               console.log('values',values)
               const res = await dispatch(updateStaff(navigate, formData))
               if (res && res.success) {
@@ -359,22 +344,20 @@ const StaffEdit = () => {
                         fullWidth
                         variant="filled"
                         type="text"
-                        label="ภาควิชา"
+                        label="สังกัด"
                         select
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values.department_id}
-                        name="department_id"                         
-                        error={!!touched.department_id && !!errors.department_id}
-                        helperText={touched.department_id && errors.department_id}
+                        value={values.division_id || ''}
+                        name="division_id"
                         defaultValue=""
-                        sx={{ gridColumn: "span 1" }} 
+                        sx={{ gridColumn: "span 1" }}
                         >
-                        { departmentData && departmentData.map((item,key) => (
-                        <MenuItem key={key} value={item.department_id} >
-                            {item.department_id+'-'+item.dept_name}
-                        </MenuItem>  
-                        ))} 
+                        { divisionData && divisionData.map((item, key) => (
+                        <MenuItem key={key} value={item.division_id}>
+                            {item.division_name}
+                        </MenuItem>
+                        ))}
                         </TextField>                                                         
                      </Box>
                 </Box>

@@ -121,9 +121,12 @@ import DocumentDetail from "scenes/document/DocumentDetail";
 import DocumentEdit from "scenes/document/DocumentEdit"; 
 
 import LeaverecordList from "scenes/leaverecord";
-import LeaverecordAdd from "scenes/leaverecord/LeaverecordAdd"; 
-import LeaverecordDetail from "scenes/leaverecord/LeaverecordDetail"; 
-import LeaverecordEdit from "scenes/leaverecord/LeaverecordEdit"; 
+import LeaverecordAdd from "scenes/leaverecord/LeaverecordAdd";
+import LeaverecordDetail from "scenes/leaverecord/LeaverecordDetail";
+import LeaverecordEdit from "scenes/leaverecord/LeaverecordEdit";
+import DivisionList from "scenes/division";
+import DivisionAdd from "scenes/division/DivisionAdd";
+import DivisionEdit from "scenes/division/DivisionEdit";
 import UsersList from "scenes/users/list";
 import UsersAdd from "scenes/users/add"; 
 import Log from "scenes/log";
@@ -279,7 +282,10 @@ function App() {
           <Route path="leaverecord/add" element={<LeaverecordAdd />} />
           <Route path="leaverecord/detail" element={<LeaverecordDetail />} />
           <Route path="leaverecord/edit" element={<LeaverecordEdit />} />
-          <Route path="leaverecord" element={<LeaverecordList />} />                  
+          <Route path="leaverecord" element={<LeaverecordList />} />
+          <Route path="division/add" element={<DivisionAdd />} />
+          <Route path="division/edit" element={<DivisionEdit />} />
+          <Route path="division" element={<DivisionList />} />                  
           {/* <Route path="calendar" element={<Calendar />} /> */}
           {/* <Route path="bar" element={<Bar />} /> */}
           {/* <Route path="pie" element={<Pie />} /> */}

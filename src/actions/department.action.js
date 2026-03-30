@@ -85,18 +85,11 @@ const doGetDepartment = (dispatch) => {
 };
 
 export const addDepartment = (navigate, formData) => {
-  console.log('navigate action',navigate)
-  console.log('formData action',formData)
   return async (dispatch) => {
     try {
-      // success
-      let result = await httpClient.post(server.DEPARTMENT_URL, formData)
-      console.log('addDepartment formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/department')
-      },5000)
+      await httpClient.post(server.DEPARTMENT_URL, formData)
+      navigate('/department')
     } catch (error) {
-      // failed
       console.log('addDepartment formData Error: ', error.toString())
     }
   }

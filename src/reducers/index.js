@@ -18,7 +18,8 @@ import leaverecordReducer from "./leaverecord.reducer";
 import admissionPlanReducer from "./admissionPlan.reducer";   
 import documentReducer from "./document.reducer";   
 import stafftypeReducer from "./stafftype.reducer";   
-import departmentReducer from "./department.reducer";   
+import departmentReducer from "./department.reducer";
+import divisionReducer from "./division.reducer";
 import staffuploadfileReducer from "./staffeducation.reducer";   
 import dashboard1Reducer from "./dashboard1.reducer";   
 import dashboard2Reducer from "./dashboard2.reducer";   
@@ -58,6 +59,7 @@ export default combineReducers({
   documentReducer,
   stafftypeReducer,
   departmentReducer,
+  divisionReducer,
   staffuploadfileReducer,
   dashboard1Reducer,
   dashboard2Reducer,

@@ -69,7 +69,7 @@ var StaffImportData = function() {
 
       // Sheet index 2: สถิติการลา (row 0=hints, row 1=headers → range:1)
       var ws2 = wb.Sheets[wb.SheetNames[2]]
-      var raw2 = ws2 ? XLSX.utils.sheet_to_json(ws2, { defval: '', range: 1 }) : []
+      var raw2 = ws2 ? XLSX.utils.sheet_to_json(ws2, { defval: '', range: 1, raw: false }) : []
       var mapped2 = raw2
         .filter(function(r) { return r['เลขประจำตำแหน่ง'] || r['ประเภทการลา'] })
         .map(function(r, i) {
