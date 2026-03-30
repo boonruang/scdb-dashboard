@@ -15,7 +15,16 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 import ConfirmBox from 'components/ConfirmBox'
 import Avatar from '@mui/material/Avatar'; 
 
-const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
+const MONTHS_TH = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']
+const toBE = function(val) {
+  if (!val) return '-'
+  var s = String(val).split('T')[0]
+  var parts = s.split('-')
+  if (parts.length !== 3) return s
+  var y = parseInt(parts[0]), m = parseInt(parts[1]), d = parseInt(parts[2])
+  if (isNaN(y) || isNaN(m) || isNaN(d)) return s
+  return d + ' ' + (MONTHS_TH[m - 1] || m) + ' ' + (y + 543)
+}
 
 const Leaverecords = () => {
     const theme = useTheme()
@@ -115,13 +124,15 @@ const Leaverecords = () => {
       field: 'start_date',
       headerName: 'วันเริ่ม',
       flex: 1,
-      cellClassName: "name-column--cell"
+      cellClassName: "name-column--cell",
+      renderCell: function(params) { return toBE(params.value) }
     },
     {
       field: 'end_date',
       headerName: 'วันสิ้นสุด',
       flex: 1,
-      cellClassName: "name-column--cell"
+      cellClassName: "name-column--cell",
+      renderCell: function(params) { return toBE(params.value) }
     },
     { field: 'actions', headerName: 'ดำเนินการ', headerAlign: 'center', align: 'center', flex: 1.5, renderCell: (params) => {
         return (

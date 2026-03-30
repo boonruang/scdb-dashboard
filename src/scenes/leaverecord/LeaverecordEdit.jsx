@@ -106,20 +106,30 @@ const LeaverecordEdit = () => {
                 </FormControl>
 
                 {/* วันเริ่มต้น */}
-                <DatePicker label="วันเริ่มต้น" value={values.start_date}
+                <DatePicker label="วันเริ่มต้น"
+                  value={values.start_date}
                   onChange={function(v) { setFieldValue('start_date', v) }}
                   format="d MMMM yyyy"
                   slotProps={{ textField: { fullWidth: true, variant: 'outlined', sx: { gridColumn: 'span 2' },
                     error: !!touched.start_date && !!errors.start_date,
-                    helperText: touched.start_date && errors.start_date } }} />
+                    helperText: values.start_date && !isNaN(new Date(values.start_date))
+                      ? 'พ.ศ. ' + (new Date(values.start_date).getFullYear() + 543)
+                      : (touched.start_date && errors.start_date) || 'กรอกปี ค.ศ. เช่น 2026'
+                  } }}
+                />
 
                 {/* วันสิ้นสุด */}
-                <DatePicker label="วันสิ้นสุด" value={values.end_date}
+                <DatePicker label="วันสิ้นสุด"
+                  value={values.end_date}
                   onChange={function(v) { setFieldValue('end_date', v) }}
                   format="d MMMM yyyy"
                   slotProps={{ textField: { fullWidth: true, variant: 'outlined', sx: { gridColumn: 'span 2' },
                     error: !!touched.end_date && !!errors.end_date,
-                    helperText: touched.end_date && errors.end_date } }} />
+                    helperText: values.end_date && !isNaN(new Date(values.end_date))
+                      ? 'พ.ศ. ' + (new Date(values.end_date).getFullYear() + 543)
+                      : (touched.end_date && errors.end_date) || 'กรอกปี ค.ศ. เช่น 2026'
+                  } }}
+                />
               </Box>
 
               <Box display="flex" mt="24px">

@@ -13,6 +13,20 @@ import ApartmentIcon from '@mui/icons-material/Apartment'
 
 var fmt = function(n) { return (n || 0).toLocaleString('th-TH') }
 
+// แปลงวันที่ ค.ศ. → พ.ศ. แสดงเป็น "วัน เดือนไทย พ.ศ."
+var MONTHS_TH = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']
+var toBE = function(val) {
+  if (!val) return '-'
+  var s = String(val).split('T')[0]
+  var parts = s.split('-')
+  if (parts.length !== 3) return s
+  var y = parseInt(parts[0])
+  var m = parseInt(parts[1])
+  var d = parseInt(parts[2])
+  if (isNaN(y) || isNaN(m) || isNaN(d)) return s
+  return d + ' ' + (MONTHS_TH[m - 1] || m) + ' ' + (y + 543)
+}
+
 // ── KPI Card ──────────────────────────────────────────────────────────
 var KpiCard = function(props) {
   var theme = useTheme()
@@ -217,8 +231,8 @@ var Dashboard1 = function() {
                         <TableRow key={i} style={{ backgroundColor: bg }}>
                           <TableCell style={tdStyle()}>{l.fullname_th}</TableCell>
                           <TableCell style={tdStyle({ color: colors.blueAccent[300] })}>{l.leave_type}</TableCell>
-                          <TableCell style={tdStyle({ color: colors.grey[400] })}>{l.start_date ? String(l.start_date).split('T')[0] : '-'}</TableCell>
-                          <TableCell style={tdStyle({ color: colors.grey[400] })}>{l.end_date ? String(l.end_date).split('T')[0] : '-'}</TableCell>
+                          <TableCell style={tdStyle({ color: colors.grey[400] })}>{toBE(l.start_date)}</TableCell>
+                          <TableCell style={tdStyle({ color: colors.grey[400] })}>{toBE(l.end_date)}</TableCell>
                         </TableRow>
                       )
                     })}
