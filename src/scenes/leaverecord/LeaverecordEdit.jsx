@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Box, useTheme, Button, MenuItem, Select, FormControl, InputLabel, FormHelperText, useMediaQuery } from '@mui/material'
+import { Box, useTheme, Button, MenuItem, Select, FormControl, InputLabel, FormHelperText, useMediaQuery, TextField } from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Header from '../../components/Header'
@@ -79,21 +80,19 @@ const LeaverecordEdit = () => {
                 sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' } }}
               >
                 {/* บุคลากร */}
-                <FormControl fullWidth variant="outlined" sx={{ gridColumn: 'span 2' }}
-                  error={!!touched.staff_id && !!errors.staff_id}>
-                  <InputLabel>บุคลากร</InputLabel>
-                  <Select value={values.staff_id} label="บุคลากร"
-                    onChange={function(e) { setFieldValue('staff_id', e.target.value) }}>
-                    {staffList.map(function(s) {
-                      return (
-                        <MenuItem key={s.staff_id} value={s.staff_id}>
-                          {s.position_no} — {s.firstname_th} {s.lastname_th}
-                        </MenuItem>
-                      )
-                    })}
-                  </Select>
-                  {touched.staff_id && errors.staff_id && <FormHelperText>{errors.staff_id}</FormHelperText>}
-                </FormControl>
+                <Autocomplete
+                  sx={{ gridColumn: 'span 2' }}
+                  options={staffList}
+                  getOptionLabel={function(s) { return (s.position_no || '') + ' — ' + (s.firstname_th || '') + ' ' + (s.lastname_th || '') }}
+                  value={staffList.find(function(s) { return s.staff_id === values.staff_id }) || null}
+                  onChange={function(e, val) { setFieldValue('staff_id', val ? val.staff_id : '') }}
+                  isOptionEqualToValue={function(opt, val) { return opt.staff_id === val.staff_id }}
+                  renderInput={function(params) {
+                    return <TextField {...params} label="บุคลากร" variant="outlined"
+                      error={!!touched.staff_id && !!errors.staff_id}
+                      helperText={touched.staff_id && errors.staff_id} />
+                  }}
+                />
 
                 {/* ประเภทการลา */}
                 <FormControl fullWidth variant="outlined" sx={{ gridColumn: 'span 2' }}
