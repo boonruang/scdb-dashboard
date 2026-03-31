@@ -49,7 +49,7 @@ const Login = () => {
     <CssBaseline />
       <Box 
             sx={{
-              backgroundImage: "url('images/backoffice_bg.jpg')",
+              backgroundImage: "url('/images/backoffice_bg.jpg')",
               backgroundSize: "cover",
               height: "100vh",
               width: '100%',
