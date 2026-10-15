@@ -4,7 +4,7 @@ export const mockImportData = [
     name: "ข้อมูลด้านบุคคล",
     description: "staff",
     image: "image1.jpg",
-    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/staff.xlsx",
+    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/hr.xlsx",
   },
   {
     id: 2,
@@ -15,24 +15,24 @@ export const mockImportData = [
   },
   {
     id: 3,
-    name: "ข้อมูลด้านหลักสูตร",
+    name: "ข้อมูลด้านวิชาการ",
     description: "academic",
     image: "image3.jpg",    
-    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/academicprogram.xlsx", 
+    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/academic.xlsx", 
   },
   {
     id: 4,
     name: "ข้อมูลด้านการวิจัย",
     description: "research and publications",
     image: "image4.jpg",    
-    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/publication.xlsx", 
+    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/research.xlsx", 
   },
   {
     id: 5,
     name: "ข้อมูลด้านแผนและงบประมาณ",
     description: "Plan",
     image: "image5.jpg",    
-    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/project.xlsx", 
+    import: "https://herbhuk.sgp1.digitaloceanspaces.com/scdata/templates/plan.xlsx", 
   },
   
 ];

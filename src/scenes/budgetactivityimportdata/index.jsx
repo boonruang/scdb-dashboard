@@ -16,6 +16,18 @@ import { excelDateToISO as excelSerialToDate } from '../../utils/dateUtils'
 const num = (v) => Number(v) || 0
 const str = (v) => String(v || '').trim()
 
+// สรุปผลจาก API ให้อ่านรู้เรื่อง
+const importSummary = (d, extraSkipped) => {
+  let msg = 'นำเข้าสำเร็จ\n• เพิ่มใหม่: ' + d.inserted + ' รายการ\n• อัปเดต: ' + d.updated + ' รายการ'
+  const skipped = (d.skipped || 0) + (extraSkipped || 0)
+  if (skipped) msg += '\n• ข้าม: ' + skipped + ' รายการ'
+  if (d.duplicates && d.duplicates.length) {
+    msg += '\n\nรหัสกิจกรรมที่มีมากกว่า 1 แถวใน DB (อัปเดตให้ครบทุกแถวแล้ว):\n  '
+    msg += d.duplicates.map((x) => x.activity_code + ' (' + x.rows + ' แถว)').join(', ')
+  }
+  return msg
+}
+
 const BudgetActivityImportData = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
@@ -131,17 +143,17 @@ const BudgetActivityImportData = () => {
       if (!validImport.length) { alert('ไม่มีรายการที่สามารถนำเข้าได้'); return }
       const res = await dispatch(bulkImportBudgetActivity(validImport))
       if (res && res.success) {
-        alert('นำเข้าสำเร็จ\n• เพิ่มใหม่: ' + res.data.inserted + ' รายการ\n• อัปเดต: ' + res.data.updated + ' รายการ\n• ข้าม: ' + (toImport.length - validImport.length) + ' รายการ')
+        alert(importSummary(res.data || {}, toImport.length - validImport.length))
         setData([])
-      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.error) || ''))
+      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.error) || (res && res.data && res.data.result) || ''))
     } else {
       msg += '\n(รหัสกิจกรรมซ้ำใน DB จะถูก update อัตโนมัติ)\n\nยืนยันการนำเข้า?'
       if (!window.confirm(msg)) return
       const res = await dispatch(bulkImportBudgetActivity(toImport))
       if (res && res.success) {
-        alert('นำเข้าสำเร็จ\n• เพิ่มใหม่: ' + res.data.inserted + ' รายการ\n• อัปเดต: ' + res.data.updated + ' รายการ')
+        alert(importSummary(res.data || {}, 0))
         setData([])
-      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.error) || ''))
+      } else alert('เกิดข้อผิดพลาด: ' + ((res && res.error) || (res && res.data && res.data.result) || ''))
     }
   }
 

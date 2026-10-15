@@ -90,7 +90,7 @@ const Admin = () => {
           >
 
             <Typography component="h1" variant="h5">
-              ระบบผู้ดูแล HerbHuk ISAN 
+              ระบบผู้ดูแล Science Data Center 
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField

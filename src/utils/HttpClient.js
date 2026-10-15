@@ -16,6 +16,7 @@ axios.interceptors.request.use(
       const jwtToken = await localStorage.getItem(TOKEN)
       if (jwtToken !== null) {
         config.headers = {
+          ...config.headers,
           Authorization: jwtToken,
         }
       }

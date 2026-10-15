@@ -75,7 +75,14 @@ const BudgetPlanImportData = () => {
     if (!window.confirm(msg)) return
     const res = await dispatch(bulkImportBudgetPlan(toImport))
     if (res?.success) {
-      alert(`นำเข้าสำเร็จ\n• เพิ่มใหม่: ${res.data?.inserted} รายการ\n• อัปเดต: ${res.data?.updated} รายการ`)
+      const d = res.data || {}
+      let done = `นำเข้าสำเร็จ\n• เพิ่มใหม่: ${d.inserted} รายการ\n• อัปเดต: ${d.updated} รายการ`
+      if (d.skipped) done += `\n• ข้าม (ไม่มีรหัสงบประมาณหรือชื่อโครงการ): ${d.skipped} รายการ`
+      if (d.duplicates?.length) {
+        done += `\n\nรหัสที่มีมากกว่า 1 แถวใน DB (อัปเดตให้ครบทุกแถวแล้ว):\n  `
+        done += d.duplicates.map((x) => `${x.budget_code} (${x.rows} แถว)`).join(', ')
+      }
+      alert(done)
       setData([])
     } else alert('เกิดข้อผิดพลาด: ' + (res?.error || res?.data?.result || ''))
   }

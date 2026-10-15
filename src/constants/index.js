@@ -253,7 +253,7 @@ export const OK = 'ok'
 export const NOK = 'nok'
 export const LOGIN_STATUS = 'LOGIN_STATUS'
 export const USER_ROLES = 'USER_ROLES'
-export const TOKEN = 'HerbHukToken'
+export const TOKEN = 'SCDBToken'
 
 export const server = {
   LETIN_URL: `user/letin`,

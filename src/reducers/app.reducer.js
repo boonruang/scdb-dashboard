@@ -5,7 +5,7 @@ import {
 } from '../constants'
 
 const initialState = {
-  appName: 'herbhuk',
+  appName: 'scdbapp',
   loaded: false,
   isSidebar: true,
   isFarmerDetailbox: false,

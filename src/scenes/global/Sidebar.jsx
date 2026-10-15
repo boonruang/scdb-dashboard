@@ -250,7 +250,7 @@ const Sidebar = () => {
                               : undefined }
                          </SubMenu>   : undefined  }  
 
-                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.HR].includes(role))
                            ? <SubMenu title="1.ด้านบุคลากร" icon={<PeopleOutlinedIcon />}>
                             <Item
                                 title="ข้อมูลคลากร"
@@ -282,7 +282,7 @@ const Sidebar = () => {
                             />
                          </SubMenu>   : undefined  }                          
 
-                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Student].includes(role))
                            ? <SubMenu title="2.ด้านกิจการนิสิต" icon={<SchoolIcon />}>
                             <Item
                                 title="ข้อมูลนิสิต"
@@ -323,7 +323,7 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  } 
 
 
-                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Academic].includes(role))
                            ? <SubMenu title="3.ด้านวิชาการ" icon={<FmdBadIcon />}>
                             <Item
                                 title="ข้อมูลแผนการรับนิสิต"
@@ -364,7 +364,7 @@ const Sidebar = () => {
 
 
 
-                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Research].includes(role))
                          ? <SubMenu title="4.ด้านการวิจัย" icon={<WbIncandescentIcon />}>
                            <Item
                                 title="ผลงานวิจัยตีพิมพ์"
@@ -398,7 +398,7 @@ const Sidebar = () => {
                          </SubMenu>   : undefined  }                                                 
 
 
-                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(role))
+                        { result?.roles?.find((role) => [ROLES.Admin, ROLES.Plan].includes(role))
                            ? <SubMenu title="5.ด้านแผนและงบประมาณ" icon={<PlaylistAddCheckIcon />}>
                             <Item
                                 title="แผนโครงการ/งบประมาณ"

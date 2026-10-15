@@ -85,17 +85,13 @@ export const addUser = (navigate, formData) => {
   }
 }
 
-export const updateUser = (navigate, formData) => {
-  console.log('navigate action',navigate)
-  console.log('formData action',formData)
+export const updateUser = (formData, onSuccess) => {
   return async (dispatch) => {
     try {
       // success
       let result = await httpClient.put(server.USER_URL, formData)
       console.log('editUser formData successfully: ', result)
-      setTimeout(() => {
-        navigate('/users/list')
-      },5000)
+      if (onSuccess) onSuccess()
     } catch (error) {
       // failed
       console.log('editUser formData Error: ', error.toString())

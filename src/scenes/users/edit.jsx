@@ -104,12 +104,12 @@ const UsersEdit = () => {
               let formData = new FormData()
               formData.append('id', values.id)
               formData.append('username', values.username)
-              formData.append('password', values.password)
+              if (values.password) formData.append('password', values.password)
               formData.append('firstname', values.firstname)
               formData.append('lastname', values.lastname)
               formData.append('status', values.status)
               formData.append('roles', JSON.stringify(values.roles))
-              dispatch(updateUser(navigate, formData))
+              dispatch(updateUser(formData, () => setOpen(true)))
               setSubmitted(true)
               setSubmitting(false)
             }}
@@ -377,7 +377,7 @@ const UsersEdit = () => {
         <MessageBox
         open={open}
         closeDialog={() => setOpen(false)}
-        submitFunction={() => setOpen(false)}
+        submitFunction={() => { setOpen(false); navigate('/users/list') }}
         message={"ดำเนินการเรียบร้อยแล้ว"}
         />        
     </Box >
