@@ -26,7 +26,7 @@ const BudgetActivityDetail = () => {
 
   return (
     <Box m="20px">
-      <Header title="รายละเอียดกิจกรรมโครงการ" />
+      <Header title="รายละเอียดข้อมูลขออนุมัติงบประมาณ" />
       <Box mt="40px" display="grid" gap="30px"
         gridTemplateColumns="repeat(3, minmax(0, 1fr))"
         sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 3' } }}>

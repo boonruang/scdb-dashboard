@@ -34,7 +34,7 @@ var AcademicResearchList = function(props) {
   var loginReducer = useSelector(function(state) { return state.app.loginReducer })
 
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(r) })
     : false
 
   var columns = [

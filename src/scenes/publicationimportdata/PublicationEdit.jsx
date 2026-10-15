@@ -114,7 +114,7 @@ const PublicationEdit = () => {
                         helperText={touched.pub_id && errors.pub_id}
                         sx={{ gridColumn: "span 1" }}
                     />                        
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -127,7 +127,7 @@ const PublicationEdit = () => {
                         helperText={touched.title && errors.title}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -140,7 +140,7 @@ const PublicationEdit = () => {
                         helperText={touched.journal_name && errors.journal_name}
                         sx={{ gridColumn: "span 1" }}
                     />       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -153,7 +153,7 @@ const PublicationEdit = () => {
                         helperText={touched.publication_year && errors.publication_year}
                         sx={{ gridColumn: "span 1" }}
                     />                       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -166,7 +166,7 @@ const PublicationEdit = () => {
                         helperText={touched.quartile && errors.quartile}
                         sx={{ gridColumn: "span 1" }}
                     />                       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

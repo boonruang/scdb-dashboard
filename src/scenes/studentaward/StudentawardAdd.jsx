@@ -89,7 +89,7 @@ const StudentawardAdd = () => {
                           "& > div": { gridColumn: isNonMobile ? undefined : "span 3" }
                       }}
                   >
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"
@@ -102,7 +102,7 @@ const StudentawardAdd = () => {
                       helperText={touched.student_id && errors.student_id}
                       sx={{ gridColumn: "span 1" }}
                   />
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"

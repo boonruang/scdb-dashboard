@@ -24,7 +24,7 @@ const Divisions = () => {
   const { result, isFetching } = useSelector(function(s) { return s.app.divisionReducer })
   const loginReducer = useSelector(function(s) { return s.app.loginReducer })
   const canEdit = (loginReducer.result || {}).roles &&
-    loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(r) })
 
   const columns = [
     { field: 'division_id', headerName: 'ID', flex: 0.4 },

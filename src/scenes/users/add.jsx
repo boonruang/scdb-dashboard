@@ -123,7 +123,7 @@ const UsersAdd = () => {
                         "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                     }}
                     >
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -136,7 +136,7 @@ const UsersAdd = () => {
                             helperText={touched.username && errors.username}
                             sx={{ gridColumn: "span 2" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="password"
@@ -149,7 +149,7 @@ const UsersAdd = () => {
                             helperText={touched.password && errors.password}
                             sx={{ gridColumn: "span 2" }}
                         />   
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="password"
@@ -162,7 +162,7 @@ const UsersAdd = () => {
                             helperText={touched.password2 && errors.password2}
                             sx={{ gridColumn: "span 2" }}
                         /> 
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -175,7 +175,7 @@ const UsersAdd = () => {
                             helperText={touched.firstname && errors.firstname}
                             sx={{ gridColumn: "span 2" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"

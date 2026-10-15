@@ -14,7 +14,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { th } from 'date-fns/locale'
 
 const initialValues = {
-  activity_code: '', disburse_date: null, disburse_type: '', amount: '', note: '',
+  activity_code: '', disburse_date: null, disburse_type: '', amount: '', fin_no: '', po_no: '', note: '',
 }
 
 const schema = yup.object().shape({
@@ -58,27 +58,34 @@ const BudgetDisbursementAdd = () => {
               <Box mt="40px" display="grid" gap="30px"
                 gridTemplateColumns="repeat(3, minmax(0, 1fr))"
                 sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 3' } }}>
-                <TextField fullWidth variant="filled" label="รหัสกิจกรรม" name="activity_code"
+                <TextField required fullWidth variant="filled" label="รหัสกิจกรรม" name="activity_code"
                   value={values.activity_code} onBlur={handleBlur} onChange={handleChange}
                   error={!!touched.activity_code && !!errors.activity_code} helperText={touched.activity_code && errors.activity_code}
                   sx={{ gridColumn: 'span 1' }} />
-                <TextField fullWidth variant="filled" label="ประเภทการเบิก" name="disburse_type" select
+                <TextField required fullWidth variant="filled" label="ประเภทการเบิก" name="disburse_type" select
                   value={values.disburse_type} onBlur={handleBlur} onChange={handleChange}
                   error={!!touched.disburse_type && !!errors.disburse_type} helperText={touched.disburse_type && errors.disburse_type}
                   sx={{ gridColumn: 'span 1' }}>
                   <MenuItem value="1.ผูกพัน">1.ผูกพัน</MenuItem>
                   <MenuItem value="2.จ่ายจริง">2.จ่ายจริง</MenuItem>
                 </TextField>
-                <TextField fullWidth variant="filled" label="จำนวนเงิน (บาท)" name="amount" type="number"
+                <TextField required fullWidth variant="filled" label="จำนวนเงิน (บาท)" name="amount" type="number"
                   value={values.amount} onBlur={handleBlur} onChange={handleChange}
                   error={!!touched.amount && !!errors.amount} helperText={touched.amount && errors.amount}
                   sx={{ gridColumn: 'span 1' }} />
                 <DatePicker label="วันที่เบิก" value={values.disburse_date}
                   onChange={(v) => setFieldValue('disburse_date', v)} format="d MMMM yyyy"
                   slotProps={{ textField: { fullWidth: true, variant: 'outlined', sx: { gridColumn: 'span 1' } } }} />
+                <TextField fullWidth variant="filled" label="เลขที่ FIN" name="fin_no"
+                  value={values.fin_no} onBlur={handleBlur} onChange={handleChange}
+                  sx={{ gridColumn: 'span 1' }} />
+                <TextField fullWidth variant="filled" label="เลขที่ PO" name="po_no"
+                  value={values.po_no} onBlur={handleBlur} onChange={handleChange}
+                  helperText="จ่ายจริงที่ใช้ PO เดียวกับผูกพัน จะล้างยอดผูกพันนั้นอัตโนมัติ"
+                  sx={{ gridColumn: 'span 1' }} />
                 <TextField fullWidth variant="filled" label="หมายเหตุ" name="note"
                   value={values.note} onBlur={handleBlur} onChange={handleChange}
-                  sx={{ gridColumn: 'span 2' }} />
+                  sx={{ gridColumn: 'span 3' }} />
               </Box>
               <Box display="flex" mt="20px">
                 <Button type="submit" disabled={!(dirty && isValid) || isSubmitting || submitted} sx={btnStyle}>บันทึก</Button>

@@ -22,7 +22,9 @@ axios.interceptors.request.use(
       }
       config.url = join(apiUrl, config.url)
     }
-    config.timeout = 20000 // 10 Second
+    // import จาก Excel (/bulk) ทำหลายร้อยแถวใน transaction เดียว 20 วินาทีไม่พอ
+    // หน้าเว็บเคยขึ้น error ทั้งที่ backend บันทึกสำเร็จ
+    config.timeout = /\/bulk(\/|$|\?)/.test(config.url) ? 180000 : 20000
     return config
   },
   (error) => {

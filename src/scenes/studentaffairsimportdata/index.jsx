@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import {
   Box, useTheme, Button, Typography, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, TextField, Chip, Paper,
@@ -61,7 +62,7 @@ const StudentAffairsImportData = () => {
   const [masterDepts, setMasterDepts] = useState([])   // master list จาก DB
 
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(r) })
     : false
 
   var activeData = [dataStudent, dataAward, dataGrant, dataActivity][activeTab]
@@ -380,6 +381,7 @@ const StudentAffairsImportData = () => {
             })}
           </Box>
           <Box display="flex" flexWrap="wrap">
+            <TemplateDownloadButton file="template_3_ฝ่ายกิจการนิสิต.xlsx" />
             <form>
               <input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
             </form>

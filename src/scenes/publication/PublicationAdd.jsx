@@ -65,25 +65,25 @@ const PublicationAdd = () => {
               sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 3' } }}>
 
               {sectionTitle('ข้อมูลหลัก')}
-              <TextField fullWidth variant="filled" label="ชื่อเรื่อง" name="title"
+              <TextField required fullWidth variant="filled" label="ชื่อเรื่อง" name="title"
                 value={values.title} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.title && !!errors.title} helperText={touched.title && errors.title}
                 sx={{ gridColumn: 'span 3' }} />
-              <TextField fullWidth variant="filled" label="วารสาร" name="journal_name"
+              <TextField required fullWidth variant="filled" label="วารสาร" name="journal_name"
                 value={values.journal_name} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.journal_name && !!errors.journal_name} helperText={touched.journal_name && errors.journal_name}
                 sx={{ gridColumn: 'span 2' }} />
-              <TextField fullWidth variant="filled" label="ปีที่ตีพิมพ์ (ค.ศ.)" name="publication_year" type="number"
+              <TextField required fullWidth variant="filled" label="ปีที่ตีพิมพ์ (ค.ศ.)" name="publication_year" type="number"
                 value={values.publication_year} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.publication_year && !!errors.publication_year} helperText={touched.publication_year && errors.publication_year}
                 sx={{ gridColumn: 'span 1' }} />
-              <TextField fullWidth variant="filled" label="Quartile" name="quartile" select
+              <TextField required fullWidth variant="filled" label="Quartile" name="quartile" select
                 value={values.quartile} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.quartile && !!errors.quartile} helperText={touched.quartile && errors.quartile}
                 sx={{ gridColumn: 'span 1' }}>
                 {['Q1', 'Q2', 'Q3', 'Q4', 'Tier 1'].map(q => <MenuItem key={q} value={q}>{q}</MenuItem>)}
               </TextField>
-              <TextField fullWidth variant="filled" label="ฐานข้อมูล" name="database_source" select
+              <TextField required fullWidth variant="filled" label="ฐานข้อมูล" name="database_source" select
                 value={values.database_source} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.database_source && !!errors.database_source} helperText={touched.database_source && errors.database_source}
                 sx={{ gridColumn: 'span 1' }}>

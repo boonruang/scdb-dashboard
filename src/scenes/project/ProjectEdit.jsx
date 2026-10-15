@@ -146,7 +146,7 @@ const ProjectEdit = () => {
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />                        
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -160,7 +160,7 @@ const ProjectEdit = () => {
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -174,7 +174,7 @@ const ProjectEdit = () => {
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
                     />    
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

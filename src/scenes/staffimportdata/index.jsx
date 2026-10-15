@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme, Button, Typography } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -13,7 +14,17 @@ import UploadProgresBar from 'components/UploadProgresBar'
 import { httpClient } from '../../utils/HttpClient'
 import { excelDateToISO } from '../../utils/dateUtils'
 
-var TABS = ['บุคลากร', 'สถิติการลา']
+var TABS = ['บุคลากร', 'สถิติการลา', 'ประวัติการศึกษา', 'ประวัติตำแหน่งวิชาการ']
+var IMPORT_URLS = ['staff/bulk', 'leaverecord/bulk', 'staffprofile/education/bulk', 'staffprofile/position/bulk']
+
+// เลขประจำตำแหน่งใน Excel เป็นตัวเลข (77 หรือ 77.0) แปลงเป็น string "77"
+var posNo = function(v) { return v === '' || v === null || v === undefined ? '' : String(Math.round(Number(v)) || String(v).trim()) }
+
+// ชีตใหม่ (ไฟล์ _เพิ่มฟิลด์) หาจากชื่อ ไม่ใช้ลำดับ เพราะไฟล์เดิมไม่มีชีตนี้
+var sheetByName = function(wb, name) {
+  var n = wb.SheetNames.find(function(x) { return x.trim() === name })
+  return n ? wb.Sheets[n] : null
+}
 
 var StaffImportData = function() {
   var theme = useTheme()
@@ -24,13 +35,16 @@ var StaffImportData = function() {
   var [activeTab, setActiveTab] = useState(0)
   var [dataStaff, setDataStaff] = useState([])
   var [dataLeave, setDataLeave] = useState([])
+  var [dataEdu, setDataEdu] = useState([])
+  var [dataPos, setDataPos] = useState([])
   var [showProgress, setShowProgress] = useState(false)
 
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(r) })
     : false
 
-  var activeData = activeTab === 0 ? dataStaff : dataLeave
+  var activeData = [dataStaff, dataLeave, dataEdu, dataPos][activeTab]
+  var setters = [setDataStaff, setDataLeave, setDataEdu, setDataPos]
 
   var handleFileChange = function(e) {
     var file = e.target.files[0]
@@ -83,6 +97,40 @@ var StaffImportData = function() {
         })
       setDataLeave(mapped2)
 
+      // ชีต ประวัติการศึกษา (row 0=hint, row 1=headers)
+      var wsEdu = sheetByName(wb, 'ประวัติการศึกษา')
+      var rawEdu = wsEdu ? XLSX.utils.sheet_to_json(wsEdu, { defval: '', range: 1 }) : []
+      setDataEdu(rawEdu
+        .filter(function(r) { return r['เลขประจำตำแหน่ง'] && r['วุฒิการศึกษา'] })
+        .map(function(r, i) {
+          return {
+            id: i + 1,
+            position_no: posNo(r['เลขประจำตำแหน่ง']),
+            name: String(r['ชื่อ-สกุล'] || ''),
+            level: String(r['ระดับ'] || ''),
+            degree: String(r['วุฒิการศึกษา'] || ''),
+            university: String(r['สถาบัน'] || ''),
+            year: r['ปีที่สำเร็จ (พ.ศ.)'] ? parseInt(r['ปีที่สำเร็จ (พ.ศ.)']) : null,
+          }
+        }))
+
+      // ชีต ประวัติตำแหน่งวิชาการ
+      var wsPos = sheetByName(wb, 'ประวัติตำแหน่งวิชาการ')
+      var rawPos = wsPos ? XLSX.utils.sheet_to_json(wsPos, { defval: '', range: 1, cellDates: true }) : []
+      setDataPos(rawPos
+        .filter(function(r) { return r['เลขประจำตำแหน่ง'] && r['ตำแหน่งวิชาการ'] })
+        .map(function(r, i) {
+          return {
+            id: i + 1,
+            position_no: posNo(r['เลขประจำตำแหน่ง']),
+            name: String(r['ชื่อ-สกุล'] || ''),
+            academic_position: String(r['ตำแหน่งวิชาการ'] || ''),
+            field_of_study: String(r['สาขาวิชา'] || ''),
+            appointed_date: excelDateToISO(r['วันที่แต่งตั้ง']),
+            order_no: String(r['เลขที่คำสั่ง'] || ''),
+          }
+        }))
+
       setShowProgress(false)
       if (fileInputRef.current) fileInputRef.current.value = null
     }
@@ -93,7 +141,8 @@ var StaffImportData = function() {
     var toImport = activeData
       .filter(function(r) {
         if (activeTab === 0) return r.status && r.firstname_th  // บุคลากร: ต้องมีสถานะและชื่อ
-        return r.position_no && r.leave_type                    // การลา: ต้องมีเลขตำแหน่งและประเภทการลา
+        if (activeTab === 1) return r.position_no && r.leave_type  // การลา: ต้องมีเลขตำแหน่งและประเภทการลา
+        return r.position_no                                        // ประวัติ: ต้องมีเลขตำแหน่ง
       })
       .map(function(r) { var copy = Object.assign({}, r); delete copy.id; return copy })
 
@@ -110,12 +159,16 @@ var StaffImportData = function() {
 
     if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?' + summary)) return
     try {
-      var url = activeTab === 0 ? 'staff/bulk' : 'leaverecord/bulk'
-      var res = await httpClient.post(url, toImport)
+      var res = await httpClient.post(IMPORT_URLS[activeTab], toImport)
       if (res.data && res.data.status === 'ok') {
-        alert('นำเข้าสำเร็จ ' + (res.data.count || toImport.length) + ' รายการ' + summary)
-        if (activeTab === 0) setDataStaff([])
-        else setDataLeave([])
+        var d = res.data
+        var detail = d.inserted !== undefined
+          ? '\n• เพิ่มใหม่: ' + d.inserted + '\n• ซ้ำกับข้อมูลเดิม (อัปเดตทับ): ' + d.updated +
+            (d.dupInFile ? '\n• ซ้ำกันเองในไฟล์: ' + d.dupInFile : '') +
+            (d.staffNotFound && d.staffNotFound.length ? '\n• ไม่พบเลขประจำตำแหน่ง: ' + d.staffNotFound.join(', ') : '')
+          : ''
+        alert('นำเข้าสำเร็จ ' + (d.count || (d.inserted || 0) + (d.updated || 0) || toImport.length) + ' รายการ' + summary + detail)
+        setters[activeTab]([])
       } else {
         alert('เกิดข้อผิดพลาด: ' + ((res.data && res.data.result) || ''))
       }
@@ -125,7 +178,7 @@ var StaffImportData = function() {
   }
 
   var handleClear = function() {
-    setDataStaff([]); setDataLeave([]); setShowProgress(false)
+    setDataStaff([]); setDataLeave([]); setDataEdu([]); setDataPos([]); setShowProgress(false)
     if (fileInputRef.current) fileInputRef.current.value = null
   }
 
@@ -162,7 +215,27 @@ var StaffImportData = function() {
     { field: 'end_date', headerName: 'วันที่สิ้นสุด', flex: 0.7 },
   ]
 
-  var activeCols = activeTab === 0 ? colsStaff : colsLeave
+  var colsEdu = [
+    { field: 'id', headerName: 'ลำดับ', flex: 0.3 },
+    { field: 'position_no', headerName: 'เลขประจำตำแหน่ง', flex: 0.6 },
+    { field: 'name', headerName: 'ชื่อ-สกุล', flex: 1 },
+    { field: 'level', headerName: 'ระดับ', flex: 0.6 },
+    { field: 'degree', headerName: 'วุฒิการศึกษา', flex: 1 },
+    { field: 'university', headerName: 'สถาบัน', flex: 1 },
+    { field: 'year', headerName: 'ปีที่สำเร็จ (พ.ศ.)', flex: 0.6 },
+  ]
+
+  var colsPos = [
+    { field: 'id', headerName: 'ลำดับ', flex: 0.3 },
+    { field: 'position_no', headerName: 'เลขประจำตำแหน่ง', flex: 0.6 },
+    { field: 'name', headerName: 'ชื่อ-สกุล', flex: 1 },
+    { field: 'academic_position', headerName: 'ตำแหน่งวิชาการ', flex: 0.9 },
+    { field: 'field_of_study', headerName: 'สาขาวิชา', flex: 0.7 },
+    { field: 'appointed_date', headerName: 'วันที่แต่งตั้ง', flex: 0.6 },
+    { field: 'order_no', headerName: 'เลขที่คำสั่ง', flex: 0.6 },
+  ]
+
+  var activeCols = [colsStaff, colsLeave, colsEdu, colsPos][activeTab]
 
   return (
     <Box m="20px">
@@ -186,6 +259,7 @@ var StaffImportData = function() {
             })}
           </Box>
           <Box display="flex" flexWrap="wrap">
+            <TemplateDownloadButton file="template_4_ฝ่ายบุคลากร.xlsx" />
             <form>
               <input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
             </form>

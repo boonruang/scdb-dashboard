@@ -415,14 +415,14 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="ข้อมูลกิจกรรม"
+                                title="ข้อมูลขออนุมัติงบประมาณ"
                                 to="/budgetactivity"
                                 icon={<MenuBookIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="นำเข้าข้อมูลกิจกรรม"
+                                title="นำเข้าข้อมูลขออนุมัติงบประมาณ"
                                 to="/budgetactivity/importdata"
                                 icon={<StickyNote2Icon />}
                                 selected={selected}

@@ -267,6 +267,8 @@ export const server = {
   SYSTEM_URL: `system`,
   LOGIN_PASSED: `yes`,
   ACADEMIC_URL: `academicprogram`,
+  STAFF_PROFILE_URL: `staffprofile`,
+  BULK_DELETE_URL: `bulkdelete`,
   ADMISSIONPLAN_URL: `admissionplan`,
   ACADEMICRESEARCH_URL: `academic/research`,
   ACADEMICGRANT_URL: `academicgrant`,

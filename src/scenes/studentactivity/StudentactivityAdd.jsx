@@ -109,7 +109,7 @@ const StudentactivityAdd = () => {
                       helperText={touched.activity_code && errors.activity_code}
                       sx={{ gridColumn: "span 1" }}
                   />
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"

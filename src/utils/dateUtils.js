@@ -39,7 +39,12 @@ export function excelDateToISO(val) {
   // serial number
   if (typeof val === 'number') {
     var d = new Date(Math.round((val - 25569) * 86400 * 1000))
-    return d.toISOString().split('T')[0]
+    var iso = d.toISOString().split('T')[0]
+    // ไฟล์ของคณะพิมพ์วันที่เป็นปี พ.ศ. ลงช่องวันที่ Excel (serial ของปี 2537 ไม่ใช่ 1994)
+    // เดิมไม่ได้ลบ 543 ในเคสนี้ วันบรรจุ/วันเกิดทั้งหมดจึงเข้า DB เป็นปี 25xx
+    var ys = parseInt(iso.slice(0, 4))
+    if (ys > 2400) return (ys - 543) + iso.slice(4)
+    return iso
   }
   return null
 }

@@ -26,7 +26,7 @@ var PublicationImportData = function() {
   var [importing, setImporting] = useState(false)
 
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(r) })
     : false
 
   var handleFileChange = function(e) {

@@ -145,7 +145,7 @@ const Leaverecords = () => {
               รายละเอียด
             </Button>
             
-        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
             ? <Button
             onClick={() => (navigate('/leaverecord/edit',  { state: { row: params.row }} ))}
               variant="outlined"
@@ -155,7 +155,7 @@ const Leaverecords = () => {
               แก้ไข
             </Button> : undefined  }                  
 
-        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
             ? <Button
             onClick={() => handleDeleteClick({ state: { row: params.row }})}
               variant="outlined"
@@ -200,7 +200,7 @@ const Leaverecords = () => {
                 }
             }}>
                 <Box display="flex" justifyContent="end">
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={handleAddButton}>
                         <Button  
                             sx={{
@@ -220,7 +220,7 @@ const Leaverecords = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={ExportExcelButton}>
                         <Button  
                             sx={{

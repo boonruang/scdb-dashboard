@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme, Button } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -130,7 +131,7 @@ const AuthorProfileImportData = () => {
     backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold',
     padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover },
   })
-  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r))
+  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(r))
   const sheetLabel = sheetIndex === 1 ? 'สายวิชาการ' : 'สายสนับสนุน'
 
   return (
@@ -138,6 +139,7 @@ const AuthorProfileImportData = () => {
       <Header title="นำเข้า Author Profile" subtitle={`นำเข้าจากไฟล์ Excel — ${sheetLabel}`} />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
         <Box display="flex" justifyContent="end" mb="10px">
+          <TemplateDownloadButton file="template_2_ฝ่ายวิจัย.xlsx" />
           <form>
             <input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
           </form>

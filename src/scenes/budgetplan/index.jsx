@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import BulkDeleteButton, { clearBudgetFiscalYear } from '../../components/BulkDeleteButton'
 import { Box, useTheme, Button } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -27,6 +28,9 @@ const BudgetPlanList = () => {
   const { result, isFetching } = useSelector((state) => state.app.budgetPlanReducer)
   const loginReducer = useSelector((state) => state.app.loginReducer)
 
+  const [selection, setSelection] = useState([])
+  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r))
+  const reload = () => { setSelection([]); dispatch(getBudgetPlan()) }
   const rows = result ? result.map((r) => ({ ...r, id: r.plan_id })) : []
 
   const handleDeleteClick = ({ state }) => {
@@ -68,10 +72,10 @@ const BudgetPlanList = () => {
         <Box>
           <Button onClick={() => navigate('/budgetplan/detail', { state: { row: params.row } })}
             variant="outlined" color="success" sx={{ mr: 1 }}>รายละเอียด</Button>
-          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r)) &&
+          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r)) &&
             <Button onClick={() => navigate('/budgetplan/edit', { state: { row: params.row } })}
               variant="outlined" color="info" sx={{ mr: 1 }}>แก้ไข</Button>}
-          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r)) &&
+          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r)) &&
             <Button onClick={() => handleDeleteClick({ state: { row: params.row } })}
               variant="outlined" color="error">ลบ</Button>}
         </Box>
@@ -90,18 +94,24 @@ const BudgetPlanList = () => {
       <Header title="ข้อมูลแผนโครงการ/งบประมาณ" subtitle="รายการข้อมูลแผนโครงการและงบประมาณ" />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
         <Box display="flex" justifyContent="end">
-          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r)) && result &&
+          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r)) && result &&
             <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])}
               onClick={() => navigate('/budgetplan/add')}>
               <AddIcon sx={{ mr: '10px' }} />เพิ่มข้อมูล
             </Button>}
-          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r)) && result &&
+          {loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r)) && result &&
             <Button sx={btnStyle(colors.blueAccent[700], colors.blueAccent[800])} onClick={ExportExcelButton}>
               <IosShareIcon sx={{ mr: '10px' }} />ส่งออกไฟล์ Excel
             </Button>}
+          {canEdit && <BulkDeleteButton entity="budgetplan" selected={selection} onDone={reload}
+            sx={btnStyle(colors.redAccent[700], colors.redAccent[800])} />}
+          {canEdit && result &&
+            <Button sx={btnStyle(colors.redAccent[700], colors.redAccent[800])} onClick={() => clearBudgetFiscalYear(reload)}>
+              ล้างข้อมูลทั้งปีงบ
+            </Button>}
         </Box>
         {isFetching && <Box height="65vh" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
-        {result && <DataGrid rows={rows} columns={columns} slots={{ toolbar: GridToolbar }} />}
+        {result && <DataGrid rows={rows} columns={columns} checkboxSelection={!!canEdit} disableRowSelectionOnClick rowSelectionModel={selection} onRowSelectionModelChange={setSelection} slots={{ toolbar: GridToolbar }} />}
       </Box>
       <ConfirmBox open={open} closeDialog={() => setOpen(false)}
         deleteFunction={() => { dispatch(deleteBudgetPlan(rowId)); setOpen(false) }}

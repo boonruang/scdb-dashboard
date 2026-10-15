@@ -6,6 +6,7 @@ import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { ROLES } from '../../constants'
 import { getAuthorProfiles, deleteAuthorProfile } from '../../actions/authorProfile.action'
+import BulkDeleteButton from '../../components/BulkDeleteButton'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as XLSX from 'xlsx'
 import IosShareIcon from '@mui/icons-material/IosShare'
@@ -28,8 +29,11 @@ var AuthorProfileList = function() {
   var isFetching = useSelector(function(s) { return s.app.authorProfileReducer.isFetching })
   var loginReducer = useSelector(function(s) { return s.app.loginReducer })
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(r) })
     : false
+
+  var [selection, setSelection] = useState([])
+  var reload = function() { setSelection([]); dispatch(getAuthorProfiles()) }
 
   var handleDelete = function() {
     dispatch(deleteAuthorProfile(rowId))
@@ -106,6 +110,7 @@ var AuthorProfileList = function() {
             )}
           </Box>
           <Box>
+            {canEdit && <BulkDeleteButton entity="authorprofile" selected={selection} onDone={reload} sx={{ backgroundColor: colors.redAccent[700], color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: colors.redAccent[800] } }} />}
             {canEdit && result && (
               <Button
                 sx={{ backgroundColor: colors.blueAccent[700], color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', '&:hover': { backgroundColor: colors.blueAccent[800] } }}
@@ -123,6 +128,7 @@ var AuthorProfileList = function() {
             rows={result || []}
             columns={columns}
             getRowId={function(row) { return row.author_id }}
+            checkboxSelection={!!canEdit} disableRowSelectionOnClick rowSelectionModel={selection} onRowSelectionModelChange={setSelection}
             slots={{ toolbar: GridToolbar }}
           />
         )}

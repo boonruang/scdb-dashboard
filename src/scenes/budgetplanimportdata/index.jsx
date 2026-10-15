@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme, Button, TextField, MenuItem } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -109,7 +110,7 @@ const BudgetPlanImportData = () => {
   ]
 
   const btnStyle = (bg, hover) => ({ backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover } })
-  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r))
+  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r))
 
   return (
     <Box m="20px">
@@ -121,6 +122,7 @@ const BudgetPlanImportData = () => {
             {fiscalYearOptions.map((y) => <MenuItem key={y} value={String(y)}>{y}</MenuItem>)}
           </TextField>
           <Box display="flex">
+            <TemplateDownloadButton file="template_1_แผนและงบประมาณ.xlsx" />
             <form><input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} /></form>
             {canEdit && <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])} onClick={() => fileInputRef.current.click()}><SpellcheckIcon sx={{ mr: '10px' }} />เลือกไฟล์</Button>}
             {canEdit && <Button sx={btnStyle(colors.blueAccent[700], colors.blueAccent[800])} onClick={handleImport}><BrowserUpdatedIcon sx={{ mr: '10px' }} />นำเข้าทั้งหมด</Button>}

@@ -114,7 +114,7 @@ const StaffeducationAdd = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -127,7 +127,7 @@ const StaffeducationAdd = () => {
                         helperText={touched.name && errors.name}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -140,7 +140,7 @@ const StaffeducationAdd = () => {
                         helperText={touched.position && errors.position}
                         sx={{ gridColumn: "span 1" }}
                     />       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -153,7 +153,7 @@ const StaffeducationAdd = () => {
                         helperText={touched.staffeducation_type && errors.staffeducation_type}
                         sx={{ gridColumn: "span 1" }}
                     />                       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -166,7 +166,7 @@ const StaffeducationAdd = () => {
                         helperText={touched.email && errors.email}
                         sx={{ gridColumn: "span 1" }}
                     />                       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

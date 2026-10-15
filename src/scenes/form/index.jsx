@@ -53,7 +53,7 @@ const Form = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -66,7 +66,7 @@ const Form = () => {
                             helperText={touched.firstName && errors.firstName}
                             sx={{ gridColumn: "span 2" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -79,7 +79,7 @@ const Form = () => {
                             helperText={touched.lastName && errors.lastName}
                             sx={{ gridColumn: "span 2" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -105,7 +105,7 @@ const Form = () => {
                             helperText={touched.contact && errors.contact}
                             sx={{ gridColumn: "span 4" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -118,7 +118,7 @@ const Form = () => {
                             helperText={touched.address1 && errors.address1}
                             sx={{ gridColumn: "span 4" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"

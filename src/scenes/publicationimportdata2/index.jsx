@@ -124,7 +124,7 @@ const PublicationImportData2 = () => {
     backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold',
     padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover },
   })
-  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r))
+  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(r))
 
   return (
     <Box m="20px">

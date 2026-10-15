@@ -153,7 +153,7 @@ const StudentEdit = () => {
                         helperText={touched.studentOfficial_id && errors.studentOfficial_id}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -166,7 +166,7 @@ const StudentEdit = () => {
                         helperText={touched.firstname && errors.nafirstnameme}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

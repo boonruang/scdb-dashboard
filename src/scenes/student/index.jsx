@@ -128,7 +128,7 @@ const Students = () => {
                   รายละเอียด
                 </Button>
                 
-            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                 ? <Button
                 onClick={() => (navigate('/student/edit',  { state: { row: params.row }} ))}
                   variant="outlined"
@@ -138,7 +138,7 @@ const Students = () => {
                   แก้ไข
                 </Button> : undefined  }                  
 
-            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                 ? <Button
                 onClick={() => handleDeleteClick({ state: { row: params.row }})}
                   variant="outlined"
@@ -184,7 +184,7 @@ const Students = () => {
                 }
             }}>
                 <Box display="flex" justifyContent="end">
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={handleAddButton}>
                         <Button  
                             sx={{
@@ -204,7 +204,7 @@ const Students = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={ExportExcelButton}>
                         <Button  
                             sx={{

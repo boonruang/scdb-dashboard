@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme, Button, Typography } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -32,7 +33,7 @@ var ResearchImportData = function() {
   var [importing, setImporting] = useState(false)
 
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(r) })
     : false
 
   var activeData = [dataAcademic, dataSupport, dataPaper][activeTab]
@@ -166,7 +167,10 @@ var ResearchImportData = function() {
       var payload = { publications: toImportPaper, author_links: authorLinks }
       var resP = await dispatch(bulkImportPublication(payload))
       if (resP && resP.status === 'ok') {
-        alert('นำเข้าสำเร็จ ' + resP.count + ' รายการ, author links: ' + resP.links_count)
+        alert('นำเข้าสำเร็จ ' + resP.count + ' รายการ' +
+          '\n• เพิ่มใหม่: ' + (resP.inserted || 0) +
+          '\n• ซ้ำกับผลงานเดิม (DOI หรือ ชื่อเรื่อง+ปี ตรงกัน) อัปเดตทับ: ' + (resP.updated || 0) +
+          '\n• author links: ' + resP.links_count)
         setDataPaper([])
         setAuthorLinks([])
       } else {
@@ -242,6 +246,7 @@ var ResearchImportData = function() {
             })}
           </Box>
           <Box display="flex" flexWrap="wrap">
+            <TemplateDownloadButton file="template_2_ฝ่ายวิจัย.xlsx" />
             <form>
               <input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
             </form>

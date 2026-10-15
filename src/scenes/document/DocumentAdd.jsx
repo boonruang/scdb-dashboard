@@ -149,7 +149,7 @@ const DocumentAdd = () => {
                         helperText={touched.document_name && errors.document_name}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

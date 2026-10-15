@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme, Button, Typography } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -12,7 +13,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { httpClient } from '../../utils/HttpClient'
 
-var TABS = ['แผนการรับนิสิต', 'วิจัย ม.โท', 'วิจัย ป.เอก', 'ทุนนำเสนอ']
+var TABS = ['แผนการรับนิสิต', 'วิจัย ม.โท', 'วิจัย ป.เอก', 'ทุนนำเสนอ', 'อาจารย์ประจำหลักสูตร']
 var BATCH = 20
 
 var AcademicImportData = function() {
@@ -26,14 +27,15 @@ var AcademicImportData = function() {
   var [dataMaster, setDataMaster] = useState([])
   var [dataDoctor, setDataDoctor] = useState([])
   var [dataGrant, setDataGrant] = useState([])
+  var [dataProgStaff, setDataProgStaff] = useState([])
   var [showProgress, setShowProgress] = useState(false)
   var [importing, setImporting] = useState(false)
 
   var canEdit = loginReducer && loginReducer.result && loginReducer.result.roles
-    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor].includes(r) })
+    ? loginReducer.result.roles.find(function(r) { return [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(r) })
     : false
 
-  var activeData = [dataAdmission, dataMaster, dataDoctor, dataGrant][activeTab]
+  var activeData = [dataAdmission, dataMaster, dataDoctor, dataGrant, dataProgStaff][activeTab]
 
   var handleFileChange = function(e) {
     var file = e.target.files[0]
@@ -129,6 +131,20 @@ var AcademicImportData = function() {
         }
       }))
 
+      // ชีต อาจารย์ประจำหลักสูตร (มีในไฟล์ _เพิ่มฟิลด์ เท่านั้น หาจากชื่อ) row 0=hint, row 1=headers
+      var progName = wb.SheetNames.find(function(n) { return n.trim() === 'อาจารย์ประจำหลักสูตร' })
+      var rawPS = progName ? XLSX.utils.sheet_to_json(wb.Sheets[progName], { defval: '', range: 1 }) : []
+      setDataProgStaff(rawPS.filter(function(r) { return r['สาขา'] && r['เลขประจำตำแหน่ง'] }).map(function(r, i) {
+        return {
+          id: i + 1,
+          program_name: String(r['สาขา']).trim(),
+          degree_level: String(r['ระดับ'] || '').trim(),
+          position_no: String(Math.round(Number(r['เลขประจำตำแหน่ง'])) || String(r['เลขประจำตำแหน่ง']).trim()),
+          name: String(r['ชื่อ-สกุล'] || ''),
+          role: String(r['บทบาท'] || '').trim(),
+        }
+      }))
+
       setShowProgress(false)
       if (fileInputRef.current) fileInputRef.current.value = null
     }
@@ -141,10 +157,11 @@ var AcademicImportData = function() {
     if (!window.confirm('นำเข้า ' + TABS[activeTab] + ' ' + toImport.length + ' รายการ?')) return
     setImporting(true)
 
-    var urlMap = ['academic/admission/bulk', 'academic/research/bulk', 'academic/research/bulk', 'academicgrant/bulk']
+    var urlMap = ['academic/admission/bulk', 'academic/research/bulk', 'academic/research/bulk', 'academicgrant/bulk', 'staffprofile/program/bulk']
     var url = urlMap[activeTab]
 
     var totalOk = 0
+    var notFound = { staff: [], program: [], role: [] }
     for (var i = 0; i < toImport.length; i += BATCH) {
       var chunk = toImport.slice(i, i + BATCH)
       try {
@@ -154,7 +171,10 @@ var AcademicImportData = function() {
           setImporting(false)
           return
         }
-        totalOk += res.data.count || chunk.length
+        totalOk += res.data.count || ((res.data.inserted || 0) + (res.data.updated || 0)) || chunk.length
+        notFound.staff = notFound.staff.concat(res.data.staffNotFound || [])
+        notFound.program = notFound.program.concat(res.data.programNotFound || [])
+        notFound.role = notFound.role.concat(res.data.badRole || [])
       } catch (err) {
         alert('เกิดข้อผิดพลาด: ' + String(err))
         setImporting(false)
@@ -162,15 +182,22 @@ var AcademicImportData = function() {
       }
     }
     setImporting(false)
-    alert('นำเข้าสำเร็จ ' + totalOk + ' รายการ')
+    var skipped = [
+      notFound.staff.length ? 'ไม่พบเลขประจำตำแหน่ง: ' + notFound.staff.join(', ') : '',
+      notFound.program.length ? 'ไม่พบหลักสูตร (import แผนการรับก่อน): ' + notFound.program.join(', ') : '',
+      notFound.role.length ? 'บทบาทไม่ถูกต้อง: ' + notFound.role.join(', ') : '',
+    ].filter(Boolean)
+    alert('นำเข้าสำเร็จ ' + totalOk + ' รายการ' + (skipped.length ? ' (ข้ามบางแถว)' : ''))
+    if (skipped.length) alert(skipped.join(' | '))
     if (activeTab === 0) setDataAdmission([])
     else if (activeTab === 1) setDataMaster([])
     else if (activeTab === 2) setDataDoctor([])
-    else setDataGrant([])
+    else if (activeTab === 3) setDataGrant([])
+    else setDataProgStaff([])
   }
 
   var handleClear = function() {
-    setDataAdmission([]); setDataMaster([]); setDataDoctor([]); setDataGrant([])
+    setDataAdmission([]); setDataMaster([]); setDataDoctor([]); setDataGrant([]); setDataProgStaff([])
     setShowProgress(false)
     if (fileInputRef.current) fileInputRef.current.value = null
   }
@@ -220,7 +247,15 @@ var AcademicImportData = function() {
     { field: 'grant_type', headerName: 'ประเภท', flex: 0.6 },
   ]
 
-  var colsMap = [colsAdmission, colsResearch, colsResearch, colsGrant]
+  var colsProgStaff = [
+    { field: 'id', headerName: 'ลำดับ', flex: 0.3 },
+    { field: 'program_name', headerName: 'สาขา', flex: 1 },
+    { field: 'degree_level', headerName: 'ระดับ', flex: 0.6 },
+    { field: 'position_no', headerName: 'เลขประจำตำแหน่ง', flex: 0.6 },
+    { field: 'name', headerName: 'ชื่อ-สกุล', flex: 1 },
+    { field: 'role', headerName: 'บทบาท', flex: 0.9 },
+  ]
+  var colsMap = [colsAdmission, colsResearch, colsResearch, colsGrant, colsProgStaff]
 
   return (
     <Box m="20px">
@@ -229,7 +264,7 @@ var AcademicImportData = function() {
         <Box display="flex" justifyContent="space-between" mb="10px" flexWrap="wrap">
           <Box display="flex" flexWrap="wrap">
             {TABS.map(function(tab, idx) {
-              var count = [dataAdmission, dataMaster, dataDoctor, dataGrant][idx].length
+              var count = [dataAdmission, dataMaster, dataDoctor, dataGrant, dataProgStaff][idx].length
               return (
                 <Button key={idx} sx={btnStyle(
                   activeTab === idx ? colors.greenAccent[600] : colors.primary[400],
@@ -241,6 +276,7 @@ var AcademicImportData = function() {
             })}
           </Box>
           <Box display="flex" flexWrap="wrap">
+            <TemplateDownloadButton file="template_5_ฝ่ายวิชาการ.xlsx" />
             <form>
               <input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
             </form>

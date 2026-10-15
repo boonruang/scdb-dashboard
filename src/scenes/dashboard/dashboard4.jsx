@@ -137,8 +137,8 @@ const DashboardResearch = () => {
             >
                 {/* ===== ROW 1 : KPI ===== */}
                 <KpiCard icon={<PeopleOutlinedIcon sx={{ fontSize: 28 }} />} value={kpi.publishingTeachers != null ? kpi.publishingTeachers.toLocaleString() : '-'} label={`อาจารย์ที่ตีพิมพ์ (${fiscalYear})`} color={colors.greenAccent[500]} colSpan={kpiSpan} />
-                <KpiCard icon={<FormatQuoteIcon sx={{ fontSize: 28 }} />} value={kpi.citations > 0 ? kpi.citations.toLocaleString() : '-'} label={`Citations (${fiscalYear})`} color={colors.blueAccent[400]} colSpan={kpiSpan} />
-                <KpiCard icon={<StarOutlineIcon sx={{ fontSize: 28 }} />} value={kpi.hIndex > 0 ? kpi.hIndex.toLocaleString() : '-'} label="H-index เฉลี่ย" color="#f0b429" colSpan={kpiSpan} />
+                <KpiCard icon={<FormatQuoteIcon sx={{ fontSize: 28 }} />} value={kpi.citations > 0 ? kpi.citations.toLocaleString() : '-'} label="Citations ปีล่าสุด (โปรไฟล์ปัจจุบัน)" color={colors.blueAccent[400]} colSpan={kpiSpan} />
+                <KpiCard icon={<StarOutlineIcon sx={{ fontSize: 28 }} />} value={kpi.hIndex > 0 ? kpi.hIndex.toLocaleString() : '-'} label="H-index เฉลี่ย (โปรไฟล์ปัจจุบัน)" color="#f0b429" colSpan={kpiSpan} />
                 <KpiCard icon={<ArticleOutlinedIcon sx={{ fontSize: 28 }} />} value={kpi.totalPubs != null ? kpi.totalPubs.toLocaleString() : '-'} label="จำนวนผลงานตีพิมพ์" color={colors.redAccent[400]} colSpan={kpiSpan} />
 
                 {/* ===== ROW 2-3 : SCOPUS YEAR BAR + PIE ===== */}

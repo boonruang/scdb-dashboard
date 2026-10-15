@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme,Button } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
@@ -210,6 +211,7 @@ const handleImportAllData = () => {
                 }
             }}>
                 <Box display="flex" justifyContent="end">
+                  <TemplateDownloadButton file="template_3_ฝ่ายกิจการนิสิต.xlsx" />
                   <form>
                     <input
                       type="file"
@@ -220,7 +222,7 @@ const handleImportAllData = () => {
                       onChange={handleFileChange}
                     />  
                   </form>                
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleButtonClick}>
                         <Button  
                             sx={{
@@ -240,7 +242,7 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleImportAllData}>
                         <Button  
                             sx={{
@@ -259,7 +261,7 @@ const handleImportAllData = () => {
                         </Button>
                     </Box> : undefined }     
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                     ? <Box display="flex" justifyContent="end" onClick={handleClearData}>
                         <Button  
                             sx={{

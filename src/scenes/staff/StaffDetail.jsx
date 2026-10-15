@@ -21,6 +21,7 @@ import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate,useParams,useLocation } from 'react-router-dom'
 import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
+import StaffLinkedData from '../../components/StaffLinkedData'
 
 const StaffDetail = () => {
 
@@ -155,7 +156,7 @@ const StaffDetail = () => {
                         variant="filled"
                         type="text"
                         label="วันเริ่มงาน"
-                        value={location.state.row.startdate}
+                        value={location.state.row.startdate ? formatThaiDateBuddhistEra(location.state.row.startdate) : '-'}
                         name="startdate"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -165,7 +166,7 @@ const StaffDetail = () => {
                         variant="filled"
                         type="text"
                         label="วันเกิด"
-                        value={location.state.row.birthday}
+                        value={location.state.row.birthday ? formatThaiDateBuddhistEra(location.state.row.birthday) : '-'}
                         name="birthday"
                         sx={{ gridColumn: "span 1" }}
                         InputLabelProps={{ shrink: true }}
@@ -212,6 +213,8 @@ const StaffDetail = () => {
                     />                                       
                     </Box>
                 </Box>
+
+                <StaffLinkedData staffId={location.state.row.staff_id} />
 
                     <Box 
                         display="grid"

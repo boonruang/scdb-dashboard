@@ -187,7 +187,7 @@ const StaffEdit = () => {
                         name="lastname_th"
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -200,7 +200,7 @@ const StaffEdit = () => {
                         helperText={touched.firstname && errors.firstname}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -213,7 +213,7 @@ const StaffEdit = () => {
                         helperText={touched.lastname && errors.lastname}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

@@ -139,7 +139,7 @@ const StaffAdd = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -152,7 +152,7 @@ const StaffAdd = () => {
                         helperText={touched.firstname && errors.firstname}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -165,7 +165,7 @@ const StaffAdd = () => {
                         helperText={touched.lastname && errors.lastname}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

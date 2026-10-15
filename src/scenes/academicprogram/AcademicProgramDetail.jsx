@@ -12,6 +12,7 @@ import {
   } from '@mui/material'
 
 import Header from "../../components/Header"
+import ProgramStaffList from '../../components/ProgramStaffList'
 import { Formik, Field } from 'formik'
 import { tokens } from 'theme';
 import { useDispatch, useSelector } from 'react-redux'
@@ -92,6 +93,8 @@ const AcademicProgramDetail = () => {
 
                     </Box>
                 </Box>
+
+                <ProgramStaffList programId={location.state.row.program_id || location.state.row.id} />
 
                     <Box 
                         display="grid"

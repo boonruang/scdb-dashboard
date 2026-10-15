@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, useTheme,Button } from "@mui/material"
+import { Box, useTheme, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
 import AddIcon from '@mui/icons-material/Add';
@@ -13,6 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import * as XLSX from 'xlsx'
 import IosShareIcon from '@mui/icons-material/IosShare';
 import ConfirmBox from 'components/ConfirmBox'
+import BulkDeleteButton from 'components/BulkDeleteButton'
 import Avatar from '@mui/material/Avatar'; 
 
 const imagesUrl = process.env.REACT_APP_POSTS_IMAGES_URL
@@ -27,6 +28,8 @@ const Publications = () => {
 
     const [open, setOpen] = useState(false)
     const [rowId, setRowId] = useState(null)
+    const [selection, setSelection] = useState([])
+    const [yearBE, setYearBE] = useState('')   // กรองปีเผยแพร่ (พ.ศ.) ว่าง = ทุกปี
 
     const message = 'กรุณายืนยันการลบข้อมูล'    
 
@@ -36,7 +39,14 @@ const Publications = () => {
 
     const { result, isFetching } = useSelector((state) => state.app.publicationReducer)
 
+    // publication_year เก็บเป็น ค.ศ. แสดงและกรองเป็น พ.ศ.
+    const toBE = (y) => (y ? Number(y) + 543 : '')
+    const yearOptions = [...new Set((result || []).map((r) => r.publication_year).filter(Boolean))]
+      .sort((a, b) => b - a).map(toBE)
+    const rows = result ? result.filter((r) => !yearBE || toBE(r.publication_year) === yearBE) : result
+
     const loginReducer = useSelector((state) => state.app.loginReducer)
+    const canEdit = loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role))
 
     const DeleteFunction = () => {
         dispatch(deletePublication(rowId))
@@ -53,7 +63,7 @@ const Publications = () => {
       };
 
     const ExportExcelButton = () => {
-      var rows = (result || []).map(function(r) {
+      var exportRows = (rows || []).map(function(r) {
         var authors = (r.ResearchAuthors || []).map(function(a) {
           return (a.firstname_th || a.firstname || '') + ' ' + (a.lastname_th || a.lastname || '')
         }).join(', ')
@@ -61,14 +71,14 @@ const Publications = () => {
           'รหัส': r.pub_id,
           'ชื่อเรื่อง': r.title,
           'วารสาร': r.journal_name,
-          'ปีที่ตีพิมพ์': r.publication_year,
+          'ปีที่เผยแพร่ (พ.ศ.)': toBE(r.publication_year),
           'Quartile': r.quartile,
           'ฐานข้อมูล': r.database_source,
           'ผู้แต่ง': authors,
         }
       })
       var wb = XLSX.utils.book_new()
-      var ws = XLSX.utils.json_to_sheet(rows)
+      var ws = XLSX.utils.json_to_sheet(exportRows)
       XLSX.utils.book_append_sheet(wb, ws, 'Publication')
       XLSX.writeFile(wb, 'publication.xlsx')
     };
@@ -107,8 +117,9 @@ const Publications = () => {
     },
     {
       field: 'publication_year',
-      headerName: 'ตีพิมพ์',
+      headerName: 'ปีเผยแพร่ (พ.ศ.)',
       flex: 0.8,
+      renderCell: (params) => toBE(params.row.publication_year),
       cellClassName: "name-column--cell"
     },
     {
@@ -150,7 +161,7 @@ const Publications = () => {
               รายละเอียด
             </Button>
             
-        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role))
             ? <Button
             onClick={() => (navigate('/publication/edit',  { state: { row: params.row }} ))}
               variant="outlined"
@@ -160,7 +171,7 @@ const Publications = () => {
               แก้ไข
             </Button> : undefined  }                  
 
-        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role))
             ? <Button
             onClick={() => handleDeleteClick({ state: { row: params.row }})}
               variant="outlined"
@@ -205,7 +216,16 @@ const Publications = () => {
                 }
             }}>
                 <Box display="flex" justifyContent="end">
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    <FormControl size="small" sx={{ minWidth: 160, mr: '10px', mb: '10px' }}>
+                        <InputLabel>ปีเผยแพร่ (พ.ศ.)</InputLabel>
+                        <Select value={yearBE} label="ปีเผยแพร่ (พ.ศ.)" onChange={(e) => setYearBE(e.target.value)}>
+                            <MenuItem value="">ทุกปี</MenuItem>
+                            {yearOptions.map((y) => <MenuItem key={y} value={y}>{y}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    { canEdit && <BulkDeleteButton entity="publication" selected={selection}
+                        onDone={() => { setSelection([]); dispatch(getPublication()) }} sx={{ backgroundColor: colors.redAccent[700], color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: colors.redAccent[800] } }} /> }
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={handleAddButton}>
                         <Button  
                             sx={{
@@ -225,7 +245,7 @@ const Publications = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Research].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={ExportExcelButton}>
                         <Button  
                             sx={{
@@ -249,8 +269,10 @@ const Publications = () => {
                     { isFetching && <Box height="65vh" sx={{ display: 'flex', justifyContent: "center", alignItems: 'center'}}><CircularProgress /></Box>}
                     { result ?
                     <DataGrid
-                        rows={result}
+                        rows={rows}
                         columns={columns}
+                        checkboxSelection={!!canEdit} disableRowSelectionOnClick
+                        rowSelectionModel={selection} onRowSelectionModelChange={setSelection}
                         slots={{ toolbar: GridToolbar }}
                         slotProps={{
                             toolbar: {

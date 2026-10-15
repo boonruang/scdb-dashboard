@@ -29,6 +29,8 @@ const BudgetDisbursementDetail = () => {
         {field('วันที่เบิก', row.disburse_date)}
         {field('ประเภท', row.disburse_type)}
         {field('จำนวนเงิน (บาท)', row.amount)}
+        {field('เลขที่ FIN', row.fin_no)}
+        {field('เลขที่ PO', row.po_no)}
         {field('หมายเหตุ', row.note, 2)}
       </Box>
       <Box mt="20px">

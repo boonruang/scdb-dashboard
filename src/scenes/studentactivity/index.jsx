@@ -109,7 +109,7 @@ const StudentActivities = () => {
               รายละเอียด
             </Button>
 
-            { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor].includes(role))
+            { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                 ? <Button
                 onClick={() => (navigate('/studentactivity/edit', { state: { row: params.row } }))}
                   variant="outlined"
@@ -119,7 +119,7 @@ const StudentActivities = () => {
                   แก้ไข
                 </Button> : undefined }
 
-            { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor].includes(role))
+            { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role))
                 ? <Button
                 onClick={() => handleDeleteClick({ state: { row: params.row } })}
                   variant="outlined"
@@ -162,7 +162,7 @@ const StudentActivities = () => {
                 }
             }}>
                 <Box display="flex" justifyContent="end">
-                    { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor].includes(role)) && result
+                    { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={handleAddButton}>
                         <Button
                             sx={{
@@ -181,7 +181,7 @@ const StudentActivities = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor].includes(role)) && result
+                    { loginReducer && loginReducer.result && loginReducer.result.roles && loginReducer.result.roles.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Student].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={ExportExcelButton}>
                         <Button
                             sx={{

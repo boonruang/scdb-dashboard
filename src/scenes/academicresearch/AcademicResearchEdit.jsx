@@ -77,7 +77,7 @@ var AcademicResearchEdit = function(props) {
               <Box mt="30px" display="grid" gap="20px"
                 gridTemplateColumns="repeat(3, minmax(0, 1fr))"
                 sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 3' } }}>
-                <TextField fullWidth variant="filled" label="รหัสนิสิต" name="student_code"
+                <TextField required fullWidth variant="filled" label="รหัสนิสิต" name="student_code"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.student_code}
                   error={!!formik.touched.student_code && !!formik.errors.student_code}
                   helperText={formik.touched.student_code && formik.errors.student_code}
@@ -85,12 +85,12 @@ var AcademicResearchEdit = function(props) {
                 <TextField fullWidth variant="filled" label="คำนำหน้า" name="prefix"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.prefix}
                   sx={{ gridColumn: 'span 1' }} />
-                <TextField fullWidth variant="filled" label="ชื่อ" name="firstname"
+                <TextField required fullWidth variant="filled" label="ชื่อ" name="firstname"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.firstname}
                   error={!!formik.touched.firstname && !!formik.errors.firstname}
                   helperText={formik.touched.firstname && formik.errors.firstname}
                   sx={{ gridColumn: 'span 1' }} />
-                <TextField fullWidth variant="filled" label="นามสกุล" name="lastname"
+                <TextField required fullWidth variant="filled" label="นามสกุล" name="lastname"
                   onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.lastname}
                   error={!!formik.touched.lastname && !!formik.errors.lastname}
                   helperText={formik.touched.lastname && formik.errors.lastname}

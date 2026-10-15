@@ -74,15 +74,15 @@ const BudgetPlanEdit = () => {
             <Box mt="40px" display="grid" gap="30px"
               gridTemplateColumns="repeat(3, minmax(0, 1fr))"
               sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 3' } }}>
-              <TextField fullWidth variant="filled" label="รหัสงบประมาณ" name="budget_code"
+              <TextField required fullWidth variant="filled" label="รหัสงบประมาณ" name="budget_code"
                 value={values.budget_code} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.budget_code && !!errors.budget_code} helperText={touched.budget_code && errors.budget_code}
                 sx={{ gridColumn: 'span 1' }} />
-              <TextField fullWidth variant="filled" label="โครงการ/กิจกรรม" name="project_name"
+              <TextField required fullWidth variant="filled" label="โครงการ/กิจกรรม" name="project_name"
                 value={values.project_name} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.project_name && !!errors.project_name} helperText={touched.project_name && errors.project_name}
                 sx={{ gridColumn: 'span 2' }} />
-              <TextField fullWidth variant="filled" label="หมวดงบประมาณ" name="budget_type" select
+              <TextField required fullWidth variant="filled" label="หมวดงบประมาณ" name="budget_type" select
                 value={values.budget_type} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.budget_type && !!errors.budget_type} helperText={touched.budget_type && errors.budget_type}
                 sx={{ gridColumn: 'span 1' }}>

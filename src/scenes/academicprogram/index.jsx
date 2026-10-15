@@ -128,7 +128,7 @@ const AcademicProgram = () => {
                             <button className="viewButton">View</button>
                 </Link> */}
                 
-            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role))
                 ? <Button
                 onClick={() => (navigate('/academicprogram/edit',  { state: { row: params.row }} ))}
                   variant="outlined"
@@ -138,7 +138,7 @@ const AcademicProgram = () => {
                   แก้ไข
                 </Button> : undefined  }                  
 
-            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+            { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role))
                 ? <Button
                 onClick={() => handleDeleteClick({ state: { row: params.row }})}
                   variant="outlined"
@@ -184,7 +184,7 @@ const AcademicProgram = () => {
                 }
             }}>
                     <Box display="flex" justifyContent="end">
-                        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) 
+                        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role)) 
                         ? <Box display="flex" justifyContent="end" onClick={handleAddButton}>
                             <Button  
                                 sx={{
@@ -204,7 +204,7 @@ const AcademicProgram = () => {
                             </Button>
                         </Box> : undefined }
 
-                        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) 
+                        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.Academic].includes(role)) 
                         ? <Box display="flex" justifyContent="end" onClick={ExportExcelButton}>
                             <Button  
                                 sx={{

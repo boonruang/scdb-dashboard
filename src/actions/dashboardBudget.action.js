@@ -18,9 +18,9 @@ const setStateSummaryFetching = () => ({ type: HTTP_DASHBOARD_BUDGET_FETCHING })
 const setStateSummarySuccess  = (payload) => ({ type: HTTP_DASHBOARD_BUDGET_SUCCESS, payload });
 const setStateSummaryFailed   = () => ({ type: HTTP_DASHBOARD_BUDGET_FAILED });
 
-export const getBudgetSummary = (fiscalYear) => (dispatch) => {
+export const getBudgetSummary = (fiscalYear, asOf = '') => (dispatch) => {
   dispatch(setStateSummaryFetching());
-  const params = fiscalYear ? { params: { fiscalYear } } : {};
+  const params = { params: { fiscalYear, asOf: asOf || undefined } };
   httpClient
     .get(`${server.DASHBOARD_BUDGET_URL}/summary`, params)
     .then((result) => dispatch(setStateSummarySuccess(result.data)))
@@ -33,11 +33,11 @@ const setStateProjectsFetching = () => ({ type: HTTP_DASHBOARD_BUDGET_PROJECTS_F
 const setStateProjectsSuccess  = (payload) => ({ type: HTTP_DASHBOARD_BUDGET_PROJECTS_SUCCESS, payload });
 const setStateProjectsFailed   = () => ({ type: HTTP_DASHBOARD_BUDGET_PROJECTS_FAILED });
 
-export const getBudgetProjects = ({ fiscalYear, search = '', budgetType = '', page = 1, limit = 10 } = {}) => (dispatch) => {
+export const getBudgetProjects = ({ fiscalYear, search = '', budgetType = '', page = 1, limit = 10, asOf = '' } = {}) => (dispatch) => {
   dispatch(setStateProjectsFetching());
   httpClient
     .get(`${server.DASHBOARD_BUDGET_URL}/projects`, {
-      params: { fiscalYear, search, budgetType, page, limit }
+      params: { fiscalYear, search, budgetType, page, limit, asOf: asOf || undefined }
     })
     .then((result) => dispatch(setStateProjectsSuccess(result.data)))
     .catch(() => dispatch(setStateProjectsFailed()));
@@ -45,10 +45,10 @@ export const getBudgetProjects = ({ fiscalYear, search = '', budgetType = '', pa
 
 // ── Activities (expandable sub-table) ────────────────────────────────
 
-export const getBudgetActivities = (budgetCode) => (dispatch) => {
+export const getBudgetActivities = (budgetCode, asOf = '') => (dispatch) => {
   dispatch({ type: HTTP_DASHBOARD_BUDGET_ACTIVITIES_FETCHING });
   httpClient
-    .get(`${server.DASHBOARD_BUDGET_URL}/activities`, { params: { budgetCode } })
+    .get(`${server.DASHBOARD_BUDGET_URL}/activities`, { params: { budgetCode, asOf: asOf || undefined } })
     .then((result) => dispatch({ type: HTTP_DASHBOARD_BUDGET_ACTIVITIES_SUCCESS, payload: result.data.result }))
     .catch(() => dispatch({ type: HTTP_DASHBOARD_BUDGET_ACTIVITIES_FAILED }));
 };

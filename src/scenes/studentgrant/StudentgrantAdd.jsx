@@ -91,7 +91,7 @@ const StudentgrantAdd = () => {
                           "& > div": { gridColumn: isNonMobile ? undefined : "span 3" }
                       }}
                   >
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"
@@ -104,7 +104,7 @@ const StudentgrantAdd = () => {
                       helperText={touched.student_id && errors.student_id}
                       sx={{ gridColumn: "span 1" }}
                   />
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"

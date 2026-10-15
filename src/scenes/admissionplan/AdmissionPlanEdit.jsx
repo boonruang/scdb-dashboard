@@ -142,7 +142,7 @@ const AcademicEdit = () => {
                          disabled
                      />
 
-                <TextField
+                <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

@@ -174,7 +174,7 @@ const StaffAdd = () => {
                         name="lastname_th"
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -187,7 +187,7 @@ const StaffAdd = () => {
                         helperText={touched.firstname && errors.firstname}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -200,7 +200,7 @@ const StaffAdd = () => {
                         helperText={touched.lastname && errors.lastname}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

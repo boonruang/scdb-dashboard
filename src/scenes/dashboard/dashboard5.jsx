@@ -68,6 +68,7 @@ const KpiCard = ({ icon, value, unit, label, iconBg, colSpan }) => {
 
 // ── Budget Progress Bar ───────────────────────────────────────────────
 const BudgetBar = ({ budget, disbursed, committed }) => {
+    const remaining = (budget || 0) - (disbursed || 0) - (committed || 0)
     const pctDisbursed = budget > 0 ? Math.min(100, (disbursed / budget) * 100) : 0
     const pctCommitted = budget > 0 ? Math.min(100 - pctDisbursed, (committed / budget) * 100) : 0
     const pctTotal     = Math.min(100, pctDisbursed + pctCommitted)
@@ -86,6 +87,9 @@ const BudgetBar = ({ budget, disbursed, committed }) => {
             </Typography>
             <Typography display="block" sx={{ color: totalColor, fontSize: '14px', fontWeight: 'bold', whiteSpace: 'nowrap', borderTop: '1px solid rgba(255,255,255,0.1)', mt: '2px', pt: '2px' }}>
                 รวม {pctTotal.toFixed(1)}%
+            </Typography>
+            <Typography display="block" sx={{ color: remaining < 0 ? '#f44336' : '#90caf9', fontSize: '14px', whiteSpace: 'nowrap' }}>
+                คงเหลือ {Math.round(remaining).toLocaleString('th-TH')}
             </Typography>
         </Box>
     )
@@ -108,6 +112,7 @@ const DashboardBudget = () => {
     const [search, setSearch]               = useState('')
     const [budgetType, setBudgetType]       = useState('')
     const [page, setPage]                   = useState(1)
+    const [asOf, setAsOf]                   = useState('')   // ข้อมูล ณ วันที่ (ว่าง = ทั้งหมด)
     const [expandedRow, setExpandedRow]     = useState(null)
     const limit = 10
 
@@ -116,17 +121,18 @@ const DashboardBudget = () => {
             setExpandedRow(null)
         } else {
             setExpandedRow(budgetCode)
-            dispatch(getBudgetActivities(budgetCode))
+            dispatch(getBudgetActivities(budgetCode, asOf))
         }
     }
 
     useEffect(() => {
-        dispatch(getBudgetSummary(fiscalYear))
-    }, [dispatch, fiscalYear])
+        dispatch(getBudgetSummary(fiscalYear, asOf))
+    }, [dispatch, fiscalYear, asOf])
 
     const loadProjects = useCallback(() => {
-        dispatch(getBudgetProjects({ fiscalYear, search, budgetType, page, limit }))
-    }, [dispatch, fiscalYear, search, budgetType, page])
+        dispatch(getBudgetProjects({ fiscalYear, search, budgetType, page, limit, asOf }))
+        setExpandedRow(null)
+    }, [dispatch, fiscalYear, search, budgetType, page, asOf])
 
     useEffect(() => {
         loadProjects()
@@ -134,7 +140,7 @@ const DashboardBudget = () => {
 
     useEffect(() => {
         setPage(1)
-    }, [search, budgetType, fiscalYear])
+    }, [search, budgetType, fiscalYear, asOf])
 
     const kpi         = summary?.kpi       || {}
     const byQuarter   = summary?.byQuarter || {}
@@ -167,6 +173,14 @@ const DashboardBudget = () => {
                     title="แดชบอร์ดข้อมูลด้านแผนและงบประมาณ"
                     subtitle="ฝ่ายแผนและงบประมาณ คณะวิทยาศาสตร์ มหาวิทยาลัยมหาสารคาม"
                 />
+                <Box display="flex" gap="12px" alignItems="center">
+                <TextField
+                    size="small" type="date" label="ข้อมูล ณ วันที่"
+                    value={asOf} onChange={(e) => setAsOf(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    helperText={asOf ? 'ไม่นับรายการหลังวันนี้' : 'ว่าง = ทั้งหมด'}
+                    sx={{ minWidth: 170 }}
+                />
                 <FormControl size="small" sx={{ minWidth: 160 }}>
                     <InputLabel sx={{ color: colors.grey[300] }}>ปีงบประมาณ</InputLabel>
                     <Select
@@ -180,6 +194,7 @@ const DashboardBudget = () => {
                         ))}
                     </Select>
                 </FormControl>
+                </Box>
             </Box>
 
             {isFetchingSummary && (
@@ -192,7 +207,7 @@ const DashboardBudget = () => {
 
                 {/* ===== ROW 1 : KPI ===== */}
                 <KpiCard icon={<AssignmentIcon sx={{ fontSize: 26, color: '#1976d2' }} />} value={kpi.totalProjects != null ? fmt(kpi.totalProjects) : <CircularProgress size={20} />} unit="โครงการ" label="จำนวนโครงการ" iconBg="#1976d220" colSpan={kpiSpan} />
-                <KpiCard icon={<AccountBalanceIcon sx={{ fontSize: 26, color: '#4caf50' }} />} value={kpi.totalBudget != null ? fmt(kpi.totalBudget) : <CircularProgress size={20} />} unit="บาท" label="งบประมาณ" iconBg="#4caf5020" colSpan={kpiSpan} />
+                <KpiCard icon={<AccountBalanceIcon sx={{ fontSize: 26, color: '#4caf50' }} />} value={kpi.totalBudget != null ? fmt(kpi.totalBudget) : <CircularProgress size={20} />} unit="บาท" label={kpi.totalRemaining != null ? `งบประมาณ · คงเหลือ ${fmt(kpi.totalRemaining)}` : 'งบประมาณ'} iconBg="#4caf5020" colSpan={kpiSpan} />
                 <KpiCard icon={<PaymentsIcon sx={{ fontSize: 26, color: '#ff9800' }} />} value={kpi.totalDisbursed != null ? fmt(kpi.totalDisbursed) : <CircularProgress size={20} />} unit="บาท" label="เบิกจ่ายจริง" iconBg="#ff980020" colSpan={kpiSpan} />
                 <KpiCard icon={<HandshakeIcon sx={{ fontSize: 26, color: '#e91e63' }} />} value={kpi.totalCommitted != null ? fmt(kpi.totalCommitted) : <CircularProgress size={20} />} unit="บาท" label="ผูกพัน" iconBg="#e91e6320" colSpan={kpiSpan} />
 

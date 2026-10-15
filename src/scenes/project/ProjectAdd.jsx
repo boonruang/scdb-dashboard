@@ -140,7 +140,7 @@ const ProjectAdd = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -153,7 +153,7 @@ const ProjectAdd = () => {
                         helperText={touched.project_name && errors.project_name}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -166,7 +166,7 @@ const ProjectAdd = () => {
                         helperText={touched.project_type && errors.project_type}
                         sx={{ gridColumn: "span 1" }}
                     />  
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

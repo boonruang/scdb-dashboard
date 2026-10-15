@@ -99,7 +99,7 @@ const PublicationAdd = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -112,7 +112,7 @@ const PublicationAdd = () => {
                         helperText={touched.title && errors.title}
                         sx={{ gridColumn: "span 1" }}
                     />
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -125,7 +125,7 @@ const PublicationAdd = () => {
                         helperText={touched.journal_name && errors.journal_name}
                         sx={{ gridColumn: "span 1" }}
                     />       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -138,7 +138,7 @@ const PublicationAdd = () => {
                         helperText={touched.publication_year && errors.publication_year}
                         sx={{ gridColumn: "span 1" }}
                     />                       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -151,7 +151,7 @@ const PublicationAdd = () => {
                         helperText={touched.quartile && errors.quartile}
                         sx={{ gridColumn: "span 1" }}
                     />                       
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

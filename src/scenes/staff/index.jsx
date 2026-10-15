@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { formatThaiDateBuddhistEra } from '../../utils/formatthaidate'
 import { Box, useTheme,Button } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
@@ -67,8 +68,8 @@ const Staffs = () => {
           'ประเภทบุคลากร': (r.Stafftype || {}).name || '',
           'สังกัด': (r.Division || {}).division_name || '',
           'วุฒิการศึกษา': r.education,
-          'วันที่บรรจุ': r.startdate,
-          'วันเกิด': r.birthday,
+          'วันที่บรรจุ': r.startdate ? formatThaiDateBuddhistEra(r.startdate) : '',
+          'วันเกิด': r.birthday ? formatThaiDateBuddhistEra(r.birthday) : '',
           'โทรศัพท์': r.phone_no,
           'ออฟฟิศ': r.office_location,
           'อีเมล': r.email,
@@ -154,12 +155,14 @@ const Staffs = () => {
       field: 'startdate',
       headerName: 'วันที่บรรจุ',
       flex: 0.5,
+      renderCell: (params) => params.row.startdate ? formatThaiDateBuddhistEra(params.row.startdate) : '-',
       cellClassName: "name-column--cell"
     },
     {
       field: 'birthday',
       headerName: 'วันเกิด',
       flex: 0.5,
+      renderCell: (params) => params.row.birthday ? formatThaiDateBuddhistEra(params.row.birthday) : '-',
       cellClassName: "name-column--cell"
     },
     {
@@ -193,7 +196,7 @@ const Staffs = () => {
               รายละเอียด
             </Button>
             
-        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
             ? <Button
             onClick={() => (navigate('/staff/edit',  { state: { row: params.row }} ))}
               variant="outlined"
@@ -203,7 +206,7 @@ const Staffs = () => {
               แก้ไข
             </Button> : undefined  }                  
 
-        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role))
+        { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role))
             ? <Button
             onClick={() => handleDeleteClick({ state: { row: params.row }})}
               variant="outlined"
@@ -248,7 +251,7 @@ const Staffs = () => {
                 }
             }}>
                 <Box display="flex" justifyContent="end">
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={handleAddButton}>
                         <Button  
                             sx={{
@@ -268,7 +271,7 @@ const Staffs = () => {
                         </Button>
                     </Box> : undefined }
 
-                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin,ROLES.Editor].includes(role)) && result
+                    { loginReducer?.result?.roles?.find((role) => [ROLES.Admin, ROLES.Editor, ROLES.HR].includes(role)) && result
                     ? <Box display="flex" justifyContent="end" onClick={ExportExcelButton}>
                         <Button  
                             sx={{

@@ -143,7 +143,7 @@ const UsersEdit = () => {
                             InputLabelProps={{ shrink: true }}
                             disabled                            
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -182,7 +182,7 @@ const UsersEdit = () => {
                             helperText={touched.password2 && errors.password2}
                             sx={{ gridColumn: "span 2" }}
                         /> 
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"
@@ -195,7 +195,7 @@ const UsersEdit = () => {
                             helperText={touched.firstname && errors.firstname}
                             sx={{ gridColumn: "span 2" }}
                         />
-                        <TextField
+                        <TextField required
                             fullWidth
                             variant="filled"
                             type="text"

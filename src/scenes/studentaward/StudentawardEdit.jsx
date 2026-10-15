@@ -95,7 +95,7 @@ const StudentawardEdit = () => {
                       InputLabelProps={{ shrink: true }}
                       sx={{ gridColumn: "span 1" }}
                   />
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"
@@ -109,7 +109,7 @@ const StudentawardEdit = () => {
                       InputLabelProps={{ shrink: true }}
                       sx={{ gridColumn: "span 1" }}
                   />
-                  <TextField
+                  <TextField required
                       fullWidth
                       variant="filled"
                       type="text"

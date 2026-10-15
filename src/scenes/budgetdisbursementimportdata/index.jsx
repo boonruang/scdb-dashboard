@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import TemplateDownloadButton from '../../components/TemplateDownloadButton'
 import { Box, useTheme, Button } from '@mui/material'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { tokens } from '../../theme'
@@ -12,6 +13,13 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import UploadProgresBar from 'components/UploadProgresBar'
 import { bulkImportBudgetDisbursement, validateActivityCodes } from '../../actions/budgetDisbursement.action'
 import { excelDateToISO as excelSerialToDate } from '../../utils/dateUtils'
+
+// สรุปผลจาก /bulk: รายการที่ซ้ำกับของเดิมใน DB จะถูก update ไม่เพิ่มแถวใหม่
+const importSummary = (d) =>
+  'นำเข้าสำเร็จ\n• เพิ่มใหม่: ' + (d?.inserted || 0) + ' รายการ' +
+  '\n• ซ้ำกับข้อมูลเดิม (อัปเดตทับ): ' + (d?.updated || 0) + ' รายการ' +
+  (d?.dupInFile ? '\n• ซ้ำกันเองในไฟล์ (ใช้แถวล่างสุด): ' + d.dupInFile + ' รายการ' : '') +
+  (d?.skipped ? '\n• ข้าม (ไม่มีรหัสกิจกรรม): ' + d.skipped + ' รายการ' : '')
 
 const BudgetDisbursementImportData = () => {
   const theme = useTheme()
@@ -45,6 +53,9 @@ const BudgetDisbursementImportData = () => {
       const iType    = headers.findIndex(h => String(h).includes('ประเภท'))
       const iAmount  = headers.findIndex(h => String(h).includes('งบประมาณที่เบิก'))
       const iNote    = headers.findIndex(h => String(h).includes('หมายเหตุ'))
+      // คอลัมน์ FIN / PO ไม่บังคับ มีในไฟล์ก็อ่าน ไม่มีก็ว่าง
+      const iFin     = headers.findIndex(h => /\bFIN\b/i.test(String(h)))
+      const iPo      = headers.findIndex(h => /\bPO\b/i.test(String(h)))
 
       const mapped = dataRows
         .map((r, i) => ({
@@ -53,6 +64,8 @@ const BudgetDisbursementImportData = () => {
           disburse_date: excelSerialToDate(iDate !== -1 ? r[iDate] : null),
           disburse_type: String(iType   !== -1 ? r[iType]   : '').trim(),
           amount:        Number(iAmount  !== -1 ? r[iAmount]  : 0) || 0,
+          fin_no:        String(iFin     !== -1 ? r[iFin]     : '').trim(),
+          po_no:         String(iPo      !== -1 ? r[iPo]      : '').trim(),
           note:          String(iNote    !== -1 ? r[iNote]    : ''),
         }))
       setData(mapped)
@@ -80,13 +93,13 @@ const BudgetDisbursementImportData = () => {
       if (!validImport.length) { alert('ไม่มีรายการที่สามารถนำเข้าได้'); return }
       const res = await dispatch(bulkImportBudgetDisbursement(validImport))
       if (res && res.success) {
-        alert('นำเข้าสำเร็จ\n• นำเข้า: ' + validImport.length + ' รายการ\n• ข้าม: ' + (toImport.length - validImport.length) + ' รายการ')
+        alert(importSummary(res.data) + '\n• ข้าม (ไม่พบรหัสกิจกรรม): ' + (toImport.length - validImport.length) + ' รายการ')
         setData([])
       } else alert('เกิดข้อผิดพลาด: ' + ((res && res.data && res.data.result) || (res && res.error) || ''))
     } else {
       if (!window.confirm('นำเข้าข้อมูลเบิกจ่าย ' + toImport.length + ' รายการ?')) return
       const res = await dispatch(bulkImportBudgetDisbursement(toImport))
-      if (res && res.success) { alert('นำเข้าข้อมูลสำเร็จ'); setData([]) }
+      if (res && res.success) { alert(importSummary(res.data)); setData([]) }
       else alert('เกิดข้อผิดพลาด: ' + ((res && res.data && res.data.result) || (res && res.error) || ''))
     }
   }
@@ -106,17 +119,20 @@ const BudgetDisbursementImportData = () => {
     { field: 'disburse_date', headerName: 'วันที่เบิก', flex: 0.7 },
     { field: 'disburse_type', headerName: 'ประเภท', flex: 0.7 },
     { field: 'amount', headerName: 'จำนวนเงิน (บาท)', flex: 0.7, type: 'number' },
+    { field: 'fin_no', headerName: 'FIN', flex: 0.6 },
+    { field: 'po_no', headerName: 'PO', flex: 0.6 },
     { field: 'note', headerName: 'หมายเหตุ', flex: 1.5 },
   ]
 
   const btnStyle = (bg, hover) => ({ backgroundColor: bg, color: colors.grey[100], fontSize: '14px', fontWeight: 'bold', padding: '10px 20px', mr: '10px', mb: '10px', '&:hover': { backgroundColor: hover } })
-  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor].includes(r))
+  const canEdit = loginReducer?.result?.roles?.find((r) => [ROLES.Admin, ROLES.Editor, ROLES.Plan].includes(r))
 
   return (
     <Box m="20px">
       <Header title="นำเข้าข้อมูลเบิกจ่ายงบประมาณ" subtitle="นำเข้าจากไฟล์ Excel (Sheet: เบิกจ่ายงบประมาณ)" />
       <Box m="40px 0 0 0" height="75vh" sx={dgStyles}>
         <Box display="flex" justifyContent="end" mb="10px">
+          <TemplateDownloadButton file="template_1_แผนและงบประมาณ.xlsx" />
           <form><input type="file" accept=".xlsx,.xls" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} /></form>
           {canEdit && <Button sx={btnStyle(colors.greenAccent[600], colors.greenAccent[800])} onClick={() => fileInputRef.current.click()}><SpellcheckIcon sx={{ mr: '10px' }} />เลือกไฟล์</Button>}
           {canEdit && <Button sx={btnStyle(colors.blueAccent[700], colors.blueAccent[800])} onClick={handleImport}><BrowserUpdatedIcon sx={{ mr: '10px' }} />นำเข้าทั้งหมด</Button>}

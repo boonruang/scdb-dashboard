@@ -60,7 +60,7 @@ const BudgetActivityAdd = () => {
 
   return (
     <Box m="20px">
-      <Header title="เพิ่มกิจกรรมโครงการ" />
+      <Header title="เพิ่มข้อมูลขออนุมัติงบประมาณ" />
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={th}>
         <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={schema}>
           {({ values, errors, touched, isSubmitting, dirty, isValid, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
@@ -70,7 +70,7 @@ const BudgetActivityAdd = () => {
                 sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 3' } }}>
 
                 {sectionTitle('ข้อมูลหลัก')}
-                <TextField fullWidth variant="filled" label="รหัสงบประมาณ" name="budget_code"
+                <TextField required fullWidth variant="filled" label="รหัสงบประมาณ" name="budget_code"
                   value={values.budget_code} onBlur={handleBlur} onChange={handleChange}
                   error={!!touched.budget_code && !!errors.budget_code} helperText={touched.budget_code && errors.budget_code}
                   sx={{ gridColumn: 'span 1' }} />
@@ -80,7 +80,7 @@ const BudgetActivityAdd = () => {
                 <TextField fullWidth variant="filled" label="งบประมาณที่ขอ (บาท)" name="budget_requested" type="number"
                   value={values.budget_requested} onBlur={handleBlur} onChange={handleChange}
                   sx={{ gridColumn: 'span 1' }} />
-                <TextField fullWidth variant="filled" label="ชื่อโครงการ/กิจกรรม (ย่อย)" name="activity_name"
+                <TextField required fullWidth variant="filled" label="ชื่อโครงการ/กิจกรรม (ย่อย)" name="activity_name"
                   value={values.activity_name} onBlur={handleBlur} onChange={handleChange}
                   error={!!touched.activity_name && !!errors.activity_name} helperText={touched.activity_name && errors.activity_name}
                   sx={{ gridColumn: 'span 3' }} />

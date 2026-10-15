@@ -126,7 +126,7 @@ const AcademicEdit = () => {
                          sx={{ gridColumn: "span 2" }}
                      />
 
-                <TextField
+                <TextField required
                         fullWidth
                         variant="filled"
                         type="text"
@@ -139,7 +139,7 @@ const AcademicEdit = () => {
                         helperText={touched.program_name && errors.program_name}
                         sx={{ gridColumn: "span 2" }}
                     />
-                    <TextField
+                    <TextField required
                          fullWidth
                          variant="filled"
                          type="text"

@@ -113,7 +113,7 @@ const AdmissionPlanAdd = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" }
                         }}
                     >
-                    <TextField
+                    <TextField required
                         fullWidth
                         variant="filled"
                         type="text"

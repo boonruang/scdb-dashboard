@@ -37,7 +37,7 @@ const DivisionAdd = () => {
           <form onSubmit={handleSubmit}>
             <Box display="grid" gap="24px" gridTemplateColumns="repeat(4, minmax(0, 1fr))" mt="30px"
               sx={{ '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' } }}>
-              <TextField fullWidth variant="filled" label="ชื่อสังกัด *" name="division_name"
+              <TextField required fullWidth variant="filled" label="ชื่อสังกัด *" name="division_name"
                 value={values.division_name} onBlur={handleBlur} onChange={handleChange}
                 error={!!touched.division_name && !!errors.division_name}
                 helperText={touched.division_name && errors.division_name}
